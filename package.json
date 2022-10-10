@@ -1,0 +1,22 @@
+{
+    "name": "su-sdk",
+    "version": "1.0.0",
+    "description": "SearchUnify javascript SDK enables developers to easily work with the SearchUnify platform and build scalable solutions with search, analytics, crawlers and more.",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:searchunify/su-sdk-js.git"
+    },
+    "keywords": [
+        "sdk",
+        "SearchUnify",
+        "addon"
+    ],
+    "author": "SearchUnify",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "joi": "^17.4.0",
+        "qs": "^6.11.0"
+    }
+}
