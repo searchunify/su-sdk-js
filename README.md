@@ -47,11 +47,7 @@ The access token will expire after 4 hours, so you need to generate a new access
 ```javascript
 (async() => {
    try {
-       const refreshToken = await oauth.getRefreshedToken({
-           refreshToken: 'changeme',
-           clientId: 'changeme',
-           clientSecret: 'changeme'
-       });
+       const refreshToken = await oauth.getRefreshedToken();
       console.log(refreshToken);
    } catch (error) {
        console.log(error.message);

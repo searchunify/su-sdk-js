@@ -2,43 +2,36 @@ const axios = require('axios');
 const { Response } = require('./response');
 const { AUTHENTICATION } = require('./constants')
 
-const updateResponse = (response) => {
+const responseHandler = (response) => {
+    // delete extra message and statuscode.
+    let { data, message } = response;
+    let successMessage = message ? message : `Successfully done.`;
+    if (message) delete response.message;
     let result = {
-        message: null,
-        data: null
-    }
-    if (response.data && response.data.data) {
-        result.message = response.data.message;
-        result.data = response.data.data;
-        delete response.data.data.message;
-        delete response.data.data.status;
-    }
-    else if (response.data) {
-        result.message = response.data.message;
-        result.data = response.data;
-        delete response.data.message;
-        delete response.data.status;
+        status: true,
+        message: successMessage,
+        data: data ? data : response
     }
     return result;
 }
 
 exports.HttpRequest = async (options) => {
     try {
-        const requestPayload = {...options, timeout: AUTHENTICATION.REQUEST_TIMEOUT };
-        let response = await axios(requestPayload);
-        const result = updateResponse(response);
-        return new Response(true, result.message, result.data);
+        const requestPayload = { ...options, timeout: AUTHENTICATION.REQUEST_TIMEOUT };
+        let { data } = await axios(requestPayload);
+        const result = responseHandler(data);
+        return result
     } catch (error) {
-        let message = error.message;
-        if (error.response && error.response.data) {
-            if (error.response.data.message) {
-                message = error.response.data.message;
-            }
-            else if (error.response.data.error) {
-                message = error.response.data.error;
-            }
+        let errorMessage = '';
+        let { response, message } = error;
+        let { data } = response;
+        if (data && data.error) {
+            errorMessage = data.error.message ? data.error.message : message;
         }
-
-        return new Response(false, message);
+        else if (data && data.message) {
+            errorMessage = data.message ? data.message : message;
+        }
+    
+        return new Response(false, errorMessage);
     }
 }

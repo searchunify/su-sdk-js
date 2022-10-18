@@ -27,22 +27,26 @@ const generateToken = async (params) => {
         }
     }
 
-    let response = await HttpRequest(options);
-    if (response.status && response.data && response.data.accessToken) {
-        AUTHENTICATION.OAUTH2.ACCESS_TOKEN = response.data.accessToken;
-        AUTHENTICATION.OAUTH2.REFRESH_TOKEN = response.data.refreshToken;
+    let { data, status, message } = await HttpRequest(options);
+    if (status && data.accessToken) {
+        AUTHENTICATION.OAUTH2.ACCESS_TOKEN = data.accessToken;
+        AUTHENTICATION.OAUTH2.REFRESH_TOKEN = data.refreshToken;
         AUTHENTICATION.AUTH_TYPE = 'oauth2';
+        AUTHENTICATION.OAUTH2.CLIENT_ID = isValid.value.clientId;
+        AUTHENTICATION.OAUTH2.CLIENT_SECRET = isValid.value.clientSecret;
+        return 'Token generated successfully.';
     }
-    return response;
+    else {
+        throw new Error(`Client not initilized. Error message (${message})`);
+    }
 }
 
-const getRefreshedToken = async (params) => {
-    const isValid = validation.oauth2.refreshTokenValidation(params, validateClient());
-    if (isValid.error) throw new Error(isValid.error.message);
+const getRefreshedToken = async () => {
+    validateClient();
     const queryStrings = qs.stringify({
         grant_type: 'refresh_token',
-        client_id: isValid.value.clientId,
-        client_secret: isValid.value.clientSecret,
+        client_id: AUTHENTICATION.OAUTH2.CLIENT_ID,
+        client_secret: AUTHENTICATION.OAUTH2.CLIENT_SECRET,
         refresh_token: AUTHENTICATION.OAUTH2.REFRESH_TOKEN
     });
 
@@ -55,13 +59,16 @@ const getRefreshedToken = async (params) => {
             'Cache-Control': 'no-cache'
         }
     }
-    let response = await HttpRequest(options);
-    if (response.status && response.data && response.data.accessToken) {
-        AUTHENTICATION.OAUTH2.ACCESS_TOKEN = response.data.accessToken;
-        AUTHENTICATION.OAUTH2.REFRESH_TOKEN = response.data.refreshToken;
+    let { data, status, message } = await HttpRequest(options);
+    if (status && data.accessToken) {
+        AUTHENTICATION.OAUTH2.ACCESS_TOKEN = data.accessToken;
+        AUTHENTICATION.OAUTH2.REFRESH_TOKEN = data.refreshToken;
         AUTHENTICATION.AUTH_TYPE = 'oauth2';
+        return 'Token refreshed successfully.';
     }
-    return response;
+    else {
+        throw new Error(`Token not refreshed. Error message (${message})`);
+    }
 }
 
 module.exports = {

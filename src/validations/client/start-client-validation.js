@@ -28,7 +28,7 @@ exports.validateClient = () => {
         const schema = Joi.object().keys({
             ACCESS_TOKEN: Joi.string().trim().required().error(new Error(`Invalid access token.`)),
             REFRESH_TOKEN: Joi.string().trim().required().error(new Error(`Invalid refresh token.`)),
-        })
+        }).unknown(true);
         const isValid = schema.validate(oauth2);
         if (isValid.error) throw new Error(isValid.error.message);
     }

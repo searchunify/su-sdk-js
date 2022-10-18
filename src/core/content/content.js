@@ -1,3 +1,4 @@
+const qs = require('qs');
 const { CONTENT_API } = require("../../utils/su-apis");
 const { AUTHENTICATION } = require("../../utils/constants");
 const { HttpRequest } = require("../../utils/request-handler");
@@ -57,9 +58,14 @@ const getObjectSpecificData = async (params) => {
     const isValid = validation.content.objectSpecificDataValidation(params, validateClient(AUTHENTICATION));
     if (isValid.error) throw new Error(isValid.error.message);
 
+    const queryParams = qs.stringify({
+        from: isValid.value.offset,
+        size: isValid.value.size
+    });
+
     const options = {
         method: 'get',
-        url: `${AUTHENTICATION.INSTANCE_URL}${CONTENT_API.OBJECT_DATA.replace('<contentSourceId>', isValid.value.contentSourceId).replace('<objectId>', isValid.value.objectId)}`,
+        url: `${AUTHENTICATION.INSTANCE_URL}${CONTENT_API.OBJECT_DATA.replace('<contentSourceId>', isValid.value.contentSourceId).replace('<objectId>', isValid.value.objectId)}?${queryParams}`,
         headers: {
             'Authorization': getAuthHeader(),
             'Content-Type': 'application/json'
@@ -71,9 +77,8 @@ const getObjectSpecificData = async (params) => {
 }
 
 const getObjectSpecificDataWithId = async (params) => {
-    const isValid = validation.content.objectSpecificDataWithIdValidation(params, validateClient(AUTHENTICATION));
+    let isValid = validation.content.objectSpecificDataWithIdValidation(params, validateClient(AUTHENTICATION));
     if (isValid.error) throw new Error(isValid.error.message);
-
     const options = {
         method: 'get',
         url: `${AUTHENTICATION.INSTANCE_URL}${CONTENT_API.OBJECT_DATA_WITH_ID.replace('<contentSourceId>', isValid.value.contentSourceId).replace('<objectId>', isValid.value.objectId).replace('<documentId>', isValid.value.documentId)}`,

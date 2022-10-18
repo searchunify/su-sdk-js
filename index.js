@@ -1,6 +1,6 @@
-const APIs = require('./src/controllers');
+const APIs = require('./src/core');
 const validations = require('./src/validations');
-const { startClient } = require('./src/controllers/client/start-client');
+const { startClient } = require('./src/core/client/start-client');
 
 /**
  * @class Searchunify

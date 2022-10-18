@@ -12,7 +12,7 @@ const objectSpecificDataValidation = (options) => {
     const schema = Joi.object().keys({
         contentSourceId: Joi.string().trim().required(),
         objectId: Joi.string().trim().required(),
-        startFrom: Joi.number(),
+        offset: Joi.number(),
         size: Joi.number().min(1).max(50)
     });
     const result = schema.validate(options);
@@ -26,7 +26,10 @@ const objectSpecificDataWithIdValidation = (options) => {
         documentId: Joi.string().trim().required()
     });
     const result = schema.validate(options);
-    return result;
+    const response = encodePathUri(result, {
+        documentId: true // Boolean values: if encode needed.
+    })
+    return response;
 }
 
 
@@ -38,7 +41,10 @@ const updateDoucmentByIdValidation = (options) => {
         data: Joi.object().min(1).required()
     });
     const result = schema.validate(options);
-    return result;
+    const response = encodePathUri(result, {
+        documentId: true
+    })
+    return response;
 }
 
 const uploadDataValidation = (options) => {
@@ -48,6 +54,15 @@ const uploadDataValidation = (options) => {
         data: Joi.array().min(1).required()
     });
     const result = schema.validate(options);
+    return result;
+}
+
+const encodePathUri = (result, encodeParams) => {
+    Object.keys(encodeParams).forEach(items => {
+        if (encodeParams[items] === true) {
+            result.value[items] = encodeURIComponent(encodeURIComponent(result.value[items]))
+        }
+    });
     return result;
 }
 
