@@ -1,37 +1,62 @@
 const axios = require('axios');
 const { Response } = require('./response');
-const { AUTHENTICATION } = require('./constants')
+
+exports.requestMethods = {
+  post: 'POST',
+  get: 'GET',
+  put: 'PUT',
+  delete: 'DELETE',
+  patch: 'PATCH',
+  head: 'HEAD',
+  connect: 'CONNECT',
+  options: 'OPTIONS',
+  trace: 'TRACE'
+};
 
 const responseHandler = (response) => {
-    // delete extra message and statuscode.
-    let { data, message } = response;
-    let successMessage = message ? message : `Successfully done.`;
-    if (message) delete response.message;
-    let result = {
-        status: true,
-        message: successMessage,
-        data: data ? data : response
-    }
-    return result;
-}
+  // delete extra message and statuscode.
+  const { data, message } = response;
+  const successMessage = message || 'Successfully done.';
+  if (message) delete response.message;
+  const result = {
+    status: true,
+    message: successMessage,
+    data: data || response
+  };
 
-exports.HttpRequest = async (options) => {
-    try {
-        const requestPayload = { ...options, timeout: AUTHENTICATION.REQUEST_TIMEOUT };
-        let { data } = await axios(requestPayload);
-        const result = responseHandler(data);
-        return result
-    } catch (error) {
-        let errorMessage = '';
-        let { response, message } = error;
-        let { data } = response;
-        if (data && data.error) {
-            errorMessage = data.error.message ? data.error.message : message;
-        }
-        else if (data && data.message) {
-            errorMessage = data.message ? data.message : message;
-        }
-    
-        return new Response(false, errorMessage);
+  return result;
+};
+
+exports.HttpRequest = async (options, authObj) => {
+  let defaultHeaders = {};
+
+  if (options.defaultHeaders === false) {
+    delete options.defaultHeaders;
+  } else {
+    defaultHeaders = {
+      Authorization: await authObj.getAuthHeader(),
+      'Content-Type': 'application/json'
+    };
+  }
+
+  options.headers = { ...defaultHeaders, ...options.headers };
+  const requestPayload = { ...options };
+  try {
+    const { data } = await axios(requestPayload);
+
+    return responseHandler(data);
+  } catch (error) {
+    if (error
+      && error.response
+      && error.response.status === 401
+      && authObj.getAuthType() === 'oauth2') {
+      await authObj.getRefreshedToken();
+      requestPayload.headers.Authorization = await authObj.getAuthHeader();
+      const { data } = await axios(requestPayload);
+
+      return responseHandler(data);
     }
-}
+
+    return new Response(false, error);
+  }
+};
