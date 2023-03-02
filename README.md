@@ -17,42 +17,45 @@ Sign up for SearchUnify, before you begin, you need a SearchUnify account. Pleas
 ## Installation
 SDK requires [Node.js](https://nodejs.org/) to run. Install the dependencies and devDependencies and start the server.
 
+## Authentication
+Initialize the SDK, with OAuth 2.0 creds. Access token will be generated internally and will be used by SDK to serve the request to your SearchUnify instance.
+
+The access token expires after 4 hours, SDK recreates access token once the token expires using refresh token.
+
 ## Execution
 Initiate SearchUnify javascript SDK on Server. Using the SDK, you can use SearchUnify functional interface to retrieve or save data. To start using, initialize the SDK with your URL and API key.
 ```javascript
-const { Searchunify } = require('su-sdk');
-const { oauth, analytics } = new Searchunify({
-    instance: 'https://xxxx.searchunify.com'
-});
+const { SearchUnifyRestClient } = require('su-sdk');
+
+const suRestClient = new SearchUnifyRestClient({
+  instance: 'https://yourInstance.searchunify.com',
+  timeout: 60000,
+  oauth2: {
+    username: 'changeme',
+    password: 'changeme',
+    clientId: 'changeme',
+    clientSecret: 'changeme'
+  }
+})
 ```
 
-## Authentication
-Initialize the SDK, to generate OAuth 2.0 token. This token will be internally used by SDK to serve the request to your SearchUnify instance.
+## Sample API call
 ```javascript
-(async() => {
-   try {
-       const accessToken = await oauth.generateToken({
-           username: 'changeme',
-           password: 'changeme',
-           clientId: 'changeme',
-           clientSecret: 'changeme'
-       })
-       console.log(accessToken);
-   } catch (error) {
-       console.log(error.message);
-   }
-})();
-```
-The access token will expire after 4 hours, so you need to generate a new access token from the refresh token.
-```javascript
-(async() => {
-   try {
-       const refreshToken = await oauth.getRefreshedToken();
-      console.log(refreshToken);
-   } catch (error) {
-       console.log(error.message);
-   }
-})();
+const tileData = async() => {
+  try {
+      const Analytics = suRestClient.Analytics();
+      const data = await Analytics.getTilesData({
+        startDate: '2022-12-09',
+        endDate: '2022-12-10',
+        searchClientId: 'searchClient UID'
+      });
+      console.log("data", data);
+      } catch (error) {
+      console.log("error", error);
+  }
+};
+
+tileData();
 ```
 ## Documentation
 Please refer to the SearchUnify developer guide to use the SDK. https://docs.searchunify.com/Content/Developer-Guides/SDKs.htm
