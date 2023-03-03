@@ -27,7 +27,7 @@ Initiate SearchUnify javascript SDK on Server. Using the SDK, you can use Search
 ```javascript
 const { SearchUnifyRestClient } = require('su-sdk');
 
-const suRestClient = new SearchUnifyRestClient({
+const client = new SearchUnifyRestClient({
   instance: 'https://yourInstance.searchunify.com',
   timeout: 60000,
   oauth2: {
@@ -43,8 +43,8 @@ const suRestClient = new SearchUnifyRestClient({
 ```javascript
 const tileData = async() => {
   try {
-      const Analytics = suRestClient.Analytics();
-      const data = await Analytics.getTilesData({
+      const analytics = client.Analytics();
+      const data = await analytics.getTilesData({
         startDate: '2022-12-09',
         endDate: '2022-12-10',
         searchClientId: 'searchClient UID'
