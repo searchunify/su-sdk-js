@@ -25,6 +25,7 @@ const validate = (schema, request, encodeUri = false) => {
 
     throw new Error(errorMessage);
   }
+  return result;
 };
 
 
