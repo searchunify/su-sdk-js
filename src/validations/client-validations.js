@@ -10,9 +10,8 @@ const initialize = Joi.object().keys({
     clientSecret: Joi.string().required(),
     username: Joi.string().required(),
     password: Joi.string().required()
-  }),
-  apiToken: Joi.string()
-}).or('apiKey', 'oauth2', 'apiToken');
+  })
+}).or('apiKey', 'oauth2');
 
 const validateTimeout = Joi.object().keys({
   timeout: Joi.number().min(30000).max(180000)

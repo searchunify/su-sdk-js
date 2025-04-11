@@ -32,7 +32,7 @@ exports.HttpRequest = async (options, authObj) => {
 
   if (options.defaultHeaders === false) {
     delete options.defaultHeaders;
-  } else if (authObj.authType === 'apiToken') {
+  } else if (authObj.authType === 'apiKey') {
     defaultHeaders = {
       'Content-Type': 'application/json',
       'x-api-token': await authObj.getAuthHeader()

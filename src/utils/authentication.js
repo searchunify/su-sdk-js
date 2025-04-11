@@ -11,7 +11,6 @@ class Authentication {
     this.oAuthTokens = {};
     this.jwt = props.jwt || {};
     this.apiKey = props.apiKey || {};
-    this.apiToken = props.apiToken || '';
   }
 
   getOauthTokens() {
@@ -115,15 +114,11 @@ class Authentication {
         break;
 
       case 'apiKey':
-        authHeader = `ApiKey ${this.apiKey.apiToken}`;
+        authHeader = `${this.apiKey}`;
         break;
 
       case 'jwt':
         authHeader = `Jwt ${this.jwt.jwtToken}`;
-        break;
-
-      case 'apiToken':
-        authHeader = `${this.apiToken}`;
         break;
 
       default:
