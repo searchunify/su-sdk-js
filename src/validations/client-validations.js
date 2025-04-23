@@ -8,8 +8,16 @@ const initialize = Joi.object().keys({
   oauth2: Joi.object().keys({
     clientId: Joi.string().required(),
     clientSecret: Joi.string().required(),
-    username: Joi.string().required(),
-    password: Joi.string().required()
+    username: Joi.string().when(Joi.ref('/authType'), {
+      is: 'oauth2',
+      then: Joi.required(),
+      otherwise: Joi.forbidden()
+    }),
+    password: Joi.string().when(Joi.ref('/authType'), {
+      is: 'oauth2',
+      then: Joi.required(),
+      otherwise: Joi.forbidden()
+    })
   })
 }).or('apiKey', 'oauth2');
 

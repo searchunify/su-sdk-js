@@ -61,6 +61,16 @@ exports.HttpRequest = async (options, authObj) => {
 
       return responseHandler(data);
     }
+    if (error
+      && error.response
+      && error.response.status === 401
+      && authObj.getAuthType() === 'clientCredentials') {
+      await authObj.generateToken();
+      requestPayload.headers.Authorization = await authObj.getAuthHeader();
+      const { data } = await axios(requestPayload);
+
+      return responseHandler(data);
+    }
 
     return new Response(false, error);
   }
