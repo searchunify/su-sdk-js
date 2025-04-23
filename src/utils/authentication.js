@@ -28,7 +28,7 @@ class Authentication {
 
   setOauthTokens(props) {
     this.oAuthTokens = props;
-    this.authType = this.authType || 'oauth2';
+    this.authType = this.authType || AUTH_TYPES.PASSWORD;
   }
 
   refreshOauthTokens(props) {
@@ -43,7 +43,7 @@ class Authentication {
   generateToken = async () => {
     const authHeader = Buffer.from(`${this.oAuth2.clientId}:${this.oAuth2.clientSecret}`).toString('base64');
     let queryStrings;
-    if (this.authType === 'clientCredentials') {
+    if (this.authType === AUTH_TYPES.CLIENT_CREDENTIALS) {
       queryStrings = qs.stringify({
         grant_type: 'client_credentials'
       });
@@ -109,7 +109,7 @@ class Authentication {
 
   getAuthHeader = async () => {
     let authHeader = null;
-    if (!this.authType || this.authType === AUTH_TYPES.OAUTH2) {
+    if (!this.authType || this.authType === AUTH_TYPES.PASSWORD) {
       if (this.oAuth2) {
         await this.generateToken();
       }
@@ -119,7 +119,7 @@ class Authentication {
     }
 
     switch (this.authType) {
-      case AUTH_TYPES.OAUTH2:
+      case AUTH_TYPES.PASSWORD:
         authHeader = `Bearer ${this.oAuthTokens.accessToken}`;
         break;
 

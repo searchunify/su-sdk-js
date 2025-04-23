@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { Response } = require('./response');
+const { AUTH_TYPES } = require('./constants');
 
 exports.requestMethods = {
   post: 'POST',
@@ -54,7 +55,7 @@ exports.HttpRequest = async (options, authObj) => {
     if (error
       && error.response
       && error.response.status === 401
-      && authObj.getAuthType() === 'oauth2') {
+      && authObj.getAuthType() === AUTH_TYPES.PASSWORD) {
       await authObj.getRefreshedToken();
       requestPayload.headers.Authorization = await authObj.getAuthHeader();
       const { data } = await axios(requestPayload);
@@ -64,7 +65,7 @@ exports.HttpRequest = async (options, authObj) => {
     if (error
       && error.response
       && error.response.status === 401
-      && authObj.getAuthType() === 'clientCredentials') {
+      && authObj.getAuthType() === AUTH_TYPES.CLIENT_CREDENTIALS) {
       await authObj.generateToken();
       requestPayload.headers.Authorization = await authObj.getAuthHeader();
       const { data } = await axios(requestPayload);
