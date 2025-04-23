@@ -1,6 +1,7 @@
 const qs = require('qs');
 const { HttpRequest, requestMethods } = require('./request-handler');
 const { AUTH_API } = require('./su-apis');
+const { AUTH_TYPES } = require('./constants');
 
 class Authentication {
   constructor(props = {}) {
@@ -108,29 +109,29 @@ class Authentication {
 
   getAuthHeader = async () => {
     let authHeader = null;
-    if (!this.authType) {
+    if (!this.authType || this.authType === AUTH_TYPES.OAUTH2) {
       if (this.oAuth2) {
         await this.generateToken();
       }
     }
-    if (this.authType === 'clientCredentials') {
+    if (this.authType === AUTH_TYPES.CLIENT_CREDENTIALS) {
       await this.generateToken();
     }
 
     switch (this.authType) {
-      case 'oauth2':
+      case AUTH_TYPES.OAUTH2:
         authHeader = `Bearer ${this.oAuthTokens.accessToken}`;
         break;
 
-      case 'apiKey':
+      case AUTH_TYPES.API_KEY:
         authHeader = `${this.apiKey}`;
         break;
 
-      case 'jwt':
+      case AUTH_TYPES.JWT:
         authHeader = `Jwt ${this.jwt.jwtToken}`;
         break;
 
-      case 'clientCredentials':
+      case AUTH_TYPES.CLIENT_CREDENTIALS:
         authHeader = `Bearer ${this.oAuthTokens.accessToken}`;
         break;
 
