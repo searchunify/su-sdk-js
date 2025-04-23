@@ -27,7 +27,7 @@ class Authentication {
 
   setOauthTokens(props) {
     this.oAuthTokens = props;
-    this.authType = 'oauth2';
+    this.authType = this.authType || 'oauth2';
   }
 
   refreshOauthTokens(props) {
@@ -41,12 +41,18 @@ class Authentication {
 
   generateToken = async () => {
     const authHeader = Buffer.from(`${this.oAuth2.clientId}:${this.oAuth2.clientSecret}`).toString('base64');
-
-    const queryStrings = qs.stringify({
-      grant_type: 'password',
-      username: this.oAuth2.username,
-      password: this.oAuth2.password
-    });
+    let queryStrings;
+    if (this.authType === 'clientCredentials') {
+      queryStrings = qs.stringify({
+        grant_type: 'client_credentials'
+      });
+    } else {
+      queryStrings = qs.stringify({
+        grant_type: 'password',
+        username: this.oAuth2.username,
+        password: this.oAuth2.password
+      });
+    }
 
     const options = {
       timeout: this.timeout,
@@ -107,6 +113,9 @@ class Authentication {
         await this.generateToken();
       }
     }
+    if (this.authType === 'clientCredentials') {
+      await this.generateToken();
+    }
 
     switch (this.authType) {
       case 'oauth2':
@@ -114,11 +123,15 @@ class Authentication {
         break;
 
       case 'apiKey':
-        authHeader = `ApiKey ${this.apiKey.apiToken}`;
+        authHeader = `${this.apiKey}`;
         break;
 
       case 'jwt':
         authHeader = `Jwt ${this.jwt.jwtToken}`;
+        break;
+
+      case 'clientCredentials':
+        authHeader = `Bearer ${this.oAuthTokens.accessToken}`;
         break;
 
       default:

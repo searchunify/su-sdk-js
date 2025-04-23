@@ -32,6 +32,11 @@ exports.HttpRequest = async (options, authObj) => {
 
   if (options.defaultHeaders === false) {
     delete options.defaultHeaders;
+  } else if (authObj.authType === 'apiKey') {
+    defaultHeaders = {
+      'Content-Type': 'application/json',
+      'x-api-token': await authObj.getAuthHeader()
+    };
   } else {
     defaultHeaders = {
       Authorization: await authObj.getAuthHeader(),
@@ -51,6 +56,16 @@ exports.HttpRequest = async (options, authObj) => {
       && error.response.status === 401
       && authObj.getAuthType() === 'oauth2') {
       await authObj.getRefreshedToken();
+      requestPayload.headers.Authorization = await authObj.getAuthHeader();
+      const { data } = await axios(requestPayload);
+
+      return responseHandler(data);
+    }
+    if (error
+      && error.response
+      && error.response.status === 401
+      && authObj.getAuthType() === 'clientCredentials') {
+      await authObj.generateToken();
       requestPayload.headers.Authorization = await authObj.getAuthHeader();
       const { data } = await axios(requestPayload);
 
