@@ -18,14 +18,69 @@ Sign up for SearchUnify, before you begin, you need a SearchUnify account. Pleas
 SDK requires [Node.js](https://nodejs.org/) to run. Install the dependencies and devDependencies and start the server.
 
 ## Authentication
-Initialize the SDK, with OAuth 2.0 creds. Access token will be generated internally and will be used by SDK to serve the request to your SearchUnify instance.
+The SDK supports multiple authentication methods to securely connect to your SearchUnify instance. Depending on your setup, you can initialize the SDK using OAuth 2.0, API Key, or Client Credentials authentication.
 
+1. OAuth 2.0 (Password Grant)
+Initialize the SDK using your OAuth 2.0 credentials. An access token will be generated internally and used automatically by the SDK to serve requests to your SearchUnify instance.
+
+## Example
+```javascript
+const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
+
+const suRestClient = new SearchUnifyRestClient({
+  instance: 'https://yourInstance.searchunify.com',
+  timeout: 60000,
+  authType: AUTH_TYPES.PASSWORD,
+  oauth2: {
+    username: 'changeme',
+    password: 'changeme',
+    clientId: 'changeme',
+    clientSecret: 'changeme'
+  }
+})
+```
+The access token expires after 4 hours, SDK recreates access token once the token expires using refresh token.
+
+2. API Key Authentication
+Generate the API key from the SearchUnify admin panel.
+## Example
+```javascript
+
+const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
+
+const suRestClient = new SearchUnifyRestClient({
+  instance: 'https://yourInstance.searchunify.com',
+  timeout: 60000,
+  apiKey: 'changeme',
+  authType: AUTH_TYPES.API_KEY
+});
+```
+The API key will expire based on the expiry date you choose while generating the api key.
+
+
+3. Client Credentials (OAuth 2.0)
+For server-to-server communication, use the OAuth 2.0 Client Credentials flow. The SDK will generate an access token internally and use it for API requests.
+
+## Example
+```javascript
+const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
+
+const client = new SearchUnifyRestClient({
+  instance: 'https://your-instance.searchunify.com',
+  timeout: 60000,
+  authType: AUTH_TYPES.CLIENT_CREDENTIALS,
+  oauth2: {
+    clientId: 'your-client-id',
+    clientSecret: 'your-client-secret'
+  }
+});
+```
 The access token expires after 4 hours, SDK recreates access token once the token expires using refresh token.
 
 ## Execution
 Initiate SearchUnify javascript SDK on Server. Using the SDK, you can use SearchUnify functional interface to retrieve or save data. To start using, initialize the SDK with your URL and API key.
 ```javascript
-const { SearchUnifyRestClient } = require('su-sdk');
+const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
 
 const suRestClient = new SearchUnifyRestClient({
   instance: 'https://yourInstance.searchunify.com',
