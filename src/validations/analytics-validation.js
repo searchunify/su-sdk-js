@@ -1,25 +1,36 @@
 const Joi = require('joi');
 const { ANALYTICS_INTERNAL_USERS } = require('../utils/constants');
 
+const userMetricsValidation = {
+  userMetricsFlag: Joi.boolean().optional(),
+  userMetricsFilters: Joi.alternatives().try(
+    Joi.string().trim(),
+    Joi.array().items(Joi.string().trim())
+  ).optional(),
+  userMetricsLimit: Joi.when('userMetricsFlag', {
+    is: true,
+    then: Joi.number().required(),
+    otherwise: Joi.number().optional(),
+  }),
+  userMetricsOffset: Joi.when('userMetricsFlag', {
+    is: true,
+    then: Joi.number().required(),
+    otherwise: Joi.number().optional(),
+  }),
+};
+
 const similarValidation = Joi.object().keys({
   startDate: Joi.string().trim().required(),
   endDate: Joi.string().trim().required(),
   searchClientId: Joi.string().uuid().trim(),
   ecoSystemId: Joi.string().trim().optional(),
-  userMetricsFilters: Joi.string().trim().optional(),
   internalUser: Joi.string().trim().optional().valid(...Object.values(ANALYTICS_INTERNAL_USERS)),
   tenantId: Joi.string().trim().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsLimit: Joi.number().optional()
-    .when('userMetricsFlag', {
-      is: Joi.exist(),
-      then: Joi.required(),
-    }),
-  userMetricsOffset: Joi.number().optional(),
   emailTracking: Joi.boolean().optional(),
   conversionType: Joi.string().optional(),
+  ...userMetricsValidation
 }).nand('searchClientId', 'ecoSystemId').messages({
-  'object.xor': 'searchClientId and ecoSystemId cannot be used together',
+  'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
 const similarValidationWithCount = Joi.object().keys({
@@ -30,11 +41,10 @@ const similarValidationWithCount = Joi.object().keys({
   tenantId: Joi.string().trim().optional(),
   internalUser: Joi.string().trim().optional().valid(...Object.values(ANALYTICS_INTERNAL_USERS)),
   ecoSystemId: Joi.string().trim().optional(),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
+  ...userMetricsValidation,
   pageNumber: Joi.number().optional(),
+}).nand('searchClientId', 'ecoSystemId').messages({
+  'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
 const searchSessionByCaseUidValidation = Joi.object().keys({
@@ -52,10 +62,7 @@ const searchConversionWithFilters = Joi.object().keys({
   searchClientId: Joi.string().trim().optional(),
   tenantId: Joi.string().trim().optional(),
   internalUser: Joi.string().trim().optional().valid(...Object.values(ANALYTICS_INTERNAL_USERS)),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
+  ...userMetricsValidation,
 });
 
 const searchConversionBySessionId = Joi.object().keys({
@@ -65,11 +72,7 @@ const searchConversionBySessionId = Joi.object().keys({
   searchClientId: Joi.string().uuid().trim(),
   sessionId: Joi.string().trim().required(),
   tenantId: Joi.string().trim().optional(),
-  internalUser: Joi.string().trim().optional().valid(...Object.values(ANALYTICS_INTERNAL_USERS)),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
+  internalUser: Joi.string().trim().optional().valid(...Object.values(ANALYTICS_INTERNAL_USERS))
 });
 
 const discussionsReadyToBecomeArticles = Joi.object().keys({
@@ -77,11 +80,10 @@ const discussionsReadyToBecomeArticles = Joi.object().keys({
   endDate: Joi.string().trim().required(),
   count: Joi.number().min(1).max(500).required(),
   internalUser: Joi.string().trim().optional().valid(...Object.values(ANALYTICS_INTERNAL_USERS)),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
+  ...userMetricsValidation,
   tenantId: Joi.string().trim().optional(),
+}).nand('searchClientId', 'ecoSystemId').messages({
+  'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
 const caseArticlesValidation = Joi.object().keys({
@@ -92,12 +94,11 @@ const caseArticlesValidation = Joi.object().keys({
   searchType: Joi.string().trim().valid('all', 'global', 'support').required(),
   searchClientId: Joi.string().uuid().trim().required(),
   offset: Joi.number().min(1),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
+  ...userMetricsValidation,
   tenantId: Joi.string().trim().optional(),
   ecoSystemId: Joi.string().trim().optional(),
+}).nand('searchClientId', 'ecoSystemId').messages({
+  'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
 const attachedArticlesValidation = Joi.object().keys({
@@ -109,10 +110,9 @@ const attachedArticlesValidation = Joi.object().keys({
   offset: Joi.number().min(1),
   ecoSystemId: Joi.string().trim().optional(),
   tenantId: Joi.string().trim().optional(),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
+  ...userMetricsValidation,
+}).nand('searchClientId', 'ecoSystemId').messages({
+  'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
 const attachedOnCaseValidation = Joi.object().keys({
@@ -123,10 +123,10 @@ const attachedOnCaseValidation = Joi.object().keys({
   searchClientId: Joi.string().uuid().trim().required(),
   offset: Joi.number().min(1),
   url: Joi.string().uri().trim().required(),
-  userMetricsFilters: Joi.string().trim().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional()
+  ...userMetricsValidation,
+  tenantId: Joi.string().trim().optional(),
+}).nand('searchClientId', 'ecoSystemId').messages({
+  'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
 const searchSessionBySSIdValidation = Joi.object().keys({

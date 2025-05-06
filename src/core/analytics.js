@@ -215,7 +215,6 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
-  // Doubt
   getAllSearchConversion(params) {
     validate(analytics.similarValidationWithCount, params);
 
@@ -285,11 +284,7 @@ class Analytics extends Base {
       count: params.count,
       searchClientId: params.searchClientId,
       tenantId: params.tenantId,
-      internalUser: params.internalUser,
-      userMetricsFilters: params.userMetricsFilters,
-      userMetricsFlag: params.userMetricsFlag,
-      userMetricsLimit: params.userMetricsLimit,
-      userMetricsOffset: params.userMetricsOffset
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -419,6 +414,7 @@ class Analytics extends Base {
       userMetricsFlag: params.userMetricsFlag,
       userMetricsLimit: params.userMetricsLimit,
       userMetricsOffset: params.userMetricsOffset,
+      tenantId: params.tenantId,
     });
 
     return HttpRequest({
@@ -464,7 +460,7 @@ class Analytics extends Base {
 
     return HttpRequest({
       timeout: this.#timeout,
-      method: requestMethods.get,
+      method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.KCS_SUPPORT}`,
       data: payload
     }, this.#authObj);
