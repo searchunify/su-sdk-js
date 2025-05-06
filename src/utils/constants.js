@@ -6,3 +6,12 @@ exports.AUTH_TYPES = {
   CLIENT_CREDENTIALS: 'clientCredentials',
   JWT: 'jwt'
 };
+
+exports.ANALYTICS_INTERNAL_USERS = {
+  TRUE: 'true',
+  FALSE: 'false',
+  ALL: 'all',
+  INTERNAL: 'internal',
+  EXTERNAL: 'external',
+  EXTERNAL_ONLY: 'externalOnly'
+};
