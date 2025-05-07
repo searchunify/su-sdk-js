@@ -15,3 +15,13 @@ exports.ANALYTICS_INTERNAL_USERS = {
   EXTERNAL: 'external',
   EXTERNAL_ONLY: 'externalOnly'
 };
+
+exports.GPT_REQUEST_TYPE = {
+  GPT: 'GPT',
+  SEARCH_GPT: 'SEARCH_GPT',
+};
+
+exports.GPT_REQUEST_SORT = {
+  SCORE: '_score',
+  POST_TIME: '_post_time'
+};

@@ -28,7 +28,8 @@ exports.AUTH_API = {
 };
 
 exports.SEARCH_API = {
-  SEARCH: '/api/v2_search/searchResults'
+  SEARCH: '/api/v2_search/searchResults',
+  GPT_RESULTS: '/api/v2_gpt/gptResults'
 };
 
 exports.CONTENT_API = {
