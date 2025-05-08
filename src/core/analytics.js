@@ -25,7 +25,15 @@ class Analytics extends Base {
     const payload = JSON.stringify({
       from: params.startDate,
       to: params.endDate,
-      uid: params.searchClientId
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      internalUser: params.internalUser,
+      tenantId: params.tenantId,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
     });
 
     return HttpRequest({
@@ -42,7 +50,14 @@ class Analytics extends Base {
     const payload = JSON.stringify({
       from: params.startDate,
       to: params.endDate,
-      uid: params.searchClientId
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      internalUser: params.internalUser,
+      tenantId: params.tenantId,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
     });
 
     return HttpRequest({
@@ -60,7 +75,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      internalUser: params.internalUser,
+      tenantId: params.tenantId
     });
 
     return HttpRequest({
@@ -77,7 +94,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -94,7 +113,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -111,7 +132,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -128,7 +151,14 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      internalUser: params.internalUser,
+      tenantId: params.tenantId,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
     });
 
 
@@ -147,7 +177,14 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      internalUser: params.internalUser,
+      tenantId: params.tenantId,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
     });
 
     return HttpRequest({
@@ -165,7 +202,8 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      caseUid: params.caseUid
+      caseUid: params.caseUid,
+      tenantId: params.tenantId,
     });
 
 
@@ -184,7 +222,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -201,7 +241,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -216,7 +258,14 @@ class Analytics extends Base {
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
-      endDate: params.endDate
+      endDate: params.endDate,
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser,
+      userMetricsFilters: params.userMetricsFilters,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
     });
 
     return HttpRequest({
@@ -233,7 +282,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser
     });
 
     return HttpRequest({
@@ -250,7 +301,12 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      internalUser: params.internalUser
+      internalUser: params.internalUser,
+      tenantId: params.tenantId,
+      userMetricsFilters: params.userMetricsFilters,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
     });
 
 
@@ -272,7 +328,13 @@ class Analytics extends Base {
       searchType: params.searchType,
       uid: params.searchClientId,
       offset: params.offset,
-      limit: params.count
+      limit: params.count,
+      userMetricsFilters: params.userMetricsFilters,
+      tenantId: params.tenantId,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset,
+      ecoId: params.ecoSystemId,
     });
 
     return HttpRequest({
@@ -293,7 +355,13 @@ class Analytics extends Base {
       searchType: params.searchType,
       uid: params.searchClientId,
       offset: params.offset,
-      limit: params.count
+      limit: params.count,
+      tenantId: params.tenantId,
+      userMetricsFilters: params.userMetricsFilters,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset,
+      ecoId: params.ecoSystemId,
     });
 
     return HttpRequest({
@@ -313,7 +381,13 @@ class Analytics extends Base {
       internalUser: params.internalUser,
       uid: params.searchClientId,
       offset: params.offset,
-      limit: params.count
+      limit: params.count,
+      ecoId: params.ecoSystemId,
+      tenantId: params.tenantId,
+      userMetricsFilters: params.userMetricsFilters,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset,
     });
 
 
@@ -335,7 +409,12 @@ class Analytics extends Base {
       uid: params.searchClientId,
       offset: params.offset,
       limit: params.count,
-      url: params.url
+      url: params.url,
+      userMetricsFilters: params.userMetricsFilters,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset,
+      tenantId: params.tenantId,
     });
 
     return HttpRequest({
@@ -353,7 +432,10 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser,
+      pageNumber: params.pageNumber,
     });
 
     return HttpRequest({
@@ -370,12 +452,15 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      searchClientId: params.searchClientId
+      searchClientId: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      tenantId: params.tenantId,
+      userMetricsFilters: params.userMetricsFilters
     });
 
     return HttpRequest({
       timeout: this.#timeout,
-      method: requestMethods.get,
+      method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.KCS_SUPPORT}`,
       data: payload
     }, this.#authObj);
@@ -388,7 +473,9 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
-      caseUid: params.caseUid
+      caseUid: params.caseUid,
+      tenantId: params.tenantId,
+      ecoId: params.ecoSystemId,
     });
 
     return HttpRequest({
@@ -408,7 +495,9 @@ class Analytics extends Base {
       count: params.count,
       sessionId: params.sessionId,
       searchClientId: params.searchClientId,
-      pageNumber: params.pageNumber
+      pageNumber: params.pageNumber,
+      internalUser: params.internalUser,
+      tenantId: params.tenantId,
     });
 
     return HttpRequest({
