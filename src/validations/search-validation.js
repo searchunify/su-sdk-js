@@ -17,8 +17,8 @@ const gptResultValidation = Joi.object().keys({
   }),
   context: Joi.when('requestType', {
     is: GPT_REQUEST_TYPE.GPT,
-    then: Joi.number().required(),
-    otherwise: Joi.number().optional(),
+    then: Joi.string().required(),
+    otherwise: Joi.string().optional(),
   }),
   articles: Joi.when('requestType', {
     is: GPT_REQUEST_TYPE.GPT,
