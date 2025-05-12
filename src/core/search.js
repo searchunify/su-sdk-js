@@ -60,7 +60,9 @@ class Search extends Base {
       "mergeSources": params.mergeSources || false,
       "searchWithoutHosted": params.searchWithoutHosted || false,
       "referer": params.referer || '',
-      "RequestType": params.requestType
+      "RequestType": params.requestType,
+      "context": params.context || '',
+      "articles": params.articles || [],
     }
 
     return HttpRequest({
