@@ -9,7 +9,7 @@ const initialize = Joi.object({
     AUTH_TYPES.API_KEY,
     AUTH_TYPES.PASSWORD,
     AUTH_TYPES.CLIENT_CREDENTIALS
-  ).default(AUTH_TYPES.PASSWORD),
+  ).default('oauth2'),
   oauth2: Joi.when('authType', {
     switch: [
       {
@@ -42,7 +42,7 @@ const initialize = Joi.object({
       password: Joi.string().required()
     }).required()
   })
-}).or(AUTH_TYPES.API_KEY, AUTH_TYPES.PASSWORD);
+}).or(AUTH_TYPES.API_KEY, 'oauth2');
 
 const validateTimeout = Joi.object().keys({
   timeout: Joi.number().min(30000).max(180000)
