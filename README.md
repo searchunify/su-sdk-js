@@ -15,7 +15,11 @@ The SearchUnify SDK simplifies use of SearchUnify Services by providing a set of
 Sign up for SearchUnify, before you begin, you need a SearchUnify account. Please see the oAuth section of the developer guide for information about how to retrieve your SearchUnify credentials.
 
 ## Installation
-SDK requires [Node.js](https://nodejs.org/) to run. Install the dependencies and devDependencies and start the server.
+SDK requires [Node.js](https://nodejs.org/) to run.
+
+```bash
+npm install su-sdk
+```
 
 ## Authentication
 The SDK supports multiple authentication methods to securely connect to your SearchUnify instance. Depending on your setup, you can initialize the SDK using OAuth 2.0, API Key, or Client Credentials authentication.
@@ -126,11 +130,19 @@ const searchClients = await SearchClients.getSearchClients();
 ```javascript
 const Search = suRestClient.Search();
 
-// Search results
+// Search results (uid is the search client UID)
 const results = await Search.getSearchResults({ uid: 'searchClient UID', searchString: 'your query' });
 
-// GPT-enhanced search
-const gptResults = await Search.getGPTResults({ uid: 'searchClient UID', searchString: 'your query' });
+// GPT-enhanced search (requires requestType and sortby)
+const gptResults = await Search.getGPTResults({
+  searchClientId: 'searchClient UID',
+  searchString: 'your query',
+  requestType: 'SEARCH_GPT',
+  sortby: '_score',
+  from: 0,
+  resultsPerPage: 10,
+  pageNo: 1
+});
 ```
 
 ### Analytics
