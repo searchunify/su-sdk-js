@@ -41,7 +41,6 @@ describe('averageClickPositionValidation', () => {
       startDate: '2025-01-01',
       endDate: '2025-01-31',
       searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-      offset: 1,
       count: 50,
     });
     assert.ok(result);
@@ -74,13 +73,12 @@ describe('sessionDetailsValidation', () => {
     assert.ok(result);
   });
 
-  it('should pass with optional startIndex and count', () => {
+  it('should pass with optional count', () => {
     const result = validate(analyticsValidation.sessionDetailsValidation, {
       startDate: '2025-01-01',
       endDate: '2025-01-31',
       searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
       count: 10,
-      startIndex: 2,
     });
     assert.ok(result);
   });
@@ -95,39 +93,6 @@ describe('sessionDetailsValidation', () => {
   });
 });
 
-describe('similarValidationWithCountAndOffset', () => {
-  it('should pass with offset', () => {
-    const result = validate(analyticsValidation.similarValidationWithCountAndOffset, {
-      startDate: '2025-01-01',
-      endDate: '2025-01-31',
-      count: 10,
-      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-      offset: 2,
-    });
-    assert.ok(result);
-  });
-
-  it('should pass without offset (backward compatible)', () => {
-    const result = validate(analyticsValidation.similarValidationWithCountAndOffset, {
-      startDate: '2025-01-01',
-      endDate: '2025-01-31',
-      count: 10,
-      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    });
-    assert.ok(result);
-  });
-
-  it('should fail with count over 500', () => {
-    assert.throws(() => {
-      validate(analyticsValidation.similarValidationWithCountAndOffset, {
-        startDate: '2025-01-01',
-        endDate: '2025-01-31',
-        count: 501,
-        searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-      });
-    });
-  });
-});
 
 // --- Class instantiation ---
 
@@ -181,24 +146,15 @@ describe('Content class - getSearchClients removed', () => {
   });
 });
 
-// --- Pagination backward compatibility ---
+// --- Existing methods unchanged ---
 
-describe('Existing methods accept offset param', () => {
-  it('getAllSearchQuery validates with offset', () => {
-    const result = validate(analyticsValidation.similarValidationWithCountAndOffset, {
+describe('Existing methods use similarValidationWithCount', () => {
+  it('validates with count (no offset)', () => {
+    const result = validate(analyticsValidation.similarValidationWithCount, {
       startDate: '2025-01-01',
       endDate: '2025-01-31',
       count: 10,
-      offset: 3,
-    });
-    assert.ok(result);
-  });
-
-  it('getAllSearchQuery validates without offset (backward compat)', () => {
-    const result = validate(analyticsValidation.similarValidationWithCountAndOffset, {
-      startDate: '2025-01-01',
-      endDate: '2025-01-31',
-      count: 10,
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     });
     assert.ok(result);
   });

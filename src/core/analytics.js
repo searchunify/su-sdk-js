@@ -65,14 +65,13 @@ class Analytics extends Base {
   }
 
   getAllSearchQuery(params) {
-    validate(analytics.similarValidationWithCountAndOffset, params);
+    validate(analytics.similarValidationWithCount, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
-      offset: params.offset,
     });
 
     return HttpRequest({
@@ -83,14 +82,13 @@ class Analytics extends Base {
   }
 
   searchQueryWithResult(params) {
-    validate(analytics.similarValidationWithCountAndOffset, params);
+    validate(analytics.similarValidationWithCount, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
-      offset: params.offset,
     });
 
     return HttpRequest({
@@ -101,14 +99,13 @@ class Analytics extends Base {
   }
 
   searchQueryWithNoClicks(params) {
-    validate(analytics.similarValidationWithCountAndOffset, params);
+    validate(analytics.similarValidationWithCount, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
-      offset: params.offset,
     });
 
     return HttpRequest({
@@ -119,14 +116,13 @@ class Analytics extends Base {
   }
 
   searchQueryWithoutResults(params) {
-    validate(analytics.similarValidationWithCountAndOffset, params);
+    validate(analytics.similarValidationWithCount, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
-      offset: params.offset,
     });
 
     return HttpRequest({
@@ -203,14 +199,13 @@ class Analytics extends Base {
   }
 
   getAllSearchConversion(params) {
-    validate(analytics.similarValidationWithCountAndOffset, params);
+    validate(analytics.similarValidationWithCount, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
-      offset: params.offset,
     });
 
     return HttpRequest({
@@ -478,7 +473,6 @@ class Analytics extends Base {
       startDate: params.startDate,
       endDate: params.endDate,
       searchClientId: params.searchClientId,
-      offset: params.offset,
       count: params.count,
     });
 
@@ -498,7 +492,6 @@ class Analytics extends Base {
       endDate: params.endDate,
       uid: params.searchClientId,
       count: params.count,
-      startIndex: params.startIndex,
     });
 
     return HttpRequest({
