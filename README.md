@@ -112,6 +112,67 @@ const tileData = async() => {
 
 tileData();
 ```
+## Available APIs
+
+### Search Clients
+```javascript
+const SearchClients = suRestClient.SearchClients();
+
+// Get all search clients (returns id, name, uid, search_client_type)
+const searchClients = await SearchClients.getSearchClients();
+```
+
+### Search
+```javascript
+const Search = suRestClient.Search();
+
+// Search results
+const results = await Search.getSearchResults({ uid: 'searchClient UID', searchString: 'your query' });
+
+// GPT-enhanced search
+const gptResults = await Search.getGPTResults({ uid: 'searchClient UID', searchString: 'your query' });
+```
+
+### Analytics
+```javascript
+const Analytics = suRestClient.Analytics();
+
+// Tile data (overview metrics)
+const tiles = await Analytics.getTilesData({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// All search queries
+const queries = await Analytics.getAllSearchQuery({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search queries with results
+const withResults = await Analytics.searchQueryWithResult({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search queries with no clicks
+const noClicks = await Analytics.searchQueryWithNoClicks({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search queries without results
+const noResults = await Analytics.searchQueryWithoutResults({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// All search conversions
+const conversions = await Analytics.getAllSearchConversion({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Average click position
+const acp = await Analytics.getAverageClickPosition({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
+
+// Session details
+const sessions = await Analytics.getSessionDetails({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
+```
+
+### Content
+```javascript
+const Content = suRestClient.Content();
+
+// Get all content sources
+const sources = await Content.getContentSources();
+
+// Get content source by ID
+const source = await Content.getContentSourceById({ contentSourceId: 'id' });
+```
+
 ## Documentation
 Please refer to the SearchUnify developer guide to use the SDK. https://docs.searchunify.com/Content/Developer-Guides/SDKs.htm
 The documentation is in review and might contain bugs🐞, we will update the link on https://docs.searchunify.com once its's final.
