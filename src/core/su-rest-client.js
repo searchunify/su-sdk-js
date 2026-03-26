@@ -5,6 +5,7 @@ const { DEFAULT_TIMEOUT } = require('../utils/constants');
 const { Analytics } = require('./analytics');
 const { Content } = require('./content');
 const { Search } = require('./search');
+const { SearchClients } = require('./search-clients');
 
 /**
  * @class Searchunify Rest Client
@@ -23,6 +24,8 @@ class SearchUnifyRestClient {
 
   #search;
 
+  #searchClients;
+
   constructor(props) {
     joiValidator.validate(validations.client.initialize, props);
 
@@ -33,6 +36,7 @@ class SearchUnifyRestClient {
     this.#analytics = new Analytics(props, this.#authentication);
     this.#content = new Content(props, this.#authentication);
     this.#search = new Search(props, this.#authentication);
+    this.#searchClients = new SearchClients(props, this.#authentication);
   }
 
   Analytics() {
@@ -45,6 +49,10 @@ class SearchUnifyRestClient {
 
   Search() {
     return this.#search;
+  }
+
+  SearchClients() {
+    return this.#searchClients;
   }
 }
 

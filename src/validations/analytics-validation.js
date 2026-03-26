@@ -112,6 +112,20 @@ const attachedOnCaseValidation = Joi.object().keys({
   'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
+const averageClickPositionValidation = Joi.object().keys({
+  startDate: Joi.string().trim().required(),
+  endDate: Joi.string().trim().required(),
+  searchClientId: Joi.string().uuid().trim().optional(),
+  count: Joi.number().min(1).max(500).optional(),
+});
+
+const sessionDetailsValidation = Joi.object().keys({
+  startDate: Joi.string().trim().required(),
+  endDate: Joi.string().trim().required(),
+  searchClientId: Joi.string().uuid().trim().required(),
+  count: Joi.number().min(1).max(500).optional(),
+});
+
 const searchSessionBySSIdValidation = Joi.object().keys({
   startDate: Joi.string().trim().required(),
   endDate: Joi.string().trim().required(),
@@ -131,5 +145,7 @@ module.exports = {
   caseArticlesValidation,
   attachedArticlesValidation,
   attachedOnCaseValidation,
-  searchSessionBySSIdValidation
+  searchSessionBySSIdValidation,
+  averageClickPositionValidation,
+  sessionDetailsValidation
 };

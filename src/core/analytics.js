@@ -465,6 +465,41 @@ class Analytics extends Base {
       url: `${this.#instance}${ANALYTICS.SEARCH_SESSION_BY_SESSION_ID}/${params.sessionId}?${queryParams}`
     }, this.#authObj);
   }
+
+  getAverageClickPosition(params) {
+    validate(analytics.averageClickPositionValidation, params);
+
+    const payload = JSON.stringify({
+      startDate: params.startDate,
+      endDate: params.endDate,
+      searchClientId: params.searchClientId,
+      count: params.count,
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.AVERAGE_CLICK_POSITION}`,
+      data: payload
+    }, this.#authObj);
+  }
+
+  getSessionDetails(params) {
+    validate(analytics.sessionDetailsValidation, params);
+
+    const queryParams = qs.stringify({
+      startDate: params.startDate,
+      endDate: params.endDate,
+      uid: params.searchClientId,
+      count: params.count,
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.get,
+      url: `${this.#instance}${ANALYTICS.SESSION_LOG}?${queryParams}`
+    }, this.#authObj);
+  }
 }
 
 module.exports = {
