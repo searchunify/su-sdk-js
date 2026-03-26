@@ -20,7 +20,9 @@ exports.ANALYTICS = {
   ARTICLE_CREATED_CASES: '/api/v2/conversion/articlesCreatedCases',
   ARTICLE_DEFLECTED_CASES: '/api/v2/conversion/articlesDeflectedCase',
   ATTACHED_ARTICLE: '/api/v2/conversion/attachedArticles',
-  ATTACHED_ON_CASE: '/api/v2/conversion/attachedOnCase'
+  ATTACHED_ON_CASE: '/api/v2/conversion/attachedOnCase',
+  AVERAGE_CLICK_POSITION: '/api/v2/searchQuery/averageClickPosition',
+  SESSION_LOG: '/api/v2/session/log/all'
 };
 
 exports.AUTH_API = {
@@ -39,5 +41,6 @@ exports.CONTENT_API = {
   OBJECT_DATA: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/get',
   OBJECT_DATA_WITH_ID: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/document/<documentId>/get',
   UPDATE_DOC_BY_ID: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/document/<documentId>/update',
-  BATCH_UPLOAD: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/bulkUpload'
+  BATCH_UPLOAD: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/bulkUpload',
+  SEARCH_CLIENTS: '/api/v1/search-clients'
 };

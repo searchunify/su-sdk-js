@@ -65,13 +65,14 @@ class Analytics extends Base {
   }
 
   getAllSearchQuery(params) {
-    validate(analytics.similarValidationWithCount, params);
+    validate(analytics.similarValidationWithCountAndOffset, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
+      offset: params.offset,
     });
 
     return HttpRequest({
@@ -82,13 +83,14 @@ class Analytics extends Base {
   }
 
   searchQueryWithResult(params) {
-    validate(analytics.similarValidationWithCount, params);
+    validate(analytics.similarValidationWithCountAndOffset, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
+      offset: params.offset,
     });
 
     return HttpRequest({
@@ -99,13 +101,14 @@ class Analytics extends Base {
   }
 
   searchQueryWithNoClicks(params) {
-    validate(analytics.similarValidationWithCount, params);
+    validate(analytics.similarValidationWithCountAndOffset, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
+      offset: params.offset,
     });
 
     return HttpRequest({
@@ -116,13 +119,14 @@ class Analytics extends Base {
   }
 
   searchQueryWithoutResults(params) {
-    validate(analytics.similarValidationWithCount, params);
+    validate(analytics.similarValidationWithCountAndOffset, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
+      offset: params.offset,
     });
 
     return HttpRequest({
@@ -199,13 +203,14 @@ class Analytics extends Base {
   }
 
   getAllSearchConversion(params) {
-    validate(analytics.similarValidationWithCount, params);
+    validate(analytics.similarValidationWithCountAndOffset, params);
 
     const queryParams = qs.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
       count: params.count,
       searchClientId: params.searchClientId,
+      offset: params.offset,
     });
 
     return HttpRequest({
@@ -463,6 +468,43 @@ class Analytics extends Base {
       timeout: this.#timeout,
       method: requestMethods.get,
       url: `${this.#instance}${ANALYTICS.SEARCH_SESSION_BY_SESSION_ID}/${params.sessionId}?${queryParams}`
+    }, this.#authObj);
+  }
+
+  getAverageClickPosition(params) {
+    validate(analytics.averageClickPositionValidation, params);
+
+    const payload = JSON.stringify({
+      startDate: params.startDate,
+      endDate: params.endDate,
+      searchClientId: params.searchClientId,
+      offset: params.offset,
+      count: params.count,
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.AVERAGE_CLICK_POSITION}`,
+      data: payload
+    }, this.#authObj);
+  }
+
+  getSessionDetails(params) {
+    validate(analytics.sessionDetailsValidation, params);
+
+    const queryParams = qs.stringify({
+      startDate: params.startDate,
+      endDate: params.endDate,
+      uid: params.searchClientId,
+      count: params.count,
+      startIndex: params.startIndex,
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.get,
+      url: `${this.#instance}${ANALYTICS.SESSION_LOG}?${queryParams}`
     }, this.#authObj);
   }
 }

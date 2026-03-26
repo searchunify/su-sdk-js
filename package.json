@@ -14,7 +14,8 @@
     ],
     "scripts": {
         "lint": "eslint './src/**/*.js'",
-        "lint-fix": "eslint --fix './src/**/*.js'"
+        "lint-fix": "eslint --fix './src/**/*.js'",
+        "test": "node --test 'test/**/*.js'"
     },
     "author": "SearchUnify",
     "license": "MIT",
