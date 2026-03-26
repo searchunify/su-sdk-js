@@ -21,7 +21,7 @@ describe('su-apis URLs', () => {
   });
 
   it('should have SEARCH_CLIENTS url', () => {
-    assert.equal(CONTENT_API.SEARCH_CLIENTS, '/api/v1/search-clients');
+    assert.equal(CONTENT_API.SEARCH_CLIENTS, '/api/v2/search-clients');
   });
 });
 

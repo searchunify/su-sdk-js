@@ -42,5 +42,5 @@ exports.CONTENT_API = {
   OBJECT_DATA_WITH_ID: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/document/<documentId>/get',
   UPDATE_DOC_BY_ID: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/document/<documentId>/update',
   BATCH_UPLOAD: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/bulkUpload',
-  SEARCH_CLIENTS: '/api/v1/search-clients'
+  SEARCH_CLIENTS: '/api/v2/search-clients'
 };
