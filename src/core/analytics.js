@@ -5,6 +5,16 @@ const { analytics } = require('../validations');
 const { validate } = require('../validations/joi-validator');
 const { Base } = require('./base');
 
+const buildSearchClassificationQueryParams = (params) => qs.stringify({
+  startDate: params.startDate,
+  endDate: params.endDate,
+  count: params.count,
+  searchClientId: params.searchClientId,
+  pageNumber: params.pageNumber,
+  sortByField: params.sortByField,
+  sortType: params.sortType
+});
+
 class Analytics extends Base {
   #instance;
 
@@ -67,12 +77,7 @@ class Analytics extends Base {
   getAllSearchQuery(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -84,12 +89,7 @@ class Analytics extends Base {
   searchQueryWithResult(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -101,12 +101,7 @@ class Analytics extends Base {
   searchQueryWithNoClicks(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -118,12 +113,7 @@ class Analytics extends Base {
   searchQueryWithoutResults(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,

@@ -38,7 +38,9 @@ const similarValidationWithCount = Joi.object().keys({
   searchClientId: Joi.string().uuid().trim(),
   ecoSystemId: Joi.string().trim().optional(),
   ...userMetricsValidation,
-  pageNumber: Joi.number().optional(),
+  pageNumber: Joi.number().min(1).optional(),
+  sortByField: Joi.string().valid('count').optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
 }).nand('searchClientId', 'ecoSystemId').messages({
   'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
