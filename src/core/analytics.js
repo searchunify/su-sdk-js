@@ -482,6 +482,7 @@ class Analytics extends Base {
       endDate: params.endDate,
       uid: params.searchClientId,
       count: params.count,
+      sessionId: params.sessionId,
     });
 
     return HttpRequest({
