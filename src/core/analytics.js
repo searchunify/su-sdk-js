@@ -483,6 +483,7 @@ class Analytics extends Base {
       uid: params.searchClientId,
       count: params.count,
       sessionId: params.sessionId,
+      startIndex: params.startIndex,
     });
 
     return HttpRequest({

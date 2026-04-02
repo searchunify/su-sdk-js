@@ -127,6 +127,7 @@ const sessionDetailsValidation = Joi.object().keys({
   searchClientId: Joi.string().uuid().trim().required(),
   count: Joi.number().min(1).optional(),
   sessionId: Joi.string().trim().optional(),
+  startIndex: Joi.number().min(1).optional(),
 });
 
 const searchSessionBySSIdValidation = Joi.object().keys({
