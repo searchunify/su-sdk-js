@@ -477,14 +477,21 @@ class Analytics extends Base {
   getSessionDetails(params) {
     validate(analytics.sessionDetailsValidation, params);
 
-    const queryParams = qs.stringify({
+    const query = {
       startDate: params.startDate,
       endDate: params.endDate,
       uid: params.searchClientId,
       count: params.count,
       sessionId: params.sessionId,
       startIndex: params.startIndex,
-    });
+    };
+    if (params.sortByField !== undefined && params.sortByField !== null) {
+      query.sortByField = params.sortByField;
+    }
+    if (params.sortType !== undefined && params.sortType !== null) {
+      query.sortType = params.sortType;
+    }
+    const queryParams = qs.stringify(query);
 
     return HttpRequest({
       timeout: this.#timeout,

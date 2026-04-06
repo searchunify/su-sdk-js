@@ -128,6 +128,10 @@ const sessionDetailsValidation = Joi.object().keys({
   count: Joi.number().min(1).optional(),
   sessionId: Joi.string().trim().optional(),
   startIndex: Joi.number().min(1).optional(),
+  sortByField: Joi.string()
+    .valid('search', 'click', 'support', 'case', 'end_date', 'start_date')
+    .optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
 });
 
 const searchSessionBySSIdValidation = Joi.object().keys({

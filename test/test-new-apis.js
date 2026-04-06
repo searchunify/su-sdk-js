@@ -94,6 +94,18 @@ describe('sessionDetailsValidation', () => {
     assert.ok(result);
   });
 
+  it('should pass with optional sortByField and sortType', () => {
+    const result = validate(analyticsValidation.sessionDetailsValidation, {
+      startDate: '2025-01-01',
+      endDate: '2025-01-31',
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      count: 10,
+      sortByField: 'click',
+      sortType: 'desc',
+    });
+    assert.ok(result);
+  });
+
   it('should fail without searchClientId', () => {
     assert.throws(() => {
       validate(analyticsValidation.sessionDetailsValidation, {
