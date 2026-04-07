@@ -129,7 +129,20 @@ const sessionDetailsValidation = Joi.object().keys({
   sessionId: Joi.string().trim().optional(),
   startIndex: Joi.number().min(1).optional(),
   sortByField: Joi.string()
-    .valid('search', 'click', 'support', 'case', 'end_date', 'start_date')
+    .valid('search', 'click', 'support', 'case', 'page_view', 'end_date', 'start_date')
+    .optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
+});
+
+const sessionListTableValidation = Joi.object().keys({
+  startDate: Joi.string().trim().required(),
+  endDate: Joi.string().trim().required(),
+  searchClientId: Joi.string().uuid().trim().required(),
+  count: Joi.number().min(1).max(500).required(),
+  sessionId: Joi.string().trim().optional(),
+  startIndex: Joi.number().min(1).optional(),
+  sortByField: Joi.string()
+    .valid('search', 'click', 'support', 'case', 'page_view', 'end_date', 'start_date')
     .optional(),
   sortType: Joi.string().valid('asc', 'desc').optional(),
 });
@@ -155,5 +168,6 @@ module.exports = {
   attachedOnCaseValidation,
   searchSessionBySSIdValidation,
   averageClickPositionValidation,
-  sessionDetailsValidation
+  sessionDetailsValidation,
+  sessionListTableValidation
 };

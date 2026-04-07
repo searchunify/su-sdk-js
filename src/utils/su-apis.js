@@ -22,7 +22,8 @@ exports.ANALYTICS = {
   ATTACHED_ARTICLE: '/api/v2/conversion/attachedArticles',
   ATTACHED_ON_CASE: '/api/v2/conversion/attachedOnCase',
   AVERAGE_CLICK_POSITION: '/api/v2/searchQuery/averageClickPosition',
-  SESSION_LOG: '/api/v2/session/log/all'
+  SESSION_LOG: '/api/v2/session/log/all',
+  SESSION_LIST_TABLE: '/api/v2/session/list/table'
 };
 
 exports.AUTH_API = {

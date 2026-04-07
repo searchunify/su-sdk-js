@@ -499,6 +499,32 @@ class Analytics extends Base {
       url: `${this.#instance}${ANALYTICS.SESSION_LOG}?${queryParams}`
     }, this.#authObj);
   }
+
+  getSessionListTable(params) {
+    validate(analytics.sessionListTableValidation, params);
+
+    const query = {
+      startDate: params.startDate,
+      endDate: params.endDate,
+      uid: params.searchClientId,
+      count: params.count,
+      sessionId: params.sessionId,
+      startIndex: params.startIndex,
+    };
+    if (params.sortByField !== undefined && params.sortByField !== null) {
+      query.sortByField = params.sortByField;
+    }
+    if (params.sortType !== undefined && params.sortType !== null) {
+      query.sortType = params.sortType;
+    }
+    const queryParams = qs.stringify(query);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.get,
+      url: `${this.#instance}${ANALYTICS.SESSION_LIST_TABLE}?${queryParams}`
+    }, this.#authObj);
+  }
 }
 
 module.exports = {
