@@ -525,6 +525,75 @@ class Analytics extends Base {
       url: `${this.#instance}${ANALYTICS.SESSION_LIST_TABLE}?${queryParams}`
     }, this.#authObj);
   }
+
+  getTileDataContent(params) {
+    validate(analytics.similarValidation, params);
+
+    const payload = JSON.stringify({
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.TILE_DATA_CONTENT}`,
+      data: payload
+    }, this.#authObj);
+  }
+
+  getTileDataMetrics1(params) {
+    validate(analytics.similarValidation, params);
+
+    const payload = JSON.stringify({
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_1}`,
+      data: payload
+    }, this.#authObj);
+  }
+
+  getTileDataMetrics2(params) {
+    validate(analytics.similarValidation, params);
+
+    const payload = JSON.stringify({
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_2}`,
+      data: payload
+    }, this.#authObj);
+  }
 }
 
 module.exports = {
