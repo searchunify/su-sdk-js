@@ -5,6 +5,40 @@ const { analytics } = require('../validations');
 const { validate } = require('../validations/joi-validator');
 const { Base } = require('./base');
 
+const buildSearchClassificationQueryParams = (params) => qs.stringify({
+  startDate: params.startDate,
+  endDate: params.endDate,
+  count: params.count,
+  searchClientId: params.searchClientId,
+  pageNumber: params.pageNumber,
+  sortByField: params.sortByField,
+  sortType: params.sortType
+});
+
+/** Session list rows from API have either uid (sessions) or eco_id (eco_sessions); expose both keys for consumers. */
+const normalizeSessionListTableData = (data) => {
+  if (!data || typeof data !== 'object' || !Array.isArray(data.sessions)) {
+    return data;
+  }
+  return {
+    ...data,
+    sessions: data.sessions.map((row) => {
+      if (row == null || typeof row !== 'object') {
+        return row;
+      }
+      const hasUid = Object.prototype.hasOwnProperty.call(row, 'uid');
+      const hasEco = Object.prototype.hasOwnProperty.call(row, 'eco_id');
+      if (hasUid && !hasEco) {
+        return { ...row, eco_id: null };
+      }
+      if (hasEco && !hasUid) {
+        return { ...row, uid: null };
+      }
+      return row;
+    })
+  };
+};
+
 class Analytics extends Base {
   #instance;
 
@@ -67,12 +101,7 @@ class Analytics extends Base {
   getAllSearchQuery(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -84,12 +113,7 @@ class Analytics extends Base {
   searchQueryWithResult(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -101,12 +125,7 @@ class Analytics extends Base {
   searchQueryWithNoClicks(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -118,12 +137,7 @@ class Analytics extends Base {
   searchQueryWithoutResults(params) {
     validate(analytics.similarValidationWithCount, params);
 
-    const queryParams = qs.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      count: params.count,
-      searchClientId: params.searchClientId,
-    });
+    const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
       timeout: this.#timeout,
@@ -467,13 +481,20 @@ class Analytics extends Base {
   }
 
   getAverageClickPosition(params) {
-    validate(analytics.averageClickPositionValidation, params);
+    validate(analytics.similarValidation, params);
 
     const payload = JSON.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      searchClientId: params.searchClientId,
-      count: params.count,
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset,
     });
 
     return HttpRequest({
@@ -487,17 +508,126 @@ class Analytics extends Base {
   getSessionDetails(params) {
     validate(analytics.sessionDetailsValidation, params);
 
-    const queryParams = qs.stringify({
+    const query = {
       startDate: params.startDate,
       endDate: params.endDate,
       uid: params.searchClientId,
       count: params.count,
-    });
+      sessionId: params.sessionId,
+      startIndex: params.startIndex,
+    };
+    if (params.sortByField !== undefined && params.sortByField !== null) {
+      query.sortByField = params.sortByField;
+    }
+    if (params.sortType !== undefined && params.sortType !== null) {
+      query.sortType = params.sortType;
+    }
+    const queryParams = qs.stringify(query);
 
     return HttpRequest({
       timeout: this.#timeout,
       method: requestMethods.get,
       url: `${this.#instance}${ANALYTICS.SESSION_LOG}?${queryParams}`
+    }, this.#authObj);
+  }
+
+  getSessionListTable(params) {
+    validate(analytics.sessionListTableValidation, params);
+
+    const query = {
+      startDate: params.startDate,
+      endDate: params.endDate,
+      uid: params.searchClientId,
+      count: params.count,
+      sessionId: params.sessionId,
+      startIndex: params.startIndex,
+    };
+    if (params.sortByField !== undefined && params.sortByField !== null) {
+      query.sortByField = params.sortByField;
+    }
+    if (params.sortType !== undefined && params.sortType !== null) {
+      query.sortType = params.sortType;
+    }
+    const queryParams = qs.stringify(query);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.get,
+      url: `${this.#instance}${ANALYTICS.SESSION_LIST_TABLE}?${queryParams}`
+    }, this.#authObj).then((result) => {
+      if (result && result.status && result.data) {
+        return { ...result, data: normalizeSessionListTableData(result.data) };
+      }
+      return result;
+    });
+  }
+
+  getTileDataContent(params) {
+    validate(analytics.similarValidation, params);
+
+    const payload = JSON.stringify({
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.TILE_DATA_CONTENT}`,
+      data: payload
+    }, this.#authObj);
+  }
+
+  getTileDataMetrics1(params) {
+    validate(analytics.similarValidation, params);
+
+    const payload = JSON.stringify({
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_1}`,
+      data: payload
+    }, this.#authObj);
+  }
+
+  getTileDataMetrics2(params) {
+    validate(analytics.similarValidation, params);
+
+    const payload = JSON.stringify({
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset
+    });
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_2}`,
+      data: payload
     }, this.#authObj);
   }
 }

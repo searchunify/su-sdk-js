@@ -21,8 +21,12 @@ exports.ANALYTICS = {
   ARTICLE_DEFLECTED_CASES: '/api/v2/conversion/articlesDeflectedCase',
   ATTACHED_ARTICLE: '/api/v2/conversion/attachedArticles',
   ATTACHED_ON_CASE: '/api/v2/conversion/attachedOnCase',
-  AVERAGE_CLICK_POSITION: '/api/v2/searchQuery/averageClickPosition',
-  SESSION_LOG: '/api/v2/session/log/all'
+  AVERAGE_CLICK_POSITION: '/api/v2/overview/averageClickPositionChart',
+  TILE_DATA_CONTENT: '/api/v2/content/tileDataContent',
+  TILE_DATA_METRICS_1: '/api/v2/overview/tileDataMetrics1',
+  TILE_DATA_METRICS_2: '/api/v2/overview/tileDataMetrics2',
+  SESSION_LOG: '/api/v2/session/log/all',
+  SESSION_LIST_TABLE: '/api/v2/session/list/table'
 };
 
 exports.AUTH_API = {

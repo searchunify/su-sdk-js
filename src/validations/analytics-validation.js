@@ -24,6 +24,15 @@ const similarValidation = Joi.object().keys({
   endDate: Joi.string().trim().required(),
   searchClientId: Joi.string().uuid().trim(),
   ecoSystemId: Joi.string().trim().optional(),
+  tenantId: Joi.string().uuid().trim().optional(),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  /** Ignored by overview POST bodies; allowed for callers (e.g. MCP) that share the same schema. */
+  count: Joi.number().min(1).max(500).optional(),
   emailTracking: Joi.boolean().optional(),
   conversionType: Joi.string().optional(),
   ...userMetricsValidation
@@ -38,7 +47,9 @@ const similarValidationWithCount = Joi.object().keys({
   searchClientId: Joi.string().uuid().trim(),
   ecoSystemId: Joi.string().trim().optional(),
   ...userMetricsValidation,
-  pageNumber: Joi.number().optional(),
+  pageNumber: Joi.number().min(1).optional(),
+  sortByField: Joi.string().valid('count').optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
 }).nand('searchClientId', 'ecoSystemId').messages({
   'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
@@ -112,18 +123,33 @@ const attachedOnCaseValidation = Joi.object().keys({
   'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
-const averageClickPositionValidation = Joi.object().keys({
-  startDate: Joi.string().trim().required(),
-  endDate: Joi.string().trim().required(),
-  searchClientId: Joi.string().uuid().trim().optional(),
-  count: Joi.number().min(1).max(500).optional(),
-});
+/** Same as overview POST validation (getAverageClickPosition uses similarValidation). Kept for backward compatibility. */
+const averageClickPositionValidation = similarValidation;
 
 const sessionDetailsValidation = Joi.object().keys({
   startDate: Joi.string().trim().required(),
   endDate: Joi.string().trim().required(),
   searchClientId: Joi.string().uuid().trim().required(),
-  count: Joi.number().min(1).max(500).optional(),
+  count: Joi.number().min(1).optional(),
+  sessionId: Joi.string().trim().optional(),
+  startIndex: Joi.number().min(1).optional(),
+  sortByField: Joi.string()
+    .valid('search', 'click', 'support', 'case', 'page_view', 'end_date', 'start_date')
+    .optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
+});
+
+const sessionListTableValidation = Joi.object().keys({
+  startDate: Joi.string().trim().required(),
+  endDate: Joi.string().trim().required(),
+  searchClientId: Joi.string().uuid().trim().required(),
+  count: Joi.number().min(1).max(500).required(),
+  sessionId: Joi.string().trim().optional(),
+  startIndex: Joi.number().min(1).optional(),
+  sortByField: Joi.string()
+    .valid('search', 'click', 'support', 'case', 'page_view', 'end_date', 'start_date')
+    .optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
 });
 
 const searchSessionBySSIdValidation = Joi.object().keys({
@@ -147,5 +173,6 @@ module.exports = {
   attachedOnCaseValidation,
   searchSessionBySSIdValidation,
   averageClickPositionValidation,
-  sessionDetailsValidation
+  sessionDetailsValidation,
+  sessionListTableValidation
 };

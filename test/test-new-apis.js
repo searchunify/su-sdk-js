@@ -13,11 +13,15 @@ const { validate } = require('../src/validations/joi-validator');
 
 describe('su-apis URLs', () => {
   it('should have AVERAGE_CLICK_POSITION url', () => {
-    assert.equal(ANALYTICS.AVERAGE_CLICK_POSITION, '/api/v2/searchQuery/averageClickPosition');
+    assert.equal(ANALYTICS.AVERAGE_CLICK_POSITION, '/api/v2/overview/averageClickPositionChart');
   });
 
   it('should have SESSION_LOG url', () => {
     assert.equal(ANALYTICS.SESSION_LOG, '/api/v2/session/log/all');
+  });
+
+  it('should have SESSION_LIST_TABLE url', () => {
+    assert.equal(ANALYTICS.SESSION_LIST_TABLE, '/api/v2/session/list/table');
   });
 
   it('should have SEARCH_CLIENTS url', () => {
@@ -83,6 +87,29 @@ describe('sessionDetailsValidation', () => {
     assert.ok(result);
   });
 
+  it('should pass with optional sessionId filter', () => {
+    const result = validate(analyticsValidation.sessionDetailsValidation, {
+      startDate: '2025-01-01',
+      endDate: '2025-01-31',
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      count: 10,
+      sessionId: '1649742483444046',
+    });
+    assert.ok(result);
+  });
+
+  it('should pass with optional sortByField and sortType', () => {
+    const result = validate(analyticsValidation.sessionDetailsValidation, {
+      startDate: '2025-01-01',
+      endDate: '2025-01-31',
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      count: 10,
+      sortByField: 'click',
+      sortType: 'desc',
+    });
+    assert.ok(result);
+  });
+
   it('should fail without searchClientId', () => {
     assert.throws(() => {
       validate(analyticsValidation.sessionDetailsValidation, {
@@ -90,6 +117,52 @@ describe('sessionDetailsValidation', () => {
         endDate: '2025-01-31',
       });
     });
+  });
+
+  it('should accept sortByField page_view', () => {
+    const result = validate(analyticsValidation.sessionDetailsValidation, {
+      startDate: '2025-01-01',
+      endDate: '2025-01-31',
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      count: 10,
+      sortByField: 'page_view',
+      sortType: 'desc',
+    });
+    assert.ok(result);
+  });
+});
+
+describe('sessionListTableValidation', () => {
+  it('should pass with required count and max 500', () => {
+    const result = validate(analyticsValidation.sessionListTableValidation, {
+      startDate: '2025-01-01',
+      endDate: '2025-01-31',
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      count: 500,
+    });
+    assert.ok(result);
+  });
+
+  it('should fail when count exceeds 500', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.sessionListTableValidation, {
+        startDate: '2025-01-01',
+        endDate: '2025-01-31',
+        searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        count: 501,
+      });
+    });
+  });
+
+  it('should accept optional startIndex without upper bound', () => {
+    const result = validate(analyticsValidation.sessionListTableValidation, {
+      startDate: '2025-01-01',
+      endDate: '2025-01-31',
+      searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      count: 100,
+      startIndex: 500,
+    });
+    assert.ok(result);
   });
 });
 
@@ -134,6 +207,10 @@ describe('Analytics class - new methods exist', () => {
 
   it('should have getSessionDetails method', () => {
     assert.equal(typeof analytics.getSessionDetails, 'function');
+  });
+
+  it('should have getSessionListTable method', () => {
+    assert.equal(typeof analytics.getSessionListTable, 'function');
   });
 });
 
