@@ -15,6 +15,30 @@ const buildSearchClassificationQueryParams = (params) => qs.stringify({
   sortType: params.sortType
 });
 
+/** Session list rows from API have either uid (sessions) or eco_id (eco_sessions); expose both keys for consumers. */
+const normalizeSessionListTableData = (data) => {
+  if (!data || typeof data !== 'object' || !Array.isArray(data.sessions)) {
+    return data;
+  }
+  return {
+    ...data,
+    sessions: data.sessions.map((row) => {
+      if (row == null || typeof row !== 'object') {
+        return row;
+      }
+      const hasUid = Object.prototype.hasOwnProperty.call(row, 'uid');
+      const hasEco = Object.prototype.hasOwnProperty.call(row, 'eco_id');
+      if (hasUid && !hasEco) {
+        return { ...row, eco_id: null };
+      }
+      if (hasEco && !hasUid) {
+        return { ...row, uid: null };
+      }
+      return row;
+    })
+  };
+};
+
 class Analytics extends Base {
   #instance;
 
@@ -523,7 +547,12 @@ class Analytics extends Base {
       timeout: this.#timeout,
       method: requestMethods.get,
       url: `${this.#instance}${ANALYTICS.SESSION_LIST_TABLE}?${queryParams}`
-    }, this.#authObj);
+    }, this.#authObj).then((result) => {
+      if (result && result.status && result.data) {
+        return { ...result, data: normalizeSessionListTableData(result.data) };
+      }
+      return result;
+    });
   }
 
   getTileDataContent(params) {
