@@ -481,13 +481,20 @@ class Analytics extends Base {
   }
 
   getAverageClickPosition(params) {
-    validate(analytics.averageClickPositionValidation, params);
+    validate(analytics.similarValidation, params);
 
     const payload = JSON.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      searchClientId: params.searchClientId,
-      count: params.count,
+      from: params.startDate,
+      to: params.endDate,
+      uid: params.searchClientId,
+      ecoId: params.ecoSystemId,
+      tenantId: params.tenantId,
+      internalUser: params.internalUser,
+      userMetricsFilters: params.userMetricsFilters,
+      emailTracking: params.emailTracking,
+      userMetricsFlag: params.userMetricsFlag,
+      userMetricsLimit: params.userMetricsLimit,
+      userMetricsOffset: params.userMetricsOffset,
     });
 
     return HttpRequest({

@@ -24,6 +24,15 @@ const similarValidation = Joi.object().keys({
   endDate: Joi.string().trim().required(),
   searchClientId: Joi.string().uuid().trim(),
   ecoSystemId: Joi.string().trim().optional(),
+  tenantId: Joi.string().uuid().trim().optional(),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  /** Ignored by overview POST bodies; allowed for callers (e.g. MCP) that share the same schema. */
+  count: Joi.number().min(1).max(500).optional(),
   emailTracking: Joi.boolean().optional(),
   conversionType: Joi.string().optional(),
   ...userMetricsValidation
@@ -114,12 +123,8 @@ const attachedOnCaseValidation = Joi.object().keys({
   'object.nand': 'searchClientId and ecoSystemId cannot be used together',
 });
 
-const averageClickPositionValidation = Joi.object().keys({
-  startDate: Joi.string().trim().required(),
-  endDate: Joi.string().trim().required(),
-  searchClientId: Joi.string().uuid().trim().optional(),
-  count: Joi.number().min(1).max(500).optional(),
-});
+/** Same as overview POST validation (getAverageClickPosition uses similarValidation). Kept for backward compatibility. */
+const averageClickPositionValidation = similarValidation;
 
 const sessionDetailsValidation = Joi.object().keys({
   startDate: Joi.string().trim().required(),

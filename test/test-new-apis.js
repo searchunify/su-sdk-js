@@ -13,7 +13,7 @@ const { validate } = require('../src/validations/joi-validator');
 
 describe('su-apis URLs', () => {
   it('should have AVERAGE_CLICK_POSITION url', () => {
-    assert.equal(ANALYTICS.AVERAGE_CLICK_POSITION, '/api/v2/searchQuery/averageClickPosition');
+    assert.equal(ANALYTICS.AVERAGE_CLICK_POSITION, '/api/v2/overview/averageClickPositionChart');
   });
 
   it('should have SESSION_LOG url', () => {
