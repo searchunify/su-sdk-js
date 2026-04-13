@@ -15,7 +15,11 @@ The SearchUnify SDK simplifies use of SearchUnify Services by providing a set of
 Sign up for SearchUnify, before you begin, you need a SearchUnify account. Please see the oAuth section of the developer guide for information about how to retrieve your SearchUnify credentials.
 
 ## Installation
-SDK requires [Node.js](https://nodejs.org/) to run. Install the dependencies and devDependencies and start the server.
+SDK requires [Node.js](https://nodejs.org/) to run.
+
+```bash
+npm install su-sdk
+```
 
 ## Authentication
 The SDK supports multiple authentication methods to securely connect to your SearchUnify instance. Depending on your setup, you can initialize the SDK using OAuth 2.0, API Key, or Client Credentials authentication.
@@ -112,6 +116,75 @@ const tileData = async() => {
 
 tileData();
 ```
+## Available APIs
+
+### Search Clients
+```javascript
+const SearchClients = suRestClient.SearchClients();
+
+// Get all search clients (returns id, name, uid, search_client_type)
+const searchClients = await SearchClients.getSearchClients();
+```
+
+### Search
+```javascript
+const Search = suRestClient.Search();
+
+// Search results (uid is the search client UID)
+const results = await Search.getSearchResults({ uid: 'searchClient UID', searchString: 'your query' });
+
+// GPT-enhanced search (requires requestType and sortby)
+const gptResults = await Search.getGPTResults({
+  searchClientId: 'searchClient UID',
+  searchString: 'your query',
+  requestType: 'SEARCH_GPT',
+  sortby: '_score',
+  from: 0,
+  resultsPerPage: 10,
+  pageNo: 1
+});
+```
+
+### Analytics
+```javascript
+const Analytics = suRestClient.Analytics();
+
+// Tile data (overview metrics)
+const tiles = await Analytics.getTilesData({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// All search queries
+const queries = await Analytics.getAllSearchQuery({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search queries with results
+const withResults = await Analytics.searchQueryWithResult({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search queries with no clicks
+const noClicks = await Analytics.searchQueryWithNoClicks({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search queries without results
+const noResults = await Analytics.searchQueryWithoutResults({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// All search conversions
+const conversions = await Analytics.getAllSearchConversion({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Average click position
+const acp = await Analytics.getAverageClickPosition({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
+
+// Session details
+const sessions = await Analytics.getSessionDetails({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
+```
+
+### Content
+```javascript
+const Content = suRestClient.Content();
+
+// Get all content sources
+const sources = await Content.getContentSources();
+
+// Get content source by ID
+const source = await Content.getContentSourceById({ contentSourceId: 'id' });
+```
+
 ## Documentation
 Please refer to the SearchUnify developer guide to use the SDK. https://docs.searchunify.com/Content/Developer-Guides/SDKs.htm
 The documentation is in review and might contain bugs🐞, we will update the link on https://docs.searchunify.com once its's final.
