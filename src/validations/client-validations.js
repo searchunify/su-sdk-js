@@ -4,6 +4,8 @@ const { AUTH_TYPES } = require('./../utils/constants');
 const initialize = Joi.object({
   instance: Joi.string().uri().trim().required(),
   timeout: Joi.number().min(30000).max(180000),
+  /** When true, analytics HTTP calls include X-SearchUnify-MCP-Track (SearchUnify MCP / trusted BFF only). */
+  sendMcpConsumptionTrack: Joi.boolean().optional().default(false),
   apiKey: Joi.string(),
   authType: Joi.string().valid(
     AUTH_TYPES.API_KEY,

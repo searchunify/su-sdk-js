@@ -45,6 +45,10 @@ exports.HttpRequest = async (options, authObj) => {
     };
   }
 
+  if (authObj.sendMcpConsumptionTrack) {
+    defaultHeaders['x-searchunify-mcp-track'] = '1';
+  }
+
   options.headers = { ...defaultHeaders, ...options.headers };
   const requestPayload = { ...options };
   try {
