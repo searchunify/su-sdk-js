@@ -24,10 +24,9 @@ npm install su-sdk
 ## Authentication
 The SDK supports multiple authentication methods to securely connect to your SearchUnify instance. Depending on your setup, you can initialize the SDK using OAuth 2.0, API Key, or Client Credentials authentication.
 
-1. OAuth 2.0 (Password Grant)
-Initialize the SDK using your OAuth 2.0 credentials. An access token will be generated internally and used automatically by the SDK to serve requests to your SearchUnify instance.
+### 1. OAuth 2.0 (Password Grant)
+An access token is generated internally and refreshed automatically on expiry (4 hours).
 
-## Example
 ```javascript
 const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
 
@@ -41,36 +40,31 @@ const suRestClient = new SearchUnifyRestClient({
     clientId: 'changeme',
     clientSecret: 'changeme'
   }
-})
+});
 ```
-The access token expires after 4 hours, SDK recreates access token once the token expires using refresh token.
 
-2. API Key Authentication
+### 2. API Key Authentication
 Generate the API key from the SearchUnify admin panel.
-## Example
-```javascript
 
+```javascript
 const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
 
 const suRestClient = new SearchUnifyRestClient({
   instance: 'https://yourInstance.searchunify.com',
   timeout: 60000,
-  apiKey: 'changeme',
-  authType: AUTH_TYPES.API_KEY
+  authType: AUTH_TYPES.API_KEY,
+  apiKey: 'changeme'
 });
 ```
-The API key will expire based on the expiry date you choose while generating the api key.
 
+### 3. Client Credentials (OAuth 2.0)
+For server-to-server communication. The access token is generated internally and refreshed automatically on expiry (4 hours).
 
-3. Client Credentials (OAuth 2.0)
-For server-to-server communication, use the OAuth 2.0 Client Credentials flow. The SDK will generate an access token internally and use it for API requests.
-
-## Example
 ```javascript
 const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
 
-const client = new SearchUnifyRestClient({
-  instance: 'https://your-instance.searchunify.com',
+const suRestClient = new SearchUnifyRestClient({
+  instance: 'https://yourInstance.searchunify.com',
   timeout: 60000,
   authType: AUTH_TYPES.CLIENT_CREDENTIALS,
   oauth2: {
@@ -79,46 +73,35 @@ const client = new SearchUnifyRestClient({
   }
 });
 ```
-The access token expires after 4 hours, SDK recreates access token once the token expires using refresh token.
 
-## Execution
-Initiate SearchUnify javascript SDK on Server. Using the SDK, you can use SearchUnify functional interface to retrieve or save data. To start using, initialize the SDK with your URL and API key.
+## Sample API Call
+
 ```javascript
-const { SearchUnifyRestClient, AUTH_TYPES } = require('su-sdk');
-
-const suRestClient = new SearchUnifyRestClient({
-  instance: 'https://yourInstance.searchunify.com',
-  timeout: 60000,
-  oauth2: {
-    username: 'changeme',
-    password: 'changeme',
-    clientId: 'changeme',
-    clientSecret: 'changeme'
-  }
-})
-```
-
-## Sample API call
-```javascript
-const tileData = async() => {
+const tileData = async () => {
   try {
-      const Analytics = suRestClient.Analytics();
-      const data = await Analytics.getTilesData({
-        startDate: '2022-12-09',
-        endDate: '2022-12-10',
-        searchClientId: 'searchClient UID'
-      });
-      console.log("data", data);
-      } catch (error) {
-      console.log("error", error);
+    const Analytics = suRestClient.Analytics();
+    const data = await Analytics.getTilesData({
+      startDate: '2022-12-09',
+      endDate: '2022-12-10',
+      searchClientId: 'searchClient-UID'
+    });
+    console.log('data', data);
+  } catch (error) {
+    console.log('error', error);
   }
 };
 
 tileData();
 ```
+
 ## Available APIs
 
+> **Note:** For analytics methods, `searchClientId` and `ecoSystemId` are mutually exclusive — pass one or the other, not both.
+
+---
+
 ### Search Clients
+
 ```javascript
 const SearchClients = suRestClient.SearchClients();
 
@@ -126,68 +109,189 @@ const SearchClients = suRestClient.SearchClients();
 const searchClients = await SearchClients.getSearchClients();
 ```
 
+---
+
 ### Search
+
 ```javascript
 const Search = suRestClient.Search();
 
-// Search results (uid is the search client UID)
-const results = await Search.getSearchResults({ uid: 'searchClient UID', searchString: 'your query' });
+// Search results — uid is the search client UUID
+const results = await Search.getSearchResults({
+  uid: 'searchClient-UUID',
+  searchString: 'your query'
+});
 
-// GPT-enhanced search (requires requestType and sortby)
+// GPT-enhanced search
+// requestType: 'SEARCH_GPT' | 'GPT'
+// sortby: '_score' | '_post_time'
+// When requestType = 'SEARCH_GPT': pageNo and resultsPerPage are required
+// When requestType = 'GPT': context, from, and articles are required
 const gptResults = await Search.getGPTResults({
-  searchClientId: 'searchClient UID',
+  searchClientId: 'searchClient-UUID',
   searchString: 'your query',
   requestType: 'SEARCH_GPT',
   sortby: '_score',
-  from: 0,
-  resultsPerPage: 10,
-  pageNo: 1
+  pageNo: 1,
+  resultsPerPage: 10
 });
 ```
 
+---
+
 ### Analytics
+
 ```javascript
 const Analytics = suRestClient.Analytics();
-
-// Tile data (overview metrics)
-const tiles = await Analytics.getTilesData({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
-
-// All search queries
-const queries = await Analytics.getAllSearchQuery({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
-
-// Search queries with results
-const withResults = await Analytics.searchQueryWithResult({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
-
-// Search queries with no clicks
-const noClicks = await Analytics.searchQueryWithNoClicks({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
-
-// Search queries without results
-const noResults = await Analytics.searchQueryWithoutResults({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
-
-// All search conversions
-const conversions = await Analytics.getAllSearchConversion({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
-
-// Average click position
-const acp = await Analytics.getAverageClickPosition({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
-
-// Session details
-const sessions = await Analytics.getSessionDetails({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
 ```
 
+#### Overview / Tile Data
+
+```javascript
+// Tile summary metrics
+await Analytics.getTilesData({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// Search summary chart data
+await Analytics.getSearchSummaryChart({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// Average click position chart
+await Analytics.getAverageClickPosition({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// Content tile data
+await Analytics.getTileDataContent({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// Tile metrics (set 1 and set 2)
+await Analytics.getTileDataMetrics1({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+await Analytics.getTileDataMetrics2({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+```
+
+#### Search Queries
+> These methods require `startDate`, `endDate`, and `count` (1–500). `searchClientId` or `ecoSystemId` is optional.
+
+```javascript
+// All search queries
+await Analytics.getAllSearchQuery({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Queries that returned results
+await Analytics.searchQueryWithResult({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Queries with no clicks
+await Analytics.searchQueryWithNoClicks({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Queries without results
+await Analytics.searchQueryWithoutResults({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Search query histogram
+await Analytics.searchQueryHistogram({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Missed query histogram
+await Analytics.missedQueryHistogram({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// KCS support search queries
+await Analytics.getKcsSupportSearchQuery({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+```
+
+#### Search Conversions
+
+```javascript
+// All search conversions
+await Analytics.getAllSearchConversion({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Conversions not on first page
+await Analytics.searchConversionNotOnFirstPage({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Conversions with filters applied
+await Analytics.searchConversionWithFilters({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// Conversions by session ID
+await Analytics.searchConversionBySessionId({
+  startDate: '2025-01-01', endDate: '2025-03-26',
+  count: 10, searchClientId: 'uid', sessionId: 'session-id'
+});
+
+// Discussions ready to become articles
+await Analytics.discussionsReadyToBecomeArticles({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10 });
+```
+
+#### KCS / Case Articles
+
+```javascript
+// searchType: 'all' | 'global' | 'support'
+await Analytics.getCaseCreatedArticles({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', searchType: 'all' });
+await Analytics.getCaseDeflectedArticles({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', searchType: 'all' });
+await Analytics.getAttachedArticles({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+await Analytics.getAttachedOnCase({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', url: 'https://case-url' });
+```
+
+#### Sessions
+
+```javascript
+// Search queries grouped by session
+await Analytics.getSearchQueryInSessions({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, searchClientId: 'uid' });
+
+// Session details log
+// sortByField: 'search' | 'click' | 'support' | 'case' | 'page_view' | 'end_date' | 'start_date'
+// sortType: 'asc' | 'desc'
+await Analytics.getSessionDetails({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
+
+// Session list table (count is required)
+await Analytics.getSessionListTable({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', count: 10 });
+
+// Session by search session ID
+await Analytics.getSearchSessionBySearchSessionId({
+  startDate: '2025-01-01', endDate: '2025-03-26',
+  searchClientId: 'uid', sessionId: 'session-id'
+});
+
+// Session by case UID (authenticated)
+await Analytics.searchSessionByCaseUidAuth({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, caseUid: 'case-uuid' });
+
+// Session by case UID
+await Analytics.getSearchSessionByCaseUid({ startDate: '2025-01-01', endDate: '2025-03-26', count: 10, caseUid: 'case-uuid' });
+```
+
+---
+
 ### Content
+
 ```javascript
 const Content = suRestClient.Content();
 
 // Get all content sources
-const sources = await Content.getContentSources();
+await Content.getContentSources();
 
 // Get content source by ID
-const source = await Content.getContentSourceById({ contentSourceId: 'id' });
+await Content.getContentSourceById({ contentSourceId: 'id' });
+
+// Get objects and fields for a content source
+await Content.getObjectAndFields({ contentSourceId: 'id' });
+
+// Get object data (offset and size are optional; size max: 50)
+await Content.getObjectSpecificData({ contentSourceId: 'cs-id', objectId: 'obj-id', offset: 0, size: 10 });
+
+// Get a specific document by ID
+await Content.getObjectSpecificDataWithId({ contentSourceId: 'cs-id', objectId: 'obj-id', documentId: 'doc-id' });
+
+// Update a document (data must be a non-empty object)
+await Content.updateDoucmentById({
+  contentSourceId: 'cs-id',
+  objectId: 'obj-id',
+  documentId: 'doc-id',
+  data: { field: 'value' }
+});
+
+// Bulk upload documents (data must be a non-empty array)
+await Content.uploadData({
+  contentSourceId: 'cs-id',
+  objectId: 'obj-id',
+  data: [{ field: 'value' }]
+});
 ```
+
+---
 
 ## Documentation
 Please refer to the SearchUnify developer guide to use the SDK. https://docs.searchunify.com/Content/Developer-Guides/SDKs.htm
-The documentation is in review and might contain bugs🐞, we will update the link on https://docs.searchunify.com once its's final.
 
 ## License
 MIT

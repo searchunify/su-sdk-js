@@ -1,6 +1,6 @@
 {
     "name": "su-sdk",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "SearchUnify javascript SDK enables developers to easily work with the SearchUnify platform and build scalable solutions with search, analytics, crawlers and more.",
     "main": "index.js",
     "repository": {
@@ -25,6 +25,6 @@
         "qs": "^6.11.0"
     },
     "devDependencies": {
-        "easy-linter": "1.0.5"
+        "easy-linter": "1.0.7"
     }
 }
