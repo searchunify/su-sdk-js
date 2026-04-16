@@ -630,6 +630,100 @@ class Analytics extends Base {
       data: payload
     }, this.#authObj);
   }
+
+  postCaseDeflectionStage1(params) {
+    validate(analytics.conversionCaseDeflectionStage1, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_STAGE_1}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postCurrentRelevanceIndex(params) {
+    validate(analytics.conversionRelevanceIndex, params);
+
+    const body = {
+      tenantId: params.tenantId,
+      uid: params.uid,
+      internalUser: params.internalUser
+    };
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CURRENT_RELEVANCE_INDEX}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postRelevanceIndex(params) {
+    validate(analytics.conversionRelevanceIndex, params);
+
+    const body = {
+      tenantId: params.tenantId,
+      uid: params.uid,
+      internalUser: params.internalUser,
+      from: params.from,
+      to: params.to
+    };
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.RELEVANCE_INDEX}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipUnassistedSelfSolveVolume(params) {
+    validate(analytics.leadershipSelfSolveVolume, params);
+
+    const body = {
+      tenantId: params.tenantId,
+      internalUser: params.internalUser,
+      from: params.from,
+      to: params.to,
+      directlyViewSetting: params.directlyViewSetting
+    };
+    if (params.ecoId) {
+      body.ecoId = params.ecoId;
+    } else {
+      body.uid = params.uid;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_UNASSISTED_SELF_SOLVE_VOLUME}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipAssistedSelfSolveVolume(params) {
+    validate(analytics.leadershipSelfSolveVolume, params);
+
+    const body = {
+      tenantId: params.tenantId,
+      internalUser: params.internalUser,
+      from: params.from,
+      to: params.to
+    };
+    if (params.ecoId) {
+      body.ecoId = params.ecoId;
+    } else {
+      body.uid = params.uid;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
 }
 
 module.exports = {

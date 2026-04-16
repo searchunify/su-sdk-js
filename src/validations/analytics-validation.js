@@ -161,6 +161,78 @@ const searchSessionBySSIdValidation = Joi.object().keys({
   pageNumber: Joi.number().min(1),
 });
 
+/** POST /conversion/caseDeflectionStage1 — same core fields as analytics session validators (from/to). */
+const conversionCaseDeflectionStage1 = Joi.object({
+  from: Joi.string().trim().required(),
+  to: Joi.string().trim().required(),
+  tenantId: Joi.string().uuid().trim().required(),
+  uid: Joi.alternatives().try(Joi.string().valid('all'), Joi.string().uuid().trim()).optional(),
+  ecoId: Joi.string().uuid().trim().optional().allow(null, ''),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  emailTracking: Joi.boolean().optional(),
+  userMetricsFlag: Joi.boolean().optional(),
+  userMetricsFilters: Joi.alternatives().try(Joi.string().trim(), Joi.array().items(Joi.string().trim())).optional(),
+  userMetricsLimit: Joi.number().optional(),
+  userMetricsOffset: Joi.number().optional()
+}).custom((value, helpers) => {
+  const hasUid =
+    value.uid !== undefined && value.uid !== null && value.uid !== '';
+  const hasEco =
+    value.ecoId !== undefined &&
+    value.ecoId !== null &&
+    String(value.ecoId).trim() !== '';
+  if (hasUid && hasEco) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+});
+
+/** POST /conversion/current-relevance-index and relevance-index drill-down. */
+const conversionRelevanceIndex = Joi.object({
+  tenantId: Joi.string().uuid().trim().required(),
+  uid: Joi.string().uuid().trim().required(),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  from: Joi.string().trim().optional().allow(null, ''),
+  to: Joi.string().trim().optional().allow(null, '')
+});
+
+/** POST /leadership/unassisted-self-solve-volume and assisted-self-solve-volume. */
+const leadershipSelfSolveVolume = Joi.object({
+  tenantId: Joi.string().uuid().trim().required(),
+  uid: Joi.string().uuid().trim().optional(),
+  ecoId: Joi.string().uuid().trim().optional(),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  from: Joi.string().trim().optional().allow(null, ''),
+  to: Joi.string().trim().optional().allow(null, ''),
+  directlyViewSetting: Joi.boolean().optional()
+}).custom((value, helpers) => {
+  const hasUid = value.uid && typeof value.uid === 'string' && value.uid.length > 0;
+  const hasEco =
+    value.ecoId && typeof value.ecoId === 'string' && value.ecoId.length > 0;
+  if (hasUid && hasEco) {
+    return helpers.error('any.invalid');
+  }
+  if (!hasUid && !hasEco) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+});
+
 module.exports = {
   similarValidation,
   similarValidationWithCount,
@@ -174,5 +246,8 @@ module.exports = {
   searchSessionBySSIdValidation,
   averageClickPositionValidation,
   sessionDetailsValidation,
-  sessionListTableValidation
+  sessionListTableValidation,
+  conversionCaseDeflectionStage1,
+  conversionRelevanceIndex,
+  leadershipSelfSolveVolume
 };
