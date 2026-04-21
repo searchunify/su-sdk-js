@@ -27,9 +27,9 @@ exports.ANALYTICS = {
   TILE_DATA_METRICS_2: '/api/v2/overview/tileDataMetrics2',
   SESSION_LOG: '/api/v2/session/log/all',
   SESSION_LIST_TABLE: '/api/v2/session/list/table',
-  CASE_DEFLECTION_STAGE_1: '/conversion/caseDeflectionStage1',
-  CURRENT_RELEVANCE_INDEX: '/conversion/current-relevance-index',
-  RELEVANCE_INDEX: '/conversion/relevance-index',
+  CASE_DEFLECTION_STAGE_1: '/api/v2/conversion/caseDeflectionStage1',
+  CURRENT_RELEVANCE_INDEX: '/api/v2/conversion/current-relevance-index',
+  RELEVANCE_INDEX: '/api/v2/conversion/relevance-index',
   LEADERSHIP_UNASSISTED_SELF_SOLVE_VOLUME: '/leadership/unassisted-self-solve-volume',
   LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME: '/leadership/assisted-self-solve-volume'
 };

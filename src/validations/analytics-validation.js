@@ -161,11 +161,10 @@ const searchSessionBySSIdValidation = Joi.object().keys({
   pageNumber: Joi.number().min(1),
 });
 
-/** POST /conversion/caseDeflectionStage1 — same core fields as analytics session validators (from/to). */
+/** POST /api/v2/conversion/caseDeflectionStage1 — same core fields as analytics session validators (from/to). */
 const conversionCaseDeflectionStage1 = Joi.object({
   from: Joi.string().trim().required(),
   to: Joi.string().trim().required(),
-  tenantId: Joi.string().uuid().trim().required(),
   uid: Joi.alternatives().try(Joi.string().valid('all'), Joi.string().uuid().trim()).optional(),
   ecoId: Joi.string().uuid().trim().optional().allow(null, ''),
   internalUser: Joi.alternatives()
@@ -192,9 +191,8 @@ const conversionCaseDeflectionStage1 = Joi.object({
   return value;
 });
 
-/** POST /conversion/current-relevance-index and relevance-index drill-down. */
+/** POST /api/v2/conversion/current-relevance-index and relevance-index drill-down. */
 const conversionRelevanceIndex = Joi.object({
-  tenantId: Joi.string().uuid().trim().required(),
   uid: Joi.string().uuid().trim().required(),
   internalUser: Joi.alternatives()
     .try(
@@ -208,7 +206,6 @@ const conversionRelevanceIndex = Joi.object({
 
 /** POST /leadership/unassisted-self-solve-volume and assisted-self-solve-volume. */
 const leadershipSelfSolveVolume = Joi.object({
-  tenantId: Joi.string().uuid().trim().required(),
   uid: Joi.string().uuid().trim().optional(),
   ecoId: Joi.string().uuid().trim().optional(),
   internalUser: Joi.alternatives()

@@ -646,7 +646,6 @@ class Analytics extends Base {
     validate(analytics.conversionRelevanceIndex, params);
 
     const body = {
-      tenantId: params.tenantId,
       uid: params.uid,
       internalUser: params.internalUser
     };
@@ -663,7 +662,6 @@ class Analytics extends Base {
     validate(analytics.conversionRelevanceIndex, params);
 
     const body = {
-      tenantId: params.tenantId,
       uid: params.uid,
       internalUser: params.internalUser,
       from: params.from,
@@ -682,7 +680,6 @@ class Analytics extends Base {
     validate(analytics.leadershipSelfSolveVolume, params);
 
     const body = {
-      tenantId: params.tenantId,
       internalUser: params.internalUser,
       from: params.from,
       to: params.to,
@@ -706,7 +703,6 @@ class Analytics extends Base {
     validate(analytics.leadershipSelfSolveVolume, params);
 
     const body = {
-      tenantId: params.tenantId,
       internalUser: params.internalUser,
       from: params.from,
       to: params.to
