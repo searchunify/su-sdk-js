@@ -253,3 +253,29 @@ describe('Existing methods use similarValidationWithCount', () => {
     assert.ok(result);
   });
 });
+
+describe('overviewPageRating validation', () => {
+  const base = {
+    startDate: '2025-01-01',
+    endDate: '2025-01-31',
+    searchClientId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  };
+
+  it('allows pageNumber with count (MCP-style)', () => {
+    const result = validate(analyticsValidation.overviewPageRating, {
+      ...base,
+      count: 100,
+      pageNumber: 2,
+    });
+    assert.ok(result);
+  });
+
+  it('rejects pageNumber alone on similarValidation (regression)', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.similarValidation, {
+        ...base,
+        pageNumber: 1,
+      });
+    });
+  });
+});

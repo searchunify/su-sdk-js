@@ -347,6 +347,11 @@ const overviewCreatedCases = similarValidation.keys({
   isAscending: Joi.boolean().optional()
 });
 
+/** POST /api/v2/overview/pageRating — body uses `limit` / `offset` (row skip); MCP/SDK may pass pageNumber + count. */
+const overviewPageRating = similarValidation.keys({
+  pageNumber: Joi.number().min(1).max(500).optional()
+});
+
 /** POST /api/v2/overview/searchFeedback */
 const overviewSearchFeedback = similarValidation.keys({
   pageNumber: Joi.number().min(1).max(500).optional()
@@ -429,6 +434,7 @@ module.exports = {
   conversionClicksCountContentSource,
   overviewSearchClickPosition,
   overviewCreatedCases,
+  overviewPageRating,
   overviewSearchFeedback,
   overviewAdvertisements,
   llmResponseFeedbackOverview

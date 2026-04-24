@@ -774,8 +774,10 @@ class Analytics extends Base {
   }
 
   getOverviewPageRating(params) {
-    validate(analytics.similarValidation, params);
+    validate(analytics.overviewPageRating, params);
 
+    const page = params.pageNumber ?? 1;
+    const limit = params.count;
     const body = {
       from: params.startDate,
       to: params.endDate,
@@ -783,6 +785,10 @@ class Analytics extends Base {
       filterType: 'all',
       sortby: 'most_recent',
     };
+    if (limit != null) {
+      body.limit = limit;
+      body.offset = Math.max(0, (page - 1) * limit);
+    }
     if (params.ecoSystemId) {
       body.ecoId = params.ecoSystemId;
     } else if (params.searchClientId) {
