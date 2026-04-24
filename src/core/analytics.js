@@ -483,25 +483,27 @@ class Analytics extends Base {
   getAverageClickPosition(params) {
     validate(analytics.similarValidation, params);
 
-    const payload = JSON.stringify({
+    const payload = {
       from: params.startDate,
       to: params.endDate,
       uid: params.searchClientId,
       ecoId: params.ecoSystemId,
-      tenantId: params.tenantId,
       internalUser: params.internalUser,
       userMetricsFilters: params.userMetricsFilters,
       emailTracking: params.emailTracking,
       userMetricsFlag: params.userMetricsFlag,
       userMetricsLimit: params.userMetricsLimit,
       userMetricsOffset: params.userMetricsOffset,
-    });
+    };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      payload.tenantId = params.tenantId;
+    }
 
     return HttpRequest({
       timeout: this.#timeout,
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.AVERAGE_CLICK_POSITION}`,
-      data: payload
+      data: JSON.stringify(payload)
     }, this.#authObj);
   }
 
@@ -650,6 +652,231 @@ class Analytics extends Base {
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_2}`,
       data: payload
+    }, this.#authObj);
+  }
+
+  getOverviewSearchClickPosition(params) {
+    validate(analytics.overviewSearchClickPosition, params);
+
+    const page = params.pageNumber ?? 1;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      searchQuery: params.searchQuery ?? '',
+      sortingField: params.sortingField ?? 'click',
+      sortType: params.sortType ?? 'desc',
+      currentPage: page,
+      offset: page,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
+    } else {
+      body.uid = params.searchClientId;
+      body.ecoId = null;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_CLICK_POSITION}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewCreatedCases(params) {
+    validate(analytics.overviewCreatedCases, params);
+
+    const page = params.pageNumber ?? 1;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      caseUid: params.caseUid ?? '',
+      caseSubject: params.caseSubject ?? '',
+      cookie: params.sessionCookie ?? '',
+      emailId: params.emailId ?? '',
+      currentPage: page,
+      offset: page,
+      isAscending: params.isAscending ?? true,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
+    } else {
+      body.uid = params.searchClientId ?? '';
+      body.ecoId = null;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_CREATED_CASES}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewFeaturedSnippet(params) {
+    validate(analytics.similarValidation, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_FEATURED_SNIPPET}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewKnowledgeTitle(params) {
+    validate(analytics.similarValidation, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_KNOWLEDGE_TITLE}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewPageRating(params) {
+    validate(analytics.similarValidation, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      filterType: 'all',
+      sortby: 'most_recent',
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_PAGE_RATING}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewSearchFeedback(params) {
+    validate(analytics.overviewSearchFeedback, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      offset: params.pageNumber ?? 1,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_FEEDBACK}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewAdvertisements(params) {
+    validate(analytics.overviewAdvertisements, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      page_no: params.pageNumber ?? 1,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.searchKey !== undefined && params.searchKey !== '') {
+      body.search_key = params.searchKey;
+    }
+    if (params.advertisementSortType !== undefined && params.advertisementSortType !== '') {
+      body.sort_type = params.advertisementSortType;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_ADVERTISEMENTS}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getLlmResponseFeedback(params) {
+    validate(analytics.llmResponseFeedbackOverview, params);
+
+    const body = {
+      uid: params.searchClientId,
+      from: params.startDate,
+      to: params.endDate,
+      limit: params.count ?? 10,
+      offset: params.pageNumber ?? 1,
+      reactionFilterType: params.reactionFilterType ?? 'all',
+      searchQuery: params.searchQuery ?? '',
+      internalUser: params.internalUser ?? 'all',
+    };
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LLM_RESPONSE_FEEDBACK}`,
+      data: JSON.stringify(body)
     }, this.#authObj);
   }
 

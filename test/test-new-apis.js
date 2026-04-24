@@ -24,6 +24,12 @@ describe('su-apis URLs', () => {
     assert.equal(ANALYTICS.SESSION_LIST_TABLE, '/api/v2/session/list/table');
   });
 
+  it('should have overview MCP mirror urls', () => {
+    assert.equal(ANALYTICS.OVERVIEW_SEARCH_CLICK_POSITION, '/api/v2/overview/searchClickPosition');
+    assert.equal(ANALYTICS.OVERVIEW_CREATED_CASES, '/api/v2/overview/createdCases');
+    assert.equal(ANALYTICS.LLM_RESPONSE_FEEDBACK, '/api/v2/llm/llm-response-feedback');
+  });
+
   it('should have SEARCH_CLIENTS url', () => {
     assert.equal(CONTENT_API.SEARCH_CLIENTS, '/api/v2/search-clients');
   });
@@ -211,6 +217,17 @@ describe('Analytics class - new methods exist', () => {
 
   it('should have getSessionListTable method', () => {
     assert.equal(typeof analytics.getSessionListTable, 'function');
+  });
+
+  it('should have overview tab mirror methods', () => {
+    assert.equal(typeof analytics.getOverviewSearchClickPosition, 'function');
+    assert.equal(typeof analytics.getOverviewCreatedCases, 'function');
+    assert.equal(typeof analytics.getOverviewFeaturedSnippet, 'function');
+    assert.equal(typeof analytics.getOverviewKnowledgeTitle, 'function');
+    assert.equal(typeof analytics.getOverviewPageRating, 'function');
+    assert.equal(typeof analytics.getOverviewSearchFeedback, 'function');
+    assert.equal(typeof analytics.getOverviewAdvertisements, 'function');
+    assert.equal(typeof analytics.getLlmResponseFeedback, 'function');
   });
 });
 

@@ -329,6 +329,55 @@ const conversionClicksCountContentSource = Joi.object({
 });
 
 /** POST /leadership/unassisted-self-solve-volume and assisted-self-solve-volume. */
+/** POST /api/v2/overview/searchClickPosition — MCP mirror; tenantId omitted on wire when not set. */
+const overviewSearchClickPosition = similarValidation.keys({
+  searchQuery: Joi.string().allow('').optional(),
+  sortingField: Joi.string().optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
+  pageNumber: Joi.number().min(1).max(500).optional()
+});
+
+/** POST /api/v2/overview/createdCases */
+const overviewCreatedCases = similarValidation.keys({
+  caseUid: Joi.string().allow('').optional(),
+  caseSubject: Joi.string().allow('').optional(),
+  sessionCookie: Joi.string().allow('').optional(),
+  emailId: Joi.string().allow('').optional(),
+  pageNumber: Joi.number().min(1).max(500).optional(),
+  isAscending: Joi.boolean().optional()
+});
+
+/** POST /api/v2/overview/searchFeedback */
+const overviewSearchFeedback = similarValidation.keys({
+  pageNumber: Joi.number().min(1).max(500).optional()
+});
+
+/** POST /api/v2/overview/advertisements */
+const overviewAdvertisements = similarValidation.keys({
+  searchKey: Joi.string().allow('').optional(),
+  advertisementSortType: Joi.string().optional(),
+  pageNumber: Joi.number().min(1).max(500).optional()
+});
+
+/** POST /api/v2/llm/llm-response-feedback */
+const llmResponseFeedbackOverview = Joi.object({
+  startDate: Joi.string().trim().required(),
+  endDate: Joi.string().trim().required(),
+  searchClientId: Joi.string().uuid().trim().required(),
+  count: Joi.number().min(1).max(500).optional(),
+  pageNumber: Joi.number().min(1).max(500).optional(),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  searchQuery: Joi.string().allow('').optional(),
+  reactionFilterType: Joi.alternatives()
+    .try(Joi.string().valid('all', 'true', 'false', '0', '1'), Joi.boolean())
+    .optional()
+});
+
 const leadershipSelfSolveVolume = Joi.object({
   uid: Joi.string().uuid().trim().optional(),
   ecoId: Joi.string().uuid().trim().optional(),
@@ -377,5 +426,10 @@ module.exports = {
   leadershipDeflectionCount,
   leadershipDeflectionCostSavingsDownload,
   leadershipGetContentSources,
-  conversionClicksCountContentSource
+  conversionClicksCountContentSource,
+  overviewSearchClickPosition,
+  overviewCreatedCases,
+  overviewSearchFeedback,
+  overviewAdvertisements,
+  llmResponseFeedbackOverview
 };
