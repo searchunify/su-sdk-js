@@ -4,6 +4,8 @@ const { AUTH_TYPES } = require('./../utils/constants');
 const initialize = Joi.object({
   instance: Joi.string().uri().trim().required(),
   timeout: Joi.number().min(30000).max(180000),
+  /** Optional analytics tenant UUID (same as admin `tenant-id`) for leadership and some conversion bodies; MCP can also pass `tenantId` per recipe. */
+  tenantId: Joi.string().uuid().trim().optional(),
   /** When true, analytics HTTP calls include X-SearchUnify-MCP-Track (SearchUnify MCP / trusted BFF only). */
   sendMcpConsumptionTrack: Joi.boolean().optional().default(false),
   apiKey: Joi.string(),

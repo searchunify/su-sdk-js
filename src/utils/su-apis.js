@@ -28,10 +28,17 @@ exports.ANALYTICS = {
   SESSION_LOG: '/api/v2/session/log/all',
   SESSION_LIST_TABLE: '/api/v2/session/list/table',
   CASE_DEFLECTION_STAGE_1: '/api/v2/conversion/caseDeflectionStage1',
+  CASE_DEFLECTION_STAGE_2: '/api/v2/conversion/caseDeflectionStage2',
+  CASE_DEFLECTION_TRENDS: '/api/v2/conversion/caseDeflectionTrends',
+  CONVERSION_SUMMARY: '/api/v2/conversion/conversionSummary',
   CURRENT_RELEVANCE_INDEX: '/api/v2/conversion/current-relevance-index',
   RELEVANCE_INDEX: '/api/v2/conversion/relevance-index',
   LEADERSHIP_UNASSISTED_SELF_SOLVE_VOLUME: '/leadership/unassisted-self-solve-volume',
-  LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME: '/leadership/assisted-self-solve-volume'
+  LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME: '/leadership/assisted-self-solve-volume',
+  LEADERSHIP_DEFLECTION_COUNT: '/leadership/deflection-count',
+  LEADERSHIP_DEFLECTION_COST_SAVINGS_DOWNLOAD: '/leadership/deflection-cost-savings-download',
+  LEADERSHIP_GET_CONTENT_SOURCES: '/leadership/get-content-sources',
+  CLICKS_COUNT_CONTENT_SOURCE: '/api/v2/conversion/clicksCountContentSource'
 };
 
 exports.AUTH_API = {
