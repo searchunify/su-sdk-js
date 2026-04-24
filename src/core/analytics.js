@@ -780,11 +780,13 @@ class Analytics extends Base {
     validate(analytics.leadershipDeflectionCount, params);
 
     const body = {
-      tenantId: params.tenantId,
       internalUser: params.internalUser ?? 'all',
       from: params.from,
       to: params.to
     };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
     if (params.ecoId) {
       body.ecoId = params.ecoId;
       body.uid = null;
@@ -805,7 +807,6 @@ class Analytics extends Base {
     validate(analytics.leadershipDeflectionCostSavingsDownload, params);
 
     const body = {
-      tenantId: params.tenantId,
       internalUser: params.internalUser ?? 'all',
       from: params.from,
       to: params.to,
@@ -813,6 +814,9 @@ class Analytics extends Base {
       csv: params.csv,
       sendToEmail: params.sendToEmail ?? 0
     };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
     if (params.email !== undefined) {
       body.email = params.email;
     }
@@ -835,7 +839,10 @@ class Analytics extends Base {
   postLeadershipGetContentSources(params) {
     validate(analytics.leadershipGetContentSources, params);
 
-    const body = { tenantId: params.tenantId };
+    const body = {};
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
     if (params.csTypes !== undefined && params.csTypes !== null) {
       body.csTypes = params.csTypes;
     }

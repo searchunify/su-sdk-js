@@ -210,9 +210,8 @@ const conversionCaseDeflectionStage1 = Joi.object({
 /** POST /api/v2/conversion/caseDeflectionStage2 — same body shape as stage1. */
 const conversionCaseDeflectionStage2 = conversionCaseDeflectionStage1;
 
-/** POST /api/v2/conversion/caseDeflectionTrends — requires tenantId and filterValue. */
+/** POST /api/v2/conversion/caseDeflectionTrends — filterValue required; tenantId optional (omit when caller does not send it). */
 const conversionCaseDeflectionTrends = conversionCaseDeflectionStage1.keys({
-  tenantId: Joi.string().uuid().trim().required(),
   filterValue: Joi.string().valid('cumulative', 'stage1', 'stage2').required(),
   trueDeflection: Joi.boolean().optional()
 });
@@ -221,7 +220,7 @@ const conversionCaseDeflectionTrends = conversionCaseDeflectionStage1.keys({
 const conversionConversionSummary = Joi.object({
   from: Joi.string().trim().required(),
   to: Joi.string().trim().required(),
-  tenantId: Joi.string().uuid().trim().required(),
+  tenantId: Joi.string().uuid().trim().optional(),
   uid: Joi.alternatives().try(Joi.string().valid('all'), Joi.string().uuid().trim()).optional(),
   ecoId: Joi.string().uuid().trim().optional().allow(null, ''),
   internalUser: Joi.alternatives()
@@ -254,7 +253,7 @@ const conversionConversionSummary = Joi.object({
 
 /** POST /leadership/deflection-count */
 const leadershipDeflectionCount = Joi.object({
-  tenantId: Joi.string().uuid().trim().required(),
+  tenantId: Joi.string().uuid().trim().optional(),
   uid: Joi.string().uuid().trim().optional(),
   ecoId: Joi.string().uuid().trim().optional().allow(null, ''),
   internalUser: Joi.alternatives()
@@ -305,7 +304,7 @@ const conversionRelevanceIndex = Joi.object({
 
 /** POST /leadership/get-content-sources — un-archived content sources for facet discovery (requires analytics-secret when routed through admin). */
 const leadershipGetContentSources = Joi.object({
-  tenantId: Joi.string().uuid().trim().required(),
+  tenantId: Joi.string().uuid().trim().optional(),
   csTypes: Joi.array().items(Joi.string().trim()).optional()
 });
 
@@ -316,7 +315,7 @@ const conversionClicksCountContentSource = Joi.object({
   uid: Joi.alternatives()
     .try(Joi.string().valid('all'), Joi.string().uuid().trim())
     .required(),
-  tenantId: Joi.string().uuid().trim().required(),
+  tenantId: Joi.string().uuid().trim().optional(),
   internalUser: Joi.alternatives()
     .try(
       Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
