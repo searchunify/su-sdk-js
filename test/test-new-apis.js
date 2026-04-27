@@ -30,6 +30,20 @@ describe('su-apis URLs', () => {
     assert.equal(ANALYTICS.LLM_RESPONSE_FEEDBACK, '/api/v2/llm/llm-response-feedback');
   });
 
+  it('should have conversions tab MCP mirror urls', () => {
+    assert.equal(ANALYTICS.CONVERSION_SESSION_DETAILS, '/api/v2/conversion/sessionDetails');
+    assert.equal(ANALYTICS.CONVERSION_TOP_CLICKED_DOCS, '/api/v2/conversion/topClickedDocs');
+    assert.equal(ANALYTICS.CONVERSION_SEARCHES_ON_CLICK, '/api/v2/conversion/searchesOnClick');
+    assert.equal(ANALYTICS.CONVERSION_TOP_SEARCHES_WITH_CLICKS, '/api/v2/conversion/topSearchesWithClicks');
+    assert.equal(ANALYTICS.CONVERSION_CLICKED_RESULTS, '/api/v2/conversion/clickedResults');
+    assert.equal(ANALYTICS.SEARCHES_CREATED_CASE, '/api/v2/conversion/searchesCreatedCase');
+    assert.equal(ANALYTICS.SEARCHES_ON_DEFLECTION, '/api/v2/conversion/searchesOnDeflection');
+    assert.equal(ANALYTICS.ARTICLE_CREATED_CASES_SESSIONS, '/api/v2/conversion/articlesCreatedCasesSessions');
+    assert.equal(ANALYTICS.CONVERSION_LINK_SHARING, '/api/v2/conversion/linkSharing');
+    assert.equal(ANALYTICS.CONVERSION_DISCUSSIONS, '/api/v2/conversion/discussions');
+    assert.equal(ANALYTICS.SESSION_TRACKING_FORMATTED, '/api/v2/getSessionTrackingFormattedResult');
+  });
+
   it('should have SEARCH_CLIENTS url', () => {
     assert.equal(CONTENT_API.SEARCH_CLIENTS, '/api/v2/search-clients');
   });
@@ -228,6 +242,20 @@ describe('Analytics class - new methods exist', () => {
     assert.equal(typeof analytics.getOverviewSearchFeedback, 'function');
     assert.equal(typeof analytics.getOverviewAdvertisements, 'function');
     assert.equal(typeof analytics.getLlmResponseFeedback, 'function');
+  });
+
+  it('should have conversions tab mirror methods', () => {
+    assert.equal(typeof analytics.getSessionTrackingFormattedResult, 'function');
+    assert.equal(typeof analytics.postConversionSessionDetails, 'function');
+    assert.equal(typeof analytics.postConversionTopClickedDocs, 'function');
+    assert.equal(typeof analytics.postConversionSearchesOnClick, 'function');
+    assert.equal(typeof analytics.postConversionTopSearchesWithClicks, 'function');
+    assert.equal(typeof analytics.postConversionClickedResults, 'function');
+    assert.equal(typeof analytics.postConversionSearchesCreatedCase, 'function');
+    assert.equal(typeof analytics.postConversionSearchesOnDeflection, 'function');
+    assert.equal(typeof analytics.postConversionArticlesCreatedCasesSessions, 'function');
+    assert.equal(typeof analytics.postConversionLinkSharing, 'function');
+    assert.equal(typeof analytics.postConversionDiscussions, 'function');
   });
 });
 

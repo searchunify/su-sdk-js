@@ -308,25 +308,97 @@ const leadershipGetContentSources = Joi.object({
   csTypes: Joi.array().items(Joi.string().trim()).optional()
 });
 
-/** POST /api/v2/conversion/clicksCountContentSource — clicks rolled up by content-source facets. */
-const conversionClicksCountContentSource = Joi.object({
-  from: Joi.string().trim().required(),
-  to: Joi.string().trim().required(),
-  uid: Joi.alternatives()
-    .try(Joi.string().valid('all'), Joi.string().uuid().trim())
-    .required(),
-  tenantId: Joi.string().uuid().trim().optional(),
+/** POST /api/v2/conversion/clicksCountContentSource — same scope shape as caseDeflectionStage1 (uid xor ecoId). */
+const conversionClicksCountContentSource = conversionCaseDeflectionStage1;
+
+/** POST /api/v2/conversion/sessionDetails — session tracking detail grid (admin Conversions). */
+const conversionSessionDetailsPost = conversionCaseDeflectionStage1.keys({
+  keyword: Joi.string().allow('').optional(),
+  searchingType: Joi.string().optional(),
+  exactSearch: Joi.alternatives().try(Joi.boolean(), Joi.number(), Joi.string()).optional(),
+  offset: Joi.number().optional(),
+  limit: Joi.alternatives().try(Joi.number(), Joi.string()).optional(),
+  searchFilter: Joi.string().optional(),
+  clickFilter: Joi.string().optional(),
+  supportFilter: Joi.string().optional(),
+  caseFilter: Joi.string().optional(),
+  articleFilter: Joi.string().optional(),
+  sortByField: Joi.string().optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
+  globalSearchfilter: Joi.any().optional(),
+  globalConversion: Joi.any().optional(),
+  supportSearchFilter: Joi.any().optional(),
+  supportConversonfilter: Joi.any().optional(),
+  contentFacetsFilter: Joi.any().optional(),
+  searchActivityType: Joi.string().optional()
+});
+
+/** POST /api/v2/conversion/topClickedDocs, topSearchesWithClicks, discussions — paginated conversion tables. */
+const conversionPaginatedTablePost = conversionCaseDeflectionStage1.keys({
+  limit: Joi.alternatives().try(Joi.number(), Joi.string()).optional(),
+  offset: Joi.number().optional(),
+  terminateQueryLogic: Joi.boolean().optional()
+});
+
+/** POST /api/v2/conversion/searchesOnClick — search keywords for clicks on one document (`url` from topClickedDocs). */
+const conversionSearchesOnClickPost = conversionCaseDeflectionStage1.keys({
+  url: Joi.string().trim().required()
+});
+
+/** POST /api/v2/conversion/clickedResults — documents clicked for one search phrase (admin `text_entered`). */
+const conversionClickedResultsPost = conversionCaseDeflectionStage1.keys({
+  text_entered: Joi.string().trim().min(1).required()
+});
+
+/** POST /api/v2/conversion/searchesCreatedCase — Unsuccessful deflection: search keywords for one clicked article URL. */
+const conversionSearchesCreatedCasePost = conversionCaseDeflectionStage1.keys({
+  url: Joi.string().trim().required(),
+  searchType: Joi.string().trim().required(),
+  terminateQueryLogic: Joi.boolean().optional()
+});
+
+/** POST /api/v2/conversion/searchesOnDeflection — Successful deflection: search keywords for one clicked article URL. */
+const conversionSearchesOnDeflectionPost = conversionCaseDeflectionStage1.keys({
+  url: Joi.string().trim().required(),
+  searchType: Joi.string().trim().required(),
+  terminateQueryLogic: Joi.boolean().optional()
+});
+
+/** POST /api/v2/conversion/articlesCreatedCasesSessions — session rows for an article (admin `caseDeflaction` typo). */
+const conversionArticlesCreatedCasesSessionsPost = conversionCaseDeflectionStage1.keys({
+  url: Joi.string().trim().required(),
+  searchType: Joi.string().trim().required(),
+  offset: Joi.number().optional(),
+  limit: Joi.alternatives().try(Joi.number(), Joi.string()).optional(),
+  caseDeflaction: Joi.boolean().required()
+});
+
+/** POST /api/v2/conversion/linkSharing — Share results analytics. */
+const conversionLinkSharingPost = conversionCaseDeflectionStage1.keys({
+  limit: Joi.number().optional(),
+  offset: Joi.number().optional(),
+  modeselectInsideResults: Joi.any().optional(),
+  caseNumberText: Joi.string().allow('').optional(),
+  linkedByText: Joi.string().allow('').optional()
+});
+
+/** GET /api/v2/getSessionTrackingFormattedResult — formatted session tracking (admin). */
+const sessionTrackingFormattedValidation = Joi.object({
+  startDate: Joi.string().trim().required(),
+  endDate: Joi.string().trim().required(),
+  searchClientId: Joi.string().uuid().trim().optional(),
+  ecoSystemId: Joi.string().uuid().trim().optional(),
+  count: Joi.number().min(1).max(500).optional(),
+  startIndex: Joi.number().min(1).optional(),
   internalUser: Joi.alternatives()
     .try(
       Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
       Joi.boolean()
     )
     .optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsFilters: Joi.alternatives().try(Joi.string().trim(), Joi.array().items(Joi.string().trim())).optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional()
-});
+  sortByField: Joi.string().optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional()
+}).xor('searchClientId', 'ecoSystemId');
 
 /** POST /leadership/unassisted-self-solve-volume and assisted-self-solve-volume. */
 /** POST /api/v2/overview/searchClickPosition — MCP mirror; tenantId omitted on wire when not set. */
@@ -432,6 +504,15 @@ module.exports = {
   leadershipDeflectionCostSavingsDownload,
   leadershipGetContentSources,
   conversionClicksCountContentSource,
+  conversionSessionDetailsPost,
+  conversionPaginatedTablePost,
+  conversionSearchesOnClickPost,
+  conversionClickedResultsPost,
+  conversionSearchesCreatedCasePost,
+  conversionSearchesOnDeflectionPost,
+  conversionArticlesCreatedCasesSessionsPost,
+  conversionLinkSharingPost,
+  sessionTrackingFormattedValidation,
   overviewSearchClickPosition,
   overviewCreatedCases,
   overviewPageRating,

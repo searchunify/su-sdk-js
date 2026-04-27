@@ -355,6 +355,39 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
+  postConversionSearchesCreatedCase(params) {
+    validate(analytics.conversionSearchesCreatedCasePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_CREATED_CASE}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSearchesOnDeflection(params) {
+    validate(analytics.conversionSearchesOnDeflectionPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_ON_DEFLECTION}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionArticlesCreatedCasesSessions(params) {
+    validate(analytics.conversionArticlesCreatedCasesSessionsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.ARTICLE_CREATED_CASES_SESSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
   getAttachedArticles(params) {
     validate(analytics.attachedArticlesValidation, params);
 
@@ -1096,6 +1129,119 @@ class Analytics extends Base {
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.CLICKS_COUNT_CONTENT_SOURCE}`,
       data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSessionDetails(params) {
+    validate(analytics.conversionSessionDetailsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_SESSION_DETAILS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionTopClickedDocs(params) {
+    validate(analytics.conversionPaginatedTablePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_TOP_CLICKED_DOCS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSearchesOnClick(params) {
+    validate(analytics.conversionSearchesOnClickPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_SEARCHES_ON_CLICK}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionTopSearchesWithClicks(params) {
+    validate(analytics.conversionPaginatedTablePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_TOP_SEARCHES_WITH_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionClickedResults(params) {
+    validate(analytics.conversionClickedResultsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_CLICKED_RESULTS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionLinkSharing(params) {
+    validate(analytics.conversionLinkSharingPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_LINK_SHARING}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionDiscussions(params) {
+    validate(analytics.conversionPaginatedTablePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_DISCUSSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  getSessionTrackingFormattedResult(params) {
+    validate(analytics.sessionTrackingFormattedValidation, params);
+
+    const query = {
+      startDate: params.startDate,
+      endDate: params.endDate,
+    };
+    if (params.ecoSystemId) {
+      query.ecoId = params.ecoSystemId;
+    } else {
+      query.searchClientId = params.searchClientId;
+    }
+    if (params.count !== undefined && params.count !== null) {
+      query.count = params.count;
+    }
+    if (params.startIndex !== undefined && params.startIndex !== null) {
+      query.startIndex = params.startIndex;
+    }
+    if (params.internalUser !== undefined && params.internalUser !== null) {
+      query.internalUser = params.internalUser;
+    }
+    if (params.sortByField !== undefined && params.sortByField !== null) {
+      query.sortByField = params.sortByField;
+    }
+    if (params.sortType !== undefined && params.sortType !== null) {
+      query.sortType = params.sortType;
+    }
+    const queryParams = qs.stringify(query);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.get,
+      url: `${this.#instance}${ANALYTICS.SESSION_TRACKING_FORMATTED}?${queryParams}`
     }, this.#authObj);
   }
 }

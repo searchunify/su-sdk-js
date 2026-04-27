@@ -18,7 +18,10 @@ exports.ANALYTICS = {
   KCS_SUPPORT: '/api/v2/searchQuery/kcsSupport',
   SEARCH_SESSION_BY_CASE_UID: '/api/v2/searchSession/byCaseUid',
   ARTICLE_CREATED_CASES: '/api/v2/conversion/articlesCreatedCases',
+  ARTICLE_CREATED_CASES_SESSIONS: '/api/v2/conversion/articlesCreatedCasesSessions',
+  SEARCHES_CREATED_CASE: '/api/v2/conversion/searchesCreatedCase',
   ARTICLE_DEFLECTED_CASES: '/api/v2/conversion/articlesDeflectedCase',
+  SEARCHES_ON_DEFLECTION: '/api/v2/conversion/searchesOnDeflection',
   ATTACHED_ARTICLE: '/api/v2/conversion/attachedArticles',
   ATTACHED_ON_CASE: '/api/v2/conversion/attachedOnCase',
   AVERAGE_CLICK_POSITION: '/api/v2/overview/averageClickPositionChart',
@@ -46,7 +49,15 @@ exports.ANALYTICS = {
   LEADERSHIP_DEFLECTION_COUNT: '/leadership/deflection-count',
   LEADERSHIP_DEFLECTION_COST_SAVINGS_DOWNLOAD: '/leadership/deflection-cost-savings-download',
   LEADERSHIP_GET_CONTENT_SOURCES: '/leadership/get-content-sources',
-  CLICKS_COUNT_CONTENT_SOURCE: '/api/v2/conversion/clicksCountContentSource'
+  CLICKS_COUNT_CONTENT_SOURCE: '/api/v2/conversion/clicksCountContentSource',
+  CONVERSION_SESSION_DETAILS: '/api/v2/conversion/sessionDetails',
+  CONVERSION_TOP_CLICKED_DOCS: '/api/v2/conversion/topClickedDocs',
+  CONVERSION_SEARCHES_ON_CLICK: '/api/v2/conversion/searchesOnClick',
+  CONVERSION_TOP_SEARCHES_WITH_CLICKS: '/api/v2/conversion/topSearchesWithClicks',
+  CONVERSION_CLICKED_RESULTS: '/api/v2/conversion/clickedResults',
+  CONVERSION_LINK_SHARING: '/api/v2/conversion/linkSharing',
+  CONVERSION_DISCUSSIONS: '/api/v2/conversion/discussions',
+  SESSION_TRACKING_FORMATTED: '/api/v2/getSessionTrackingFormattedResult'
 };
 
 exports.AUTH_API = {
