@@ -642,6 +642,138 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
+  postContentSplitTileDataContent(params) {
+    validate(analytics.contentSplitTileDataPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SPLIT_TILE_DATA_CONTENT}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentUnsuccessfulSummaryChart(params) {
+    validate(analytics.contentUnsuccessfulChartsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.UNSUCCESSFUL_SUMMARY_CHART}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postOverviewSearchesWithNoClicks(params) {
+    validate(analytics.contentSearchesWithNoClicksPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHS_WITH_NO_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentSuccessiveNoClicks(params) {
+    validate(analytics.contentSuccessiveNoClicksPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_NO_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postOverviewSearchesWithNoResult(params) {
+    validate(analytics.contentSearchesWithNoResultPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_WITH_NO_RESULT}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentSuccessiveNoResults(params) {
+    validate(analytics.contentSuccessiveNoResultsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_NO_RESULTS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentUnsuccessfulSearchSessionChart(params) {
+    validate(analytics.contentUnsuccessfulChartsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.UNSUCCESSFUL_SEARCH_SESSION_CHART}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentHighConversion(params) {
+    validate(analytics.contentHighConversionPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentHighConversionClicks(params) {
+    validate(analytics.contentHighConversionClicksPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentHighConversionSessions(params) {
+    validate(analytics.contentHighConversionSessionsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION_SESSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentArticleUsageByAgents(params) {
+    validate(analytics.contentArticleUsageByAgentsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.ARTICLE_USAGE_BY_AGENTS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentSuccessiveArticlesUsage(params) {
+    validate(analytics.contentSuccessiveArticlesUsagePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_ARTICLES_USAGE}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
   getTileDataMetrics1(params) {
     validate(analytics.similarValidation, params);
 
@@ -1038,6 +1170,33 @@ class Analytics extends Base {
       timeout: this.#timeout,
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipAssistedCaseVolume(params) {
+    validate(analytics.leadershipAssistedCaseVolume, params);
+
+    const body = {
+      internalUser: params.internalUser ?? 'all'
+    };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
+    if (params.indexName !== undefined && params.indexName !== null && String(params.indexName).trim() !== '') {
+      body.indexName = params.indexName;
+    }
+    if (params.from !== undefined && params.from !== null && String(params.from).trim() !== '') {
+      body.from = params.from;
+    }
+    if (params.to !== undefined && params.to !== null && String(params.to).trim() !== '') {
+      body.to = params.to;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_CASE_VOLUME}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }

@@ -350,6 +350,66 @@ const conversionClickedResultsPost = conversionCaseDeflectionStage1.keys({
   text_entered: Joi.string().trim().min(1).required()
 });
 
+/** Base POST body for /api/v2/content/* and /api/v2/overview/search* content-gap routes. */
+const contentGapPostBase = conversionCaseDeflectionStage1.keys({
+  searchQuery: Joi.string().allow('').optional(),
+  sortingField: Joi.string().optional(),
+  sortType: Joi.string().valid('asc', 'desc').optional(),
+  offset: Joi.number().optional(),
+  limit: Joi.alternatives().try(Joi.number(), Joi.string()).optional(),
+  searchGrouping: Joi.boolean().optional(),
+  actionStatusFilters: Joi.array().items(Joi.string()).optional(),
+  text: Joi.string().allow('').optional(),
+  orderBy: Joi.string().valid('ASC', 'DESC').optional(),
+  articleTitleSearchQuery: Joi.string().allow('').optional(),
+  caseSubjectSearchQuery: Joi.string().allow('').optional(),
+  searchText: Joi.string().allow('').optional(),
+  cookie: Joi.string().allow('').optional(),
+  emailId: Joi.string().allow('').optional()
+});
+
+/** POST /api/v2/content/tileDataContent and splitTileDataContent (eco only for split). */
+const contentTileDataPost = conversionCaseDeflectionStage1;
+const contentSplitTileDataPost = conversionCaseDeflectionStage1.keys({
+  ecoId: Joi.string().uuid().trim().required()
+});
+
+/** POST /api/v2/content/unSuccessfulSummaryChart and unSuccessfulSearchSessionChart. */
+const contentUnsuccessfulChartsPost = conversionCaseDeflectionStage1;
+
+/** Search Classifications main tables. */
+const contentSearchesWithNoClicksPost = contentGapPostBase;
+const contentSearchesWithNoResultPost = contentGapPostBase;
+
+/** Search Classifications successive drill-downs. */
+const contentSuccessiveNoClicksPost = contentGapPostBase.keys({
+  text: Joi.string().trim().min(1).required()
+});
+const contentSuccessiveNoResultsPost = contentGapPostBase.keys({
+  text: Joi.string().trim().min(1).required()
+});
+
+/** High Conversion report and sub-reports. */
+const contentHighConversionPost = contentGapPostBase;
+const contentHighConversionClicksPost = contentGapPostBase.keys({
+  searchText: Joi.string().trim().min(1).required()
+});
+const contentHighConversionSessionsPost = contentGapPostBase.keys({
+  searchText: Joi.string().trim().min(1).required()
+});
+
+/** Article Usage By Agents report and sub-report. */
+const contentArticleUsageByAgentsPost = contentGapPostBase.keys({
+  orderBy: Joi.string().valid('ASC', 'DESC').optional(),
+  searchQuery: Joi.string().allow('').optional()
+});
+const contentSuccessiveArticlesUsagePost = contentGapPostBase.keys({
+  text: Joi.string().trim().min(1).required(),
+  orderBy: Joi.string().valid('ASC', 'DESC').optional(),
+  articleTitleSearchQuery: Joi.string().allow('').optional(),
+  caseSubjectSearchQuery: Joi.string().allow('').optional()
+});
+
 /** POST /api/v2/conversion/searchesCreatedCase — Unsuccessful deflection: search keywords for one clicked article URL. */
 const conversionSearchesCreatedCasePost = conversionCaseDeflectionStage1.keys({
   url: Joi.string().trim().required(),
@@ -480,6 +540,20 @@ const leadershipSelfSolveVolume = Joi.object({
   return value;
 });
 
+/** POST /leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. */
+const leadershipAssistedCaseVolume = Joi.object({
+  tenantId: Joi.string().uuid().trim().optional(),
+  indexName: Joi.string().trim().optional().allow(null, ''),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  from: Joi.string().trim().optional().allow(null, ''),
+  to: Joi.string().trim().optional().allow(null, '')
+});
+
 module.exports = {
   similarValidation,
   similarValidationWithCount,
@@ -500,6 +574,7 @@ module.exports = {
   conversionConversionSummary,
   conversionRelevanceIndex,
   leadershipSelfSolveVolume,
+  leadershipAssistedCaseVolume,
   leadershipDeflectionCount,
   leadershipDeflectionCostSavingsDownload,
   leadershipGetContentSources,
@@ -508,6 +583,18 @@ module.exports = {
   conversionPaginatedTablePost,
   conversionSearchesOnClickPost,
   conversionClickedResultsPost,
+  contentTileDataPost,
+  contentSplitTileDataPost,
+  contentUnsuccessfulChartsPost,
+  contentSearchesWithNoClicksPost,
+  contentSuccessiveNoClicksPost,
+  contentSearchesWithNoResultPost,
+  contentSuccessiveNoResultsPost,
+  contentHighConversionPost,
+  contentHighConversionClicksPost,
+  contentHighConversionSessionsPost,
+  contentArticleUsageByAgentsPost,
+  contentSuccessiveArticlesUsagePost,
   conversionSearchesCreatedCasePost,
   conversionSearchesOnDeflectionPost,
   conversionArticlesCreatedCasesSessionsPost,

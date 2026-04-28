@@ -44,6 +44,21 @@ describe('su-apis URLs', () => {
     assert.equal(ANALYTICS.SESSION_TRACKING_FORMATTED, '/api/v2/getSessionTrackingFormattedResult');
   });
 
+  it('should have content-gap MCP mirror urls', () => {
+    assert.equal(ANALYTICS.SPLIT_TILE_DATA_CONTENT, '/api/v2/content/splitTileDataContent');
+    assert.equal(ANALYTICS.UNSUCCESSFUL_SUMMARY_CHART, '/api/v2/content/unSuccessfulSummaryChart');
+    assert.equal(ANALYTICS.SEARCHS_WITH_NO_CLICKS, '/api/v2/overview/searchsWithNoClicks');
+    assert.equal(ANALYTICS.SUCCESSIVE_NO_CLICKS, '/api/v2/content/succesiveNoClicks');
+    assert.equal(ANALYTICS.SEARCHES_WITH_NO_RESULT, '/api/v2/overview/searchesWithNoResult');
+    assert.equal(ANALYTICS.SUCCESSIVE_NO_RESULTS, '/api/v2/content/succesiveNoResults');
+    assert.equal(ANALYTICS.UNSUCCESSFUL_SEARCH_SESSION_CHART, '/api/v2/content/unSuccessfulSearchSessionChart');
+    assert.equal(ANALYTICS.HIGH_CONVERSION, '/api/v2/content/highConversion');
+    assert.equal(ANALYTICS.HIGH_CONVERSION_CLICKS, '/api/v2/content/highConversionClicks');
+    assert.equal(ANALYTICS.HIGH_CONVERSION_SESSIONS, '/api/v2/content/highConversionSessions');
+    assert.equal(ANALYTICS.ARTICLE_USAGE_BY_AGENTS, '/api/v2/content/articleUsageByAgents');
+    assert.equal(ANALYTICS.SUCCESSIVE_ARTICLES_USAGE, '/api/v2/content/successiveArticlesUsage');
+  });
+
   it('should have SEARCH_CLIENTS url', () => {
     assert.equal(CONTENT_API.SEARCH_CLIENTS, '/api/v2/search-clients');
   });
@@ -256,6 +271,21 @@ describe('Analytics class - new methods exist', () => {
     assert.equal(typeof analytics.postConversionArticlesCreatedCasesSessions, 'function');
     assert.equal(typeof analytics.postConversionLinkSharing, 'function');
     assert.equal(typeof analytics.postConversionDiscussions, 'function');
+  });
+
+  it('should have content-gap mirror methods', () => {
+    assert.equal(typeof analytics.postContentSplitTileDataContent, 'function');
+    assert.equal(typeof analytics.postContentUnsuccessfulSummaryChart, 'function');
+    assert.equal(typeof analytics.postOverviewSearchesWithNoClicks, 'function');
+    assert.equal(typeof analytics.postContentSuccessiveNoClicks, 'function');
+    assert.equal(typeof analytics.postOverviewSearchesWithNoResult, 'function');
+    assert.equal(typeof analytics.postContentSuccessiveNoResults, 'function');
+    assert.equal(typeof analytics.postContentUnsuccessfulSearchSessionChart, 'function');
+    assert.equal(typeof analytics.postContentHighConversion, 'function');
+    assert.equal(typeof analytics.postContentHighConversionClicks, 'function');
+    assert.equal(typeof analytics.postContentHighConversionSessions, 'function');
+    assert.equal(typeof analytics.postContentArticleUsageByAgents, 'function');
+    assert.equal(typeof analytics.postContentSuccessiveArticlesUsage, 'function');
   });
 });
 
