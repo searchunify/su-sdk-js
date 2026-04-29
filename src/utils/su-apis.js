@@ -48,6 +48,9 @@ exports.ANALYTICS = {
   SUCCESSIVE_ARTICLES_USAGE: '/api/v2/content/successiveArticlesUsage',
   TILE_DATA_METRICS_1: '/api/v2/overview/tileDataMetrics1',
   TILE_DATA_METRICS_2: '/api/v2/overview/tileDataMetrics2',
+  // Overview Search Report: "all searches" / "top searches" vs "successful searches" (not Conversions Top Clicked Searches).
+  OVERVIEW_TOP_SEARCHES: '/api/v2/overview/topSearches',
+  OVERVIEW_SEARCH_SESSIONS: '/api/v2/overview/searchSessions',
   SESSION_LOG: '/api/v2/session/log/all',
   SESSION_LIST_TABLE: '/api/v2/session/list/table',
   CASE_DEFLECTION_STAGE_1: '/api/v2/conversion/caseDeflectionStage1',

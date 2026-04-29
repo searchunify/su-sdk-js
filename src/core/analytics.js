@@ -675,6 +675,30 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
+  /** Overview Search Report: all searches / top searches (not Conversions Top Clicked Searches). */
+  postOverviewTopSearches(params) {
+    validate(analytics.overviewTopSearchesPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_TOP_SEARCHES}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  /** Overview Search Report: successful searches (sessions with results). */
+  postOverviewSearchSessions(params) {
+    validate(analytics.overviewSearchSessionsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_SESSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
   postContentSuccessiveNoClicks(params) {
     validate(analytics.contentSuccessiveNoClicksPost, params);
 

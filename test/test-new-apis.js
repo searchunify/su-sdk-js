@@ -47,6 +47,8 @@ describe('su-apis URLs', () => {
   it('should have content-gap MCP mirror urls', () => {
     assert.equal(ANALYTICS.SPLIT_TILE_DATA_CONTENT, '/api/v2/content/splitTileDataContent');
     assert.equal(ANALYTICS.UNSUCCESSFUL_SUMMARY_CHART, '/api/v2/content/unSuccessfulSummaryChart');
+    assert.equal(ANALYTICS.OVERVIEW_TOP_SEARCHES, '/api/v2/overview/topSearches');
+    assert.equal(ANALYTICS.OVERVIEW_SEARCH_SESSIONS, '/api/v2/overview/searchSessions');
     assert.equal(ANALYTICS.SEARCHS_WITH_NO_CLICKS, '/api/v2/overview/searchsWithNoClicks');
     assert.equal(ANALYTICS.SUCCESSIVE_NO_CLICKS, '/api/v2/content/succesiveNoClicks');
     assert.equal(ANALYTICS.SEARCHES_WITH_NO_RESULT, '/api/v2/overview/searchesWithNoResult');
@@ -277,6 +279,8 @@ describe('Analytics class - new methods exist', () => {
     assert.equal(typeof analytics.postContentSplitTileDataContent, 'function');
     assert.equal(typeof analytics.postContentUnsuccessfulSummaryChart, 'function');
     assert.equal(typeof analytics.postOverviewSearchesWithNoClicks, 'function');
+    assert.equal(typeof analytics.postOverviewTopSearches, 'function');
+    assert.equal(typeof analytics.postOverviewSearchSessions, 'function');
     assert.equal(typeof analytics.postContentSuccessiveNoClicks, 'function');
     assert.equal(typeof analytics.postOverviewSearchesWithNoResult, 'function');
     assert.equal(typeof analytics.postContentSuccessiveNoResults, 'function');

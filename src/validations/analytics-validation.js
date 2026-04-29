@@ -381,6 +381,10 @@ const contentUnsuccessfulChartsPost = conversionCaseDeflectionStage1;
 const contentSearchesWithNoClicksPost = contentGapPostBase;
 const contentSearchesWithNoResultPost = contentGapPostBase;
 
+/** POST /api/v2/overview/topSearches (all / top searches grid) and /overview/searchSessions (successful searches) — same body as search-classification table posts. */
+const overviewTopSearchesPost = contentGapPostBase;
+const overviewSearchSessionsPost = contentGapPostBase;
+
 /** Search Classifications successive drill-downs. */
 const contentSuccessiveNoClicksPost = contentGapPostBase.keys({
   text: Joi.string().trim().min(1).required()
@@ -587,6 +591,8 @@ module.exports = {
   contentSplitTileDataPost,
   contentUnsuccessfulChartsPost,
   contentSearchesWithNoClicksPost,
+  overviewTopSearchesPost,
+  overviewSearchSessionsPost,
   contentSuccessiveNoClicksPost,
   contentSearchesWithNoResultPost,
   contentSuccessiveNoResultsPost,
