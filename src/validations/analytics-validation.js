@@ -251,7 +251,7 @@ const conversionConversionSummary = Joi.object({
   return value;
 });
 
-/** POST /leadership/deflection-count */
+/** POST /api/v2/leadership/deflection-count (legacy POST /leadership/deflection-count unchanged on analytics) */
 const leadershipDeflectionCount = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
   uid: Joi.string().uuid().trim().optional().allow(null, ''),
@@ -277,7 +277,7 @@ const leadershipDeflectionCount = Joi.object({
   return value;
 });
 
-/** POST /leadership/deflection-cost-savings-download */
+/** POST /api/v2/leadership/deflection-cost-savings-download */
 const leadershipDeflectionCostSavingsDownload = leadershipDeflectionCount.keys({
   costPerCase: Joi.number().positive().required(),
   csv: Joi.alternatives()
@@ -302,7 +302,7 @@ const conversionRelevanceIndex = Joi.object({
   to: Joi.string().trim().optional().allow(null, '')
 });
 
-/** POST /leadership/get-content-sources — un-archived content sources for facet discovery (requires analytics-secret when routed through admin). */
+/** POST /api/v2/leadership/get-content-sources — un-archived content sources for facet discovery (requires analytics-secret when routed through admin). */
 const leadershipGetContentSources = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
   csTypes: Joi.array().items(Joi.string().trim()).optional()
@@ -464,7 +464,7 @@ const sessionTrackingFormattedValidation = Joi.object({
   sortType: Joi.string().valid('asc', 'desc').optional()
 }).xor('searchClientId', 'ecoSystemId');
 
-/** POST /leadership/unassisted-self-solve-volume and assisted-self-solve-volume. */
+/** POST /api/v2/leadership/unassisted-self-solve-volume and assisted-self-solve-volume. */
 /** POST /api/v2/overview/searchClickPosition — MCP mirror; tenantId omitted on wire when not set. */
 const overviewSearchClickPosition = similarValidation.keys({
   searchQuery: Joi.string().allow('').optional(),
@@ -544,7 +544,7 @@ const leadershipSelfSolveVolume = Joi.object({
   return value;
 });
 
-/** POST /leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. */
+/** POST /api/v2/leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. */
 const leadershipAssistedCaseVolume = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
   indexName: Joi.string().trim().optional().allow(null, ''),

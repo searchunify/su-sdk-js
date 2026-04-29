@@ -15,7 +15,7 @@ exports.requestMethods = {
 };
 
 const responseHandler = (response) => {
-  // Raw CSV / string bodies (e.g. leadership download) are not `{ data, message }` envelopes.
+  // Raw CSV / string bodies (e.g. `/api/v2/leadership/*` download) are not `{ data, message }` envelopes.
   if (response === null || response === undefined) {
     return { status: true, message: 'Successfully done.', data: response };
   }
