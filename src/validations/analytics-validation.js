@@ -302,7 +302,7 @@ const conversionRelevanceIndex = Joi.object({
   to: Joi.string().trim().optional().allow(null, '')
 });
 
-/** POST /api/v2/leadership/get-content-sources — un-archived content sources for facet discovery (requires analytics-secret when routed through admin). */
+/** POST /api/v2/leadership/get-content-sources — un-archived content sources for facet discovery. */
 const leadershipGetContentSources = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
   csTypes: Joi.array().items(Joi.string().trim()).optional()
