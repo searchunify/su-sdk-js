@@ -254,7 +254,7 @@ const conversionConversionSummary = Joi.object({
 /** POST /leadership/deflection-count */
 const leadershipDeflectionCount = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
-  uid: Joi.string().uuid().trim().optional(),
+  uid: Joi.string().uuid().trim().optional().allow(null, ''),
   ecoId: Joi.string().uuid().trim().optional().allow(null, ''),
   internalUser: Joi.alternatives()
     .try(
@@ -520,8 +520,8 @@ const llmResponseFeedbackOverview = Joi.object({
 });
 
 const leadershipSelfSolveVolume = Joi.object({
-  uid: Joi.string().uuid().trim().optional(),
-  ecoId: Joi.string().uuid().trim().optional(),
+  uid: Joi.string().uuid().trim().optional().allow(null, ''),
+  ecoId: Joi.string().uuid().trim().optional().allow(null, ''),
   internalUser: Joi.alternatives()
     .try(
       Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
