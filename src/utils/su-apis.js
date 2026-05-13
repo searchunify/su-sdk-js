@@ -32,6 +32,11 @@ exports.ANALYTICS = {
   OVERVIEW_PAGE_RATING: '/api/v2/overview/pageRating',
   OVERVIEW_SEARCH_FEEDBACK: '/api/v2/overview/searchFeedback',
   OVERVIEW_ADVERTISEMENTS: '/api/v2/overview/advertisements',
+  /** SearchUnifyGPT User Engagement report (read / citation / copied tabs; not CSV download). */
+  OVERVIEW_READ_ANSWERS: '/api/v2/overview/readAnswers',
+  OVERVIEW_CITATION_CLICKS: '/api/v2/overview/citationClicks',
+  OVERVIEW_COPIED_ANSWERS: '/api/v2/overview/copiedAnswers',
+  OVERVIEW_USER_ENGAGEMENT_TRENDS: '/api/v2/overview/user-engagement-trends',
   LLM_RESPONSE_FEEDBACK: '/api/v2/llm/llm-response-feedback',
   TILE_DATA_CONTENT: '/api/v2/content/tileDataContent',
   SPLIT_TILE_DATA_CONTENT: '/api/v2/content/splitTileDataContent',

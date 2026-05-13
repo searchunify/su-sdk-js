@@ -1053,6 +1053,90 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
+  /** POST /api/v2/overview/readAnswers — User Engagement “Read answers” grid (not user-engagement-download). */
+  getOverviewReadAnswers(params) {
+    return this.#postUserEngagementGrid(ANALYTICS.OVERVIEW_READ_ANSWERS, params);
+  }
+
+  /** POST /api/v2/overview/citationClicks — User Engagement “Clicked citations” grid. */
+  getOverviewCitationClicks(params) {
+    return this.#postUserEngagementGrid(ANALYTICS.OVERVIEW_CITATION_CLICKS, params);
+  }
+
+  /** POST /api/v2/overview/copiedAnswers — User Engagement “Copied answers” grid. */
+  getOverviewCopiedAnswers(params) {
+    return this.#postUserEngagementGrid(ANALYTICS.OVERVIEW_COPIED_ANSWERS, params);
+  }
+
+  /** POST /api/v2/overview/user-engagement-trends — Engagement Trends series (not trends-download). */
+  getOverviewUserEngagementTrends(params) {
+    validate(analytics.overviewUserEngagementTrends, params);
+
+    const filterType = String(params.filterType || 'monthly').toLowerCase();
+    const body = {
+      internalUser: params.internalUser ?? 'all',
+      timePeriod: filterType,
+      isEcosystem: Boolean(params.ecoSystemId),
+      filterType
+    };
+    if (params.startDate && params.endDate) {
+      const from = String(params.startDate).trim();
+      const to = String(params.endDate).trim();
+      if (from && to) {
+        body.from = from.includes(' ') ? from : `${from} 00:00:00`;
+        body.to = to.includes(' ') ? to : `${to} 23:59:59`;
+      }
+    }
+    if (params.ecoSystemId) {
+      body.uid = params.ecoSystemId;
+    } else {
+      body.uid = params.searchClientId ?? '';
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_USER_ENGAGEMENT_TRENDS}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  #postUserEngagementGrid(urlPath, params) {
+    validate(analytics.overviewUserEngagementGrid, params);
+
+    const page = params.pageNumber ?? 1;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      offset: page,
+      limit: params.count ?? 10,
+      searchQuery: params.searchQuery ?? ''
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
+    } else {
+      body.ecoId = null;
+      if (params.searchClientId) {
+        body.uid = params.searchClientId;
+      }
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${urlPath}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
   getLlmResponseFeedback(params) {
     validate(analytics.llmResponseFeedbackOverview, params);
 

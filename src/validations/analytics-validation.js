@@ -500,6 +500,42 @@ const overviewAdvertisements = similarValidation.keys({
   pageNumber: Joi.number().min(1).max(500).optional()
 });
 
+/** POST /api/v2/overview/readAnswers | citationClicks | copiedAnswers — User Engagement grids (offset = 1-based page). */
+const overviewUserEngagementGrid = similarValidation.keys({
+  pageNumber: Joi.number().min(1).max(500).optional(),
+  searchQuery: Joi.string().allow('').optional()
+});
+
+/** POST /api/v2/overview/user-engagement-trends — Engagement Trends (not download). */
+const overviewUserEngagementTrends = Joi.object({
+  startDate: Joi.string().trim().optional().allow('', null),
+  endDate: Joi.string().trim().optional().allow('', null),
+  searchClientId: Joi.string().uuid().trim().optional(),
+  ecoSystemId: Joi.string().trim().optional(),
+  tenantId: Joi.string().uuid().trim().optional(),
+  internalUser: Joi.alternatives()
+    .try(
+      Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
+      Joi.boolean()
+    )
+    .optional(),
+  filterType: Joi.string().valid('monthly', 'quarterly', 'weekly', 'daily').optional(),
+  ...userMetricsValidation
+})
+  .nand('searchClientId', 'ecoSystemId')
+  .messages({
+    'object.nand': 'searchClientId and ecoSystemId cannot be used together'
+  })
+  .custom((value, helpers) => {
+    const f = String(value.filterType || 'monthly').toLowerCase();
+    const hasFrom = value.startDate && String(value.startDate).trim();
+    const hasTo = value.endDate && String(value.endDate).trim();
+    if ((f === 'weekly' || f === 'daily') && (!hasFrom || !hasTo)) {
+      return helpers.error('any.invalid');
+    }
+    return value;
+  });
+
 /** POST /api/v2/llm/llm-response-feedback */
 const llmResponseFeedbackOverview = Joi.object({
   startDate: Joi.string().trim().required(),
@@ -611,5 +647,7 @@ module.exports = {
   overviewPageRating,
   overviewSearchFeedback,
   overviewAdvertisements,
+  overviewUserEngagementGrid,
+  overviewUserEngagementTrends,
   llmResponseFeedbackOverview
 };

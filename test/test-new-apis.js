@@ -27,6 +27,10 @@ describe('su-apis URLs', () => {
   it('should have overview MCP mirror urls', () => {
     assert.equal(ANALYTICS.OVERVIEW_SEARCH_CLICK_POSITION, '/api/v2/overview/searchClickPosition');
     assert.equal(ANALYTICS.OVERVIEW_CREATED_CASES, '/api/v2/overview/createdCases');
+    assert.equal(ANALYTICS.OVERVIEW_READ_ANSWERS, '/api/v2/overview/readAnswers');
+    assert.equal(ANALYTICS.OVERVIEW_CITATION_CLICKS, '/api/v2/overview/citationClicks');
+    assert.equal(ANALYTICS.OVERVIEW_COPIED_ANSWERS, '/api/v2/overview/copiedAnswers');
+    assert.equal(ANALYTICS.OVERVIEW_USER_ENGAGEMENT_TRENDS, '/api/v2/overview/user-engagement-trends');
     assert.equal(ANALYTICS.LLM_RESPONSE_FEEDBACK, '/api/v2/llm/llm-response-feedback');
   });
 
@@ -258,6 +262,10 @@ describe('Analytics class - new methods exist', () => {
     assert.equal(typeof analytics.getOverviewPageRating, 'function');
     assert.equal(typeof analytics.getOverviewSearchFeedback, 'function');
     assert.equal(typeof analytics.getOverviewAdvertisements, 'function');
+    assert.equal(typeof analytics.getOverviewReadAnswers, 'function');
+    assert.equal(typeof analytics.getOverviewCitationClicks, 'function');
+    assert.equal(typeof analytics.getOverviewCopiedAnswers, 'function');
+    assert.equal(typeof analytics.getOverviewUserEngagementTrends, 'function');
     assert.equal(typeof analytics.getLlmResponseFeedback, 'function');
   });
 
