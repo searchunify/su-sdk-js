@@ -15,6 +15,13 @@ exports.requestMethods = {
 };
 
 const responseHandler = (response) => {
+  // Raw CSV / string bodies (e.g. `/api/v2/leadership/*` download) are not `{ data, message }` envelopes.
+  if (response === null || response === undefined) {
+    return { status: true, message: 'Successfully done.', data: response };
+  }
+  if (typeof response !== 'object' || Array.isArray(response)) {
+    return { status: true, message: 'Successfully done.', data: response };
+  }
   // delete extra message and statuscode.
   const { data, message } = response;
   const successMessage = message || 'Successfully done.';
@@ -43,6 +50,10 @@ exports.HttpRequest = async (options, authObj) => {
       Authorization: await authObj.getAuthHeader(),
       'Content-Type': 'application/json'
     };
+  }
+
+  if (authObj.sendMcpConsumptionTrack) {
+    defaultHeaders['x-searchunify-mcp-track'] = '1';
   }
 
   options.headers = { ...defaultHeaders, ...options.headers };

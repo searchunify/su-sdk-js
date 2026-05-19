@@ -22,7 +22,10 @@ npm install su-sdk
 ```
 
 ## Authentication
+
 The SDK supports multiple authentication methods to securely connect to your SearchUnify instance. Depending on your setup, you can initialize the SDK using OAuth 2.0, API Key, or Client Credentials authentication.
+
+`tenantId` on `SearchUnifyRestClient` is optional and intended for non-MCP SDK callers. **SearchUnify MCP** does not send `tenantId` on outbound requests; the admin BFF injects it from the `tenant-id` header when proxying to analytics.
 
 ### 1. OAuth 2.0 (Password Grant)
 An access token is generated internally and refreshed automatically on expiry (4 hours).
@@ -222,6 +225,82 @@ await Analytics.getCaseDeflectedArticles({ startDate: '2025-01-01', endDate: '20
 await Analytics.getAttachedArticles({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid' });
 await Analytics.getAttachedOnCase({ startDate: '2025-01-01', endDate: '2025-03-26', searchClientId: 'uid', url: 'https://case-url' });
 ```
+
+#### Leadership dashboard
+
+Leadership methods call **`POST /api/v2/leadership/*`** on your SearchUnify **admin** instance URL (same base as other analytics mirrors). The admin service proxies to the analytics service and injects `tenantId` from the `tenant-id` header when present.
+
+| SDK method | Path | Notes |
+|------------|------|--------|
+| `postLeadershipUnassistedSelfSolveVolume` | `/api/v2/leadership/unassisted-self-solve-volume` | USSV; optional `directlyViewSetting` |
+| `postLeadershipAssistedSelfSolveVolume` | `/api/v2/leadership/assisted-self-solve-volume` | ASSV / KM effectiveness |
+| `postLeadershipAssistedCaseVolume` | `/api/v2/leadership/assisted-case-volume` | Tenant-scoped; optional `indexName` |
+| `postLeadershipDeflectionCount` | `/api/v2/leadership/deflection-count` | Explicit + implicit quarterly counts |
+| `postLeadershipDeflectionCostSavingsDownload` | `/api/v2/leadership/deflection-cost-savings-download` | CSV/email; requires `costPerCase`, `csv` |
+| `postLeadershipGetContentSources` | `/api/v2/leadership/get-content-sources` | Content source / facet discovery |
+
+**Scope:** For deflection-count, USSV, and ASSV, pass **`uid` or `ecoId`** (mutually exclusive), not both. `internalUser` defaults to `'all'` on deflection-count and assisted-case-volume.
+
+**Date range:** Omit `from` and `to` to use the analytics default (**last six completed quarters**), matching the Admin Leadership tab. When set, use `YYYY-MM-DD HH:mm:ss` (or values accepted by your analytics deployment).
+
+```javascript
+// Unassisted Self Solve Volume (last six quarters when from/to omitted)
+await Analytics.postLeadershipUnassistedSelfSolveVolume({
+  uid: 'searchClient-UUID',
+  internalUser: 'all',
+  directlyViewSetting: true
+});
+
+// Assisted Self Solve Volume
+await Analytics.postLeadershipAssistedSelfSolveVolume({
+  uid: 'searchClient-UUID',
+  internalUser: 'all'
+});
+
+// Deflection counts (explicit + implicit per quarter)
+await Analytics.postLeadershipDeflectionCount({
+  uid: 'searchClient-UUID',
+  internalUser: 'all'
+});
+
+// Assisted case volume (optional indexName for one content source)
+await Analytics.postLeadershipAssistedCaseVolume({
+  internalUser: 'all',
+  indexName: 'optional-elastic-index-name'
+});
+
+// Content sources for Leadership facet labels
+await Analytics.postLeadershipGetContentSources({});
+```
+
+**Admin UI vs SDK path:** The SearchUnify Admin UI calls **`POST /analytics/leadership/*`** (session auth + `analytics-secret` on the proxy). SDK and MCP use **`/api/v2/leadership/*`** on the same admin host. Both should reach the same analytics handlers when `/api/v2` leadership mirrors are deployed.
+
+**Performance — deflection-count:** `postLeadershipDeflectionCount` runs **two** rollup queries in parallel (assisted + unassisted quarterly tables). On large tenants or slow databases it can take longer than other Leadership calls. If you see `timeout of 60000ms exceeded`, increase `timeout` on `SearchUnifyRestClient` (see below).
+
+---
+
+#### Request timeout
+
+Every analytics call uses the **`timeout`** (ms) passed to `SearchUnifyRestClient` (default **60000**). Axios aborts the client wait when the limit is reached; the upstream request may still be running on the server.
+
+```javascript
+const suRestClient = new SearchUnifyRestClient({
+  instance: 'https://yourInstance.searchunify.com',
+  timeout: 120000, // recommended for leadership deflection-count on busy tenants
+  authType: AUTH_TYPES.API_KEY,
+  apiKey: 'changeme'
+});
+```
+
+| Symptom | Likely cause | Mitigation |
+|---------|----------------|------------|
+| `timeout of 60000ms exceeded` on `postLeadershipDeflectionCount` | Heavy rollup SQL or loaded analytics DB | Raise `timeout` (e.g. 120000–180000); check analytics query logs |
+| Fast 401 on direct analytics host | Missing `analytics-secret` on legacy `POST /leadership/*` | Call through admin `/api/v2/leadership/*` or send the header your deployment expects |
+| Works in Admin UI, times out in SDK | Browser has no 60s cap; SDK enforces `timeout` | Increase SDK `timeout`; same backend may need DB tuning |
+
+**MCP:** [su-mcp](https://github.com/searchunify/su-mcp) forwards timeout via `searchunify-timeout` (HTTP headers) or `timeout` in `creds.json`.
+
+---
 
 #### Sessions
 

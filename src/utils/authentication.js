@@ -12,6 +12,7 @@ class Authentication {
     this.oAuthTokens = {};
     this.jwt = props.jwt || {};
     this.apiKey = props.apiKey || {};
+    this.sendMcpConsumptionTrack = Boolean(props.sendMcpConsumptionTrack);
   }
 
   getOauthTokens() {

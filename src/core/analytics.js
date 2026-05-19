@@ -355,6 +355,39 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
+  postConversionSearchesCreatedCase(params) {
+    validate(analytics.conversionSearchesCreatedCasePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_CREATED_CASE}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSearchesOnDeflection(params) {
+    validate(analytics.conversionSearchesOnDeflectionPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_ON_DEFLECTION}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionArticlesCreatedCasesSessions(params) {
+    validate(analytics.conversionArticlesCreatedCasesSessionsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.ARTICLE_CREATED_CASES_SESSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
   getAttachedArticles(params) {
     validate(analytics.attachedArticlesValidation, params);
 
@@ -483,25 +516,27 @@ class Analytics extends Base {
   getAverageClickPosition(params) {
     validate(analytics.similarValidation, params);
 
-    const payload = JSON.stringify({
+    const payload = {
       from: params.startDate,
       to: params.endDate,
       uid: params.searchClientId,
       ecoId: params.ecoSystemId,
-      tenantId: params.tenantId,
       internalUser: params.internalUser,
       userMetricsFilters: params.userMetricsFilters,
       emailTracking: params.emailTracking,
       userMetricsFlag: params.userMetricsFlag,
       userMetricsLimit: params.userMetricsLimit,
       userMetricsOffset: params.userMetricsOffset,
-    });
+    };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      payload.tenantId = params.tenantId;
+    }
 
     return HttpRequest({
       timeout: this.#timeout,
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.AVERAGE_CLICK_POSITION}`,
-      data: payload
+      data: JSON.stringify(payload)
     }, this.#authObj);
   }
 
@@ -537,11 +572,33 @@ class Analytics extends Base {
     const query = {
       startDate: params.startDate,
       endDate: params.endDate,
-      uid: params.searchClientId,
       count: params.count,
       sessionId: params.sessionId,
       startIndex: params.startIndex,
     };
+    if (params.ecoSystemId) {
+      query.ecoId = params.ecoSystemId;
+    } else {
+      query.uid = params.searchClientId;
+    }
+    if (params.tenantId !== undefined && params.tenantId !== null) {
+      query.tenantId = params.tenantId;
+    }
+    if (params.internalUser !== undefined && params.internalUser !== null) {
+      query.internalUser = params.internalUser;
+    }
+    if (params.searchFilter !== undefined && params.searchFilter !== null) {
+      query.searchFilter = params.searchFilter;
+    }
+    if (params.clickFilter !== undefined && params.clickFilter !== null) {
+      query.clickFilter = params.clickFilter;
+    }
+    if (params.caseFilter !== undefined && params.caseFilter !== null) {
+      query.caseFilter = params.caseFilter;
+    }
+    if (params.articleFilter !== undefined && params.articleFilter !== null) {
+      query.articleFilter = params.articleFilter;
+    }
     if (params.sortByField !== undefined && params.sortByField !== null) {
       query.sortByField = params.sortByField;
     }
@@ -582,6 +639,162 @@ class Analytics extends Base {
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.TILE_DATA_CONTENT}`,
       data: payload
+    }, this.#authObj);
+  }
+
+  postContentSplitTileDataContent(params) {
+    validate(analytics.contentSplitTileDataPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SPLIT_TILE_DATA_CONTENT}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentUnsuccessfulSummaryChart(params) {
+    validate(analytics.contentUnsuccessfulChartsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.UNSUCCESSFUL_SUMMARY_CHART}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postOverviewSearchesWithNoClicks(params) {
+    validate(analytics.contentSearchesWithNoClicksPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHS_WITH_NO_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  /** Overview Search Report: all searches / top searches (not Conversions Top Clicked Searches). */
+  postOverviewTopSearches(params) {
+    validate(analytics.overviewTopSearchesPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_TOP_SEARCHES}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  /** Overview Search Report: successful searches (sessions with results). */
+  postOverviewSearchSessions(params) {
+    validate(analytics.overviewSearchSessionsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_SESSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentSuccessiveNoClicks(params) {
+    validate(analytics.contentSuccessiveNoClicksPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_NO_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postOverviewSearchesWithNoResult(params) {
+    validate(analytics.contentSearchesWithNoResultPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_WITH_NO_RESULT}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentSuccessiveNoResults(params) {
+    validate(analytics.contentSuccessiveNoResultsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_NO_RESULTS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentUnsuccessfulSearchSessionChart(params) {
+    validate(analytics.contentUnsuccessfulChartsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.UNSUCCESSFUL_SEARCH_SESSION_CHART}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentHighConversion(params) {
+    validate(analytics.contentHighConversionPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentHighConversionClicks(params) {
+    validate(analytics.contentHighConversionClicksPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentHighConversionSessions(params) {
+    validate(analytics.contentHighConversionSessionsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION_SESSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentArticleUsageByAgents(params) {
+    validate(analytics.contentArticleUsageByAgentsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.ARTICLE_USAGE_BY_AGENTS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postContentSuccessiveArticlesUsage(params) {
+    validate(analytics.contentSuccessiveArticlesUsagePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_ARTICLES_USAGE}`,
+      data: JSON.stringify(params)
     }, this.#authObj);
   }
 
@@ -628,6 +841,674 @@ class Analytics extends Base {
       method: requestMethods.post,
       url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_2}`,
       data: payload
+    }, this.#authObj);
+  }
+
+  getOverviewSearchClickPosition(params) {
+    validate(analytics.overviewSearchClickPosition, params);
+
+    const page = params.pageNumber ?? 1;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      searchQuery: params.searchQuery ?? '',
+      sortingField: params.sortingField ?? 'click',
+      sortType: params.sortType ?? 'desc',
+      currentPage: page,
+      offset: page,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
+    } else {
+      body.uid = params.searchClientId;
+      body.ecoId = null;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_CLICK_POSITION}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewCreatedCases(params) {
+    validate(analytics.overviewCreatedCases, params);
+
+    const page = params.pageNumber ?? 1;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      caseUid: params.caseUid ?? '',
+      caseSubject: params.caseSubject ?? '',
+      cookie: params.sessionCookie ?? '',
+      emailId: params.emailId ?? '',
+      currentPage: page,
+      offset: page,
+      isAscending: params.isAscending ?? true,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
+    } else {
+      body.uid = params.searchClientId ?? '';
+      body.ecoId = null;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_CREATED_CASES}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewFeaturedSnippet(params) {
+    validate(analytics.similarValidation, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_FEATURED_SNIPPET}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewKnowledgeTitle(params) {
+    validate(analytics.similarValidation, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_KNOWLEDGE_TITLE}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewPageRating(params) {
+    validate(analytics.overviewPageRating, params);
+
+    const page = params.pageNumber ?? 1;
+    const limit = params.count;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      filterType: 'all',
+      sortby: 'most_recent',
+    };
+    if (limit != null) {
+      body.limit = limit;
+      body.offset = Math.max(0, (page - 1) * limit);
+    }
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_PAGE_RATING}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewSearchFeedback(params) {
+    validate(analytics.overviewSearchFeedback, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      offset: params.pageNumber ?? 1,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_FEEDBACK}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getOverviewAdvertisements(params) {
+    validate(analytics.overviewAdvertisements, params);
+
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      page_no: params.pageNumber ?? 1,
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+    } else if (params.searchClientId) {
+      body.uid = params.searchClientId;
+    }
+    if (params.searchKey !== undefined && params.searchKey !== '') {
+      body.search_key = params.searchKey;
+    }
+    if (params.advertisementSortType !== undefined && params.advertisementSortType !== '') {
+      body.sort_type = params.advertisementSortType;
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_ADVERTISEMENTS}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  /** POST /api/v2/overview/readAnswers — User Engagement “Read answers” grid (not user-engagement-download). */
+  getOverviewReadAnswers(params) {
+    return this.#postUserEngagementGrid(ANALYTICS.OVERVIEW_READ_ANSWERS, params);
+  }
+
+  /** POST /api/v2/overview/citationClicks — User Engagement “Clicked citations” grid. */
+  getOverviewCitationClicks(params) {
+    return this.#postUserEngagementGrid(ANALYTICS.OVERVIEW_CITATION_CLICKS, params);
+  }
+
+  /** POST /api/v2/overview/copiedAnswers — User Engagement “Copied answers” grid. */
+  getOverviewCopiedAnswers(params) {
+    return this.#postUserEngagementGrid(ANALYTICS.OVERVIEW_COPIED_ANSWERS, params);
+  }
+
+  /** POST /api/v2/overview/user-engagement-trends — Engagement Trends series (not trends-download). */
+  getOverviewUserEngagementTrends(params) {
+    validate(analytics.overviewUserEngagementTrends, params);
+
+    const filterType = String(params.filterType || 'monthly').toLowerCase();
+    const body = {
+      internalUser: params.internalUser ?? 'all',
+      timePeriod: filterType,
+      isEcosystem: Boolean(params.ecoSystemId),
+      filterType
+    };
+    if (params.startDate && params.endDate) {
+      const from = String(params.startDate).trim();
+      const to = String(params.endDate).trim();
+      if (from && to) {
+        body.from = from.includes(' ') ? from : `${from} 00:00:00`;
+        body.to = to.includes(' ') ? to : `${to} 23:59:59`;
+      }
+    }
+    if (params.ecoSystemId) {
+      body.uid = params.ecoSystemId;
+    } else {
+      body.uid = params.searchClientId ?? '';
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.OVERVIEW_USER_ENGAGEMENT_TRENDS}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  #postUserEngagementGrid(urlPath, params) {
+    validate(analytics.overviewUserEngagementGrid, params);
+
+    const page = params.pageNumber ?? 1;
+    const body = {
+      from: params.startDate,
+      to: params.endDate,
+      internalUser: params.internalUser ?? 'all',
+      offset: page,
+      limit: params.count ?? 10,
+      searchQuery: params.searchQuery ?? ''
+    };
+    if (params.ecoSystemId) {
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
+    } else {
+      body.ecoId = null;
+      if (params.searchClientId) {
+        body.uid = params.searchClientId;
+      }
+    }
+    if (params.userMetricsFilters !== undefined) {
+      body.userMetricsFilters = params.userMetricsFilters;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${urlPath}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  getLlmResponseFeedback(params) {
+    validate(analytics.llmResponseFeedbackOverview, params);
+
+    const body = {
+      uid: params.searchClientId,
+      from: params.startDate,
+      to: params.endDate,
+      limit: params.count ?? 10,
+      offset: params.pageNumber ?? 1,
+      reactionFilterType: params.reactionFilterType ?? 'all',
+      searchQuery: params.searchQuery ?? '',
+      internalUser: params.internalUser ?? 'all',
+    };
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LLM_RESPONSE_FEEDBACK}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postCaseDeflectionStage1(params) {
+    validate(analytics.conversionCaseDeflectionStage1, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_STAGE_1}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postCaseDeflectionStage2(params) {
+    validate(analytics.conversionCaseDeflectionStage2, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_STAGE_2}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postCaseDeflectionTrends(params) {
+    validate(analytics.conversionCaseDeflectionTrends, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_TRENDS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSummary(params) {
+    validate(analytics.conversionConversionSummary, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_SUMMARY}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postCurrentRelevanceIndex(params) {
+    validate(analytics.conversionRelevanceIndex, params);
+
+    const body = {
+      uid: params.uid,
+      internalUser: params.internalUser
+    };
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CURRENT_RELEVANCE_INDEX}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postRelevanceIndex(params) {
+    validate(analytics.conversionRelevanceIndex, params);
+
+    const body = {
+      uid: params.uid,
+      internalUser: params.internalUser,
+      from: params.from,
+      to: params.to
+    };
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.RELEVANCE_INDEX}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipUnassistedSelfSolveVolume(params) {
+    validate(analytics.leadershipSelfSolveVolume, params);
+
+    const body = {
+      internalUser: params.internalUser,
+      from: params.from,
+      to: params.to,
+      directlyViewSetting: params.directlyViewSetting
+    };
+    if (params.ecoId) {
+      body.ecoId = params.ecoId;
+    } else {
+      body.uid = params.uid;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_UNASSISTED_SELF_SOLVE_VOLUME}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipAssistedSelfSolveVolume(params) {
+    validate(analytics.leadershipSelfSolveVolume, params);
+
+    const body = {
+      internalUser: params.internalUser,
+      from: params.from,
+      to: params.to
+    };
+    if (params.ecoId) {
+      body.ecoId = params.ecoId;
+    } else {
+      body.uid = params.uid;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipAssistedCaseVolume(params) {
+    validate(analytics.leadershipAssistedCaseVolume, params);
+
+    const body = {
+      internalUser: params.internalUser ?? 'all'
+    };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
+    if (params.indexName !== undefined && params.indexName !== null && String(params.indexName).trim() !== '') {
+      body.indexName = params.indexName;
+    }
+    if (params.from !== undefined && params.from !== null && String(params.from).trim() !== '') {
+      body.from = params.from;
+    }
+    if (params.to !== undefined && params.to !== null && String(params.to).trim() !== '') {
+      body.to = params.to;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_CASE_VOLUME}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipDeflectionCount(params) {
+    validate(analytics.leadershipDeflectionCount, params);
+
+    const body = {
+      internalUser: params.internalUser ?? 'all',
+      from: params.from,
+      to: params.to
+    };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
+    if (params.ecoId) {
+      body.ecoId = params.ecoId;
+      body.uid = null;
+    } else {
+      body.uid = params.uid;
+      body.ecoId = null;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_DEFLECTION_COUNT}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipDeflectionCostSavingsDownload(params) {
+    validate(analytics.leadershipDeflectionCostSavingsDownload, params);
+
+    const body = {
+      internalUser: params.internalUser ?? 'all',
+      from: params.from,
+      to: params.to,
+      costPerCase: params.costPerCase,
+      csv: params.csv,
+      sendToEmail: params.sendToEmail ?? 0
+    };
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
+    if (params.email !== undefined) {
+      body.email = params.email;
+    }
+    if (params.ecoId) {
+      body.ecoId = params.ecoId;
+      body.uid = null;
+    } else {
+      body.uid = params.uid;
+      body.ecoId = null;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_DEFLECTION_COST_SAVINGS_DOWNLOAD}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postLeadershipGetContentSources(params) {
+    validate(analytics.leadershipGetContentSources, params);
+
+    const body = {};
+    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
+      body.tenantId = params.tenantId;
+    }
+    if (params.csTypes !== undefined && params.csTypes !== null) {
+      body.csTypes = params.csTypes;
+    }
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.LEADERSHIP_GET_CONTENT_SOURCES}`,
+      data: JSON.stringify(body)
+    }, this.#authObj);
+  }
+
+  postClicksCountContentSource(params) {
+    validate(analytics.conversionClicksCountContentSource, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CLICKS_COUNT_CONTENT_SOURCE}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSessionDetails(params) {
+    validate(analytics.conversionSessionDetailsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_SESSION_DETAILS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionTopClickedDocs(params) {
+    validate(analytics.conversionPaginatedTablePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_TOP_CLICKED_DOCS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionSearchesOnClick(params) {
+    validate(analytics.conversionSearchesOnClickPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_SEARCHES_ON_CLICK}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionTopSearchesWithClicks(params) {
+    validate(analytics.conversionPaginatedTablePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_TOP_SEARCHES_WITH_CLICKS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionClickedResults(params) {
+    validate(analytics.conversionClickedResultsPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_CLICKED_RESULTS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionLinkSharing(params) {
+    validate(analytics.conversionLinkSharingPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_LINK_SHARING}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  postConversionDiscussions(params) {
+    validate(analytics.conversionPaginatedTablePost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.CONVERSION_DISCUSSIONS}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
+  getSessionTrackingFormattedResult(params) {
+    validate(analytics.sessionTrackingFormattedValidation, params);
+
+    const query = {
+      startDate: params.startDate,
+      endDate: params.endDate,
+    };
+    if (params.ecoSystemId) {
+      query.ecoId = params.ecoSystemId;
+    } else {
+      query.searchClientId = params.searchClientId;
+    }
+    if (params.count !== undefined && params.count !== null) {
+      query.count = params.count;
+    }
+    if (params.startIndex !== undefined && params.startIndex !== null) {
+      query.startIndex = params.startIndex;
+    }
+    if (params.internalUser !== undefined && params.internalUser !== null) {
+      query.internalUser = params.internalUser;
+    }
+    if (params.sortByField !== undefined && params.sortByField !== null) {
+      query.sortByField = params.sortByField;
+    }
+    if (params.sortType !== undefined && params.sortType !== null) {
+      query.sortType = params.sortType;
+    }
+    const queryParams = qs.stringify(query);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.get,
+      url: `${this.#instance}${ANALYTICS.SESSION_TRACKING_FORMATTED}?${queryParams}`
     }, this.#authObj);
   }
 }
