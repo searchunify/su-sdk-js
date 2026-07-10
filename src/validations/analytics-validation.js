@@ -580,10 +580,10 @@ const leadershipSelfSolveVolume = Joi.object({
   return value;
 });
 
-/** POST /api/v2/leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. */
+/** POST /api/v2/leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. `indexName` is required. */
 const leadershipAssistedCaseVolume = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
-  indexName: Joi.string().trim().optional().allow(null, ''),
+  indexName: Joi.string().trim().required(),
   internalUser: Joi.alternatives()
     .try(
       Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
