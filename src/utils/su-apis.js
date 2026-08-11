@@ -45,6 +45,7 @@ exports.ANALYTICS = {
   SUCCESSIVE_NO_CLICKS: '/api/v2/content/succesiveNoClicks',
   SEARCHES_WITH_NO_RESULT: '/api/v2/overview/searchesWithNoResult',
   SUCCESSIVE_NO_RESULTS: '/api/v2/content/succesiveNoResults',
+  SEARCHES_WITH_NO_AI_ANSWER: '/api/v2/overview/searchesWithNoAiAnswer',
   UNSUCCESSFUL_SEARCH_SESSION_CHART: '/api/v2/content/unSuccessfulSearchSessionChart',
   HIGH_CONVERSION: '/api/v2/content/highConversion',
   HIGH_CONVERSION_CLICKS: '/api/v2/content/highConversionClicks',
