@@ -6,6 +6,10 @@ const { Analytics } = require('./analytics');
 const { Content } = require('./content');
 const { Search } = require('./search');
 const { SearchClients } = require('./search-clients');
+const { CaseQa } = require('./case-qa');
+const { SupportAgentAnalytics } = require('./support-agent-analytics');
+const { AgentPartnerAnalytics } = require('./agent-partner-analytics');
+const { LlmUsage } = require('./llm-usage');
 
 /**
  * @class Searchunify Rest Client
@@ -26,6 +30,14 @@ class SearchUnifyRestClient {
 
   #searchClients;
 
+  #caseQa;
+
+  #supportAgentAnalytics;
+
+  #agentPartnerAnalytics;
+
+  #llmUsage;
+
   constructor(props) {
     joiValidator.validate(validations.client.initialize, props);
 
@@ -37,6 +49,10 @@ class SearchUnifyRestClient {
     this.#content = new Content(props, this.#authentication);
     this.#search = new Search(props, this.#authentication);
     this.#searchClients = new SearchClients(props, this.#authentication);
+    this.#caseQa = new CaseQa(props, this.#authentication);
+    this.#supportAgentAnalytics = new SupportAgentAnalytics(props, this.#authentication);
+    this.#agentPartnerAnalytics = new AgentPartnerAnalytics(props, this.#authentication);
+    this.#llmUsage = new LlmUsage(props, this.#authentication);
   }
 
   Analytics() {
@@ -53,6 +69,22 @@ class SearchUnifyRestClient {
 
   SearchClients() {
     return this.#searchClients;
+  }
+
+  CaseQa() {
+    return this.#caseQa;
+  }
+
+  SupportAgentAnalytics() {
+    return this.#supportAgentAnalytics;
+  }
+
+  AgentPartnerAnalytics() {
+    return this.#agentPartnerAnalytics;
+  }
+
+  LlmUsage() {
+    return this.#llmUsage;
   }
 }
 

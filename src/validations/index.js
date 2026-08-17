@@ -3,3 +3,7 @@ exports.analytics = require('./analytics-validation');
 exports.content = require('./content-validation');
 exports.search = require('./search-validation');
 exports.client = require('./client-validations');
+exports.caseQa = require('./case-qa-validation');
+exports.supportAgent = require('./support-agent-validation');
+exports.agentPartner = require('./agent-partner-validation');
+exports.llmUsage = require('./llm-usage-validation');
