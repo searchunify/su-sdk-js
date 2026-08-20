@@ -1,6 +1,6 @@
 const { CONTENT_API } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
-const { Base } = require('./base');
+const { Base } = require('../utils/base');
 
 class SearchClients extends Base {
   #instance;

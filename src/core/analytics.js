@@ -3,7 +3,7 @@ const { ANALYTICS } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
 const { analytics } = require('../validations');
 const { validate } = require('../validations/joi-validator');
-const { Base } = require('./base');
+const { Base } = require('../utils/base');
 
 const buildSearchClassificationQueryParams = (params) => qs.stringify({
   startDate: params.startDate,

@@ -2,7 +2,7 @@ const { SEARCH_API } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
 const { search } = require('../validations');
 const { validate } = require('../validations/joi-validator');
-const { Base } = require('./base');
+const { Base } = require('../utils/base');
 
 class Search extends Base {
   #instance;

@@ -3,7 +3,7 @@ const { SUPPORT_AGENT_API } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
 const { supportAgent } = require('../validations');
 const { validate } = require('../validations/joi-validator');
-const { Base } = require('../core/base');
+const { Base } = require('../utils/base');
 
 /** Bot/chatbot conversation analytics - Agentic Suite "Support Agent" domain. */
 class SupportAgentAnalytics extends Base {

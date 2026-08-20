@@ -2,7 +2,7 @@ const { AGENT_PARTNER_API } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
 const { agentPartner } = require('../validations');
 const { validate } = require('../validations/joi-validator');
-const { Base } = require('../core/base');
+const { Base } = require('../utils/base');
 
 /**
  * Agent Partner Analytics - self-service partner reporting suite (search-clients, adoption,
