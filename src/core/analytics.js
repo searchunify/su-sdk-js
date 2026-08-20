@@ -721,6 +721,18 @@ class Analytics extends Base {
     }, this.#authObj);
   }
 
+  /** Overview: GPT searches with no AI answer (failed / not applicable). */
+  postOverviewSearchesWithNoAiAnswer(params) {
+    validate(analytics.contentSearchesWithNoAiAnswerPost, params);
+
+    return HttpRequest({
+      timeout: this.#timeout,
+      method: requestMethods.post,
+      url: `${this.#instance}${ANALYTICS.SEARCHES_WITH_NO_AI_ANSWER}`,
+      data: JSON.stringify(params)
+    }, this.#authObj);
+  }
+
   postContentSuccessiveNoResults(params) {
     validate(analytics.contentSuccessiveNoResultsPost, params);
 
