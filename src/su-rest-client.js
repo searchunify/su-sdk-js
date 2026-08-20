@@ -1,9 +1,9 @@
-const { Authentication } = require('../utils/authentication');
-const validations = require('../validations');
-const joiValidator = require('../validations/joi-validator');
-const { DEFAULT_TIMEOUT } = require('../utils/constants');
-const { initSuCoreClasses } = require('./su-core-classes');
-const { initAgenticClasses } = require('../agentic');
+const { Authentication } = require('./utils/authentication');
+const validations = require('./validations');
+const joiValidator = require('./validations/joi-validator');
+const { DEFAULT_TIMEOUT } = require('./utils/constants');
+const { initSuCoreClasses } = require('./core');
+const { initAgenticClasses } = require('./agentic');
 
 /**
  * @class Searchunify Rest Client
