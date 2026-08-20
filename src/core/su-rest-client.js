@@ -6,10 +6,10 @@ const { Analytics } = require('./analytics');
 const { Content } = require('./content');
 const { Search } = require('./search');
 const { SearchClients } = require('./search-clients');
-const { CaseQa } = require('./case-qa');
-const { SupportAgentAnalytics } = require('./support-agent-analytics');
-const { AgentPartnerAnalytics } = require('./agent-partner-analytics');
-const { LlmUsage } = require('./llm-usage');
+const { CaseQa } = require('../agentic/case-qa');
+const { SupportAgentAnalytics } = require('../agentic/support-agent-analytics');
+const { AgentPartnerAnalytics } = require('../agentic/agent-partner-analytics');
+const { LlmUsage } = require('../agentic/llm-usage');
 
 /**
  * @class Searchunify Rest Client

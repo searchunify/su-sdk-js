@@ -3,7 +3,7 @@ const { LLM_USAGE_API } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
 const { llmUsage } = require('../validations');
 const { validate } = require('../validations/joi-validator');
-const { Base } = require('./base');
+const { Base } = require('../core/base');
 
 /** LLM token/cost consumption dashboard - Agentic Suite Analytics. */
 class LlmUsage extends Base {

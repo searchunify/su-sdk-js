@@ -3,7 +3,7 @@ const { CASE_QA_API } = require('../utils/su-apis');
 const { HttpRequest, requestMethods } = require('../utils/request-handler');
 const { caseQa } = require('../validations');
 const { validate } = require('../validations/joi-validator');
-const { Base } = require('./base');
+const { Base } = require('../core/base');
 
 /** Case QA scores & agent scorecards - Agentic Suite Analytics ("L1"/AI agent quality surface). */
 class CaseQa extends Base {
