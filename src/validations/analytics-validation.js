@@ -381,6 +381,21 @@ const contentUnsuccessfulChartsPost = conversionCaseDeflectionStage1;
 const contentSearchesWithNoClicksPost = contentGapPostBase;
 const contentSearchesWithNoResultPost = contentGapPostBase;
 
+/**
+ * POST /api/v2/overview/searchesWithNoAiAnswer — Searches with no AI answer generated.
+ * `offset`/`limit`/`sortType`/`sortingField` are required by the analytics route
+ * (`webApiCount`, `webApiPageNumber`, `sortOrder`, `sortByField` in `common-validator.js`,
+ * called unconditionally in `controllers/overview/routes.js`), so they must be required
+ * here too rather than inherited as optional from `contentGapPostBase`.
+ */
+const contentSearchesWithNoAiAnswerPost = contentGapPostBase.keys({
+  offset: Joi.number().integer().min(1).required(),
+  limit: Joi.alternatives().try(Joi.number().integer().min(1).max(500), Joi.string()).required(),
+  sortType: Joi.string().valid('asc', 'desc').required(),
+  sortingField: Joi.string().valid('Users', 'Searches', 'Sessions', 'Queries').required(),
+  noAiAnswerStatus: Joi.string().valid('all', 'not_applicable', 'failed').optional()
+});
+
 /** POST /api/v2/overview/topSearches (all / top searches grid) and /overview/searchSessions (successful searches) — same body as search-classification table posts. */
 const overviewTopSearchesPost = contentGapPostBase;
 const overviewSearchSessionsPost = contentGapPostBase;
@@ -627,6 +642,7 @@ module.exports = {
   contentSplitTileDataPost,
   contentUnsuccessfulChartsPost,
   contentSearchesWithNoClicksPost,
+  contentSearchesWithNoAiAnswerPost,
   overviewTopSearchesPost,
   overviewSearchSessionsPost,
   contentSuccessiveNoClicksPost,
