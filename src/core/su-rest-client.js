@@ -2,14 +2,8 @@ const { Authentication } = require('../utils/authentication');
 const validations = require('../validations');
 const joiValidator = require('../validations/joi-validator');
 const { DEFAULT_TIMEOUT } = require('../utils/constants');
-const { Analytics } = require('./analytics');
-const { Content } = require('./content');
-const { Search } = require('./search');
-const { SearchClients } = require('./search-clients');
-const { CaseQa } = require('../agentic/case-qa');
-const { SupportAgentAnalytics } = require('../agentic/support-agent-analytics');
-const { AgentPartnerAnalytics } = require('../agentic/agent-partner-analytics');
-const { LlmUsage } = require('../agentic/llm-usage');
+const { initSuCoreClasses } = require('./su-core-classes');
+const { initAgenticClasses } = require('../agentic');
 
 /**
  * @class Searchunify Rest Client
@@ -22,21 +16,9 @@ const { LlmUsage } = require('../agentic/llm-usage');
 class SearchUnifyRestClient {
   #authentication;
 
-  #analytics;
+  #core;
 
-  #content;
-
-  #search;
-
-  #searchClients;
-
-  #caseQa;
-
-  #supportAgentAnalytics;
-
-  #agentPartnerAnalytics;
-
-  #llmUsage;
+  #agentic;
 
   constructor(props) {
     joiValidator.validate(validations.client.initialize, props);
@@ -45,46 +27,40 @@ class SearchUnifyRestClient {
     props.instance = props.instance.replace(/\/$/, ''); // Removing trailing slash
 
     this.#authentication = new Authentication(props);
-    this.#analytics = new Analytics(props, this.#authentication);
-    this.#content = new Content(props, this.#authentication);
-    this.#search = new Search(props, this.#authentication);
-    this.#searchClients = new SearchClients(props, this.#authentication);
-    this.#caseQa = new CaseQa(props, this.#authentication);
-    this.#supportAgentAnalytics = new SupportAgentAnalytics(props, this.#authentication);
-    this.#agentPartnerAnalytics = new AgentPartnerAnalytics(props, this.#authentication);
-    this.#llmUsage = new LlmUsage(props, this.#authentication);
+    this.#core = initSuCoreClasses(props, this.#authentication);
+    this.#agentic = initAgenticClasses(props, this.#authentication);
   }
 
   Analytics() {
-    return this.#analytics;
+    return this.#core.analytics;
   }
 
   Content() {
-    return this.#content;
+    return this.#core.content;
   }
 
   Search() {
-    return this.#search;
+    return this.#core.search;
   }
 
   SearchClients() {
-    return this.#searchClients;
+    return this.#core.searchClients;
   }
 
   CaseQa() {
-    return this.#caseQa;
+    return this.#agentic.caseQa;
   }
 
   SupportAgentAnalytics() {
-    return this.#supportAgentAnalytics;
+    return this.#agentic.supportAgentAnalytics;
   }
 
   AgentPartnerAnalytics() {
-    return this.#agentPartnerAnalytics;
+    return this.#agentic.agentPartnerAnalytics;
   }
 
   LlmUsage() {
-    return this.#llmUsage;
+    return this.#agentic.llmUsage;
   }
 }
 
