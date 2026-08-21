@@ -108,18 +108,82 @@ describe('getSessionsValidation', () => {
   });
 });
 
-describe('agentPartnerRequestValidation', () => {
-  it('should pass with an empty body', () => {
-    const result = validate(agentPartnerValidation.agentPartnerRequestValidation, {});
+describe('agent-partner-validation per-endpoint schemas', () => {
+  it('overviewTileDataValidation should pass with the real controller field set', () => {
+    const result = validate(agentPartnerValidation.overviewTileDataValidation, {
+      uid: 'uid-1',
+      indexName: 'idx-1',
+      from: '2025-01-01',
+      to: '2025-01-31',
+    });
     assert.ok(result);
   });
 
-  it('should pass with filters plus unknown backend-specific keys', () => {
-    const result = validate(agentPartnerValidation.agentPartnerRequestValidation, {
-      filters: { productIds: ['p1'] },
-      someBackendSpecificField: 'value',
+  it('overviewTileDataValidation should pass with an empty body (uid is optional)', () => {
+    const result = validate(agentPartnerValidation.overviewTileDataValidation, {});
+    assert.ok(result);
+  });
+
+  it('overviewTileDataValidation should reject an unknown field (typo)', () => {
+    assert.throws(() => {
+      validate(agentPartnerValidation.overviewTileDataValidation, { uidd: 'typo' });
+    });
+  });
+
+  it('adoptionCaseEscalationValidation should not accept a uid field (controller has no uid for this endpoint)', () => {
+    assert.throws(() => {
+      validate(agentPartnerValidation.adoptionCaseEscalationValidation, { uid: 'uid-1', filter: 'monthly' });
+    });
+  });
+
+  it('overviewMttrReportExportValidation should require delivery', () => {
+    assert.throws(() => {
+      validate(agentPartnerValidation.overviewMttrReportExportValidation, { uid: 'uid-1' });
+    });
+  });
+
+  it('overviewMttrReportExportValidation should require recipients when delivery is email', () => {
+    assert.throws(() => {
+      validate(agentPartnerValidation.overviewMttrReportExportValidation, { delivery: 'email' });
+    });
+  });
+
+  it('overviewMttrReportExportValidation should pass with delivery download and no recipients', () => {
+    const result = validate(agentPartnerValidation.overviewMttrReportExportValidation, { delivery: 'download' });
+    assert.ok(result);
+  });
+
+  it('overviewAgentEngagementExportValidation (loose export fields) should not require delivery', () => {
+    const result = validate(agentPartnerValidation.overviewAgentEngagementExportValidation, {});
+    assert.ok(result);
+  });
+
+  it('tagTrendsSpikeWatchlistValidation should accept agents/products arrays and pagination', () => {
+    const result = validate(agentPartnerValidation.tagTrendsSpikeWatchlistValidation, {
+      agents: ['agent-1'],
+      products: ['product-1'],
+      pagination: { enabled: true, page: 1, pageSize: 20 },
     });
     assert.ok(result);
+  });
+
+  it('feedbackFeatureTypesValidation should reject any body field (endpoint takes none)', () => {
+    assert.throws(() => {
+      validate(agentPartnerValidation.feedbackFeatureTypesValidation, { caseId: 'c1' });
+    });
+  });
+});
+
+describe('getCqaInsightsValidation', () => {
+  it('should pass with no params', () => {
+    const result = validate(caseQaValidation.getCqaInsightsValidation, {});
+    assert.ok(result);
+  });
+
+  it('should reject an unexpected field (regression - getCqaInsights() now calls validate())', () => {
+    assert.throws(() => {
+      validate(caseQaValidation.getCqaInsightsValidation, { unexpectedField: 'x' });
+    });
   });
 });
 

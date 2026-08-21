@@ -349,3 +349,114 @@ describe('overviewPageRating validation', () => {
     });
   });
 });
+
+// --- Regression coverage for code-review findings ---
+
+describe('leadershipAssistedCaseVolume validation', () => {
+  it('should pass without indexName (optional, matches README/method behavior)', () => {
+    const result = validate(analyticsValidation.leadershipAssistedCaseVolume, {
+      internalUser: 'all',
+    });
+    assert.ok(result);
+  });
+
+  it('should pass with indexName provided', () => {
+    const result = validate(analyticsValidation.leadershipAssistedCaseVolume, {
+      indexName: 'idx-1',
+    });
+    assert.ok(result);
+  });
+});
+
+describe('atMostOneOf(uid, ecoId) - conversionCaseDeflectionStage1', () => {
+  const base = { from: '2025-01-01', to: '2025-01-31' };
+
+  it('should pass with neither uid nor ecoId (both optional on this schema)', () => {
+    const result = validate(analyticsValidation.conversionCaseDeflectionStage1, base);
+    assert.ok(result);
+  });
+
+  it('should pass with only uid', () => {
+    const result = validate(analyticsValidation.conversionCaseDeflectionStage1, {
+      ...base,
+      uid: 'all',
+    });
+    assert.ok(result);
+  });
+
+  it('should reject when both uid and ecoId are present', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.conversionCaseDeflectionStage1, {
+        ...base,
+        uid: 'all',
+        ecoId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      });
+    });
+  });
+});
+
+describe('exactlyOneOf(uid, ecoId) - leadershipDeflectionCount/leadershipSelfSolveVolume/conversionConversionSummary', () => {
+  it('leadershipDeflectionCount should reject when neither uid nor ecoId is present', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.leadershipDeflectionCount, {});
+    });
+  });
+
+  it('leadershipDeflectionCount should reject when both uid and ecoId are present', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.leadershipDeflectionCount, {
+        uid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        ecoId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567891',
+      });
+    });
+  });
+
+  it('leadershipDeflectionCount should pass with exactly one of uid/ecoId', () => {
+    const result = validate(analyticsValidation.leadershipDeflectionCount, {
+      uid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    });
+    assert.ok(result);
+  });
+
+  it('leadershipDeflectionCount should treat an empty-string ecoId as absent, not present', () => {
+    const result = validate(analyticsValidation.leadershipDeflectionCount, {
+      uid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      ecoId: '',
+    });
+    assert.ok(result);
+  });
+
+  it('leadershipSelfSolveVolume should reject when neither uid nor ecoId is present', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.leadershipSelfSolveVolume, {});
+    });
+  });
+
+  it('conversionConversionSummary should reject when neither uid nor ecoId is present', () => {
+    assert.throws(() => {
+      validate(analyticsValidation.conversionConversionSummary, {
+        from: '2025-01-01',
+        to: '2025-01-31',
+      });
+    });
+  });
+
+  it('conversionConversionSummary should pass with exactly one of uid/ecoId', () => {
+    const result = validate(analyticsValidation.conversionConversionSummary, {
+      from: '2025-01-01',
+      to: '2025-01-31',
+      ecoId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    });
+    assert.ok(result);
+  });
+});
+
+describe('Base timeout accessor shared across subclasses (setApiTimeout bug fix)', () => {
+  it('setApiTimeout() should update the value getApiTimeout() returns on the same instance', () => {
+    const mockAuth = { getAuthHeader: async () => 'test', authType: 'apiKey' };
+    const client = new SearchClients({ instance: 'https://test.searchunify.com', timeout: 5000 }, mockAuth);
+    assert.equal(client.getApiTimeout(), 5000);
+    client.setApiTimeout(30000);
+    assert.equal(client.getApiTimeout(), 30000);
+  });
+});

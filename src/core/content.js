@@ -6,32 +6,26 @@ const { validate } = require('../validations/joi-validator');
 const { Base } = require('../utils/base');
 
 class Content extends Base {
-  #instance;
-
-  #timeout;
-
   #authObj;
 
   constructor(props, authObj) {
     super(props);
-    this.#instance = props.instance;
-    this.#timeout = props.timeout;
     this.#authObj = authObj;
   }
 
   getContentSources = async () => HttpRequest({
-    timeout: this.#timeout,
+    timeout: this.getApiTimeout(),
     method: requestMethods.get,
-    url: `${this.#instance}${CONTENT_API.CONTENT_SOURCES}`
+    url: `${this.getInstance()}${CONTENT_API.CONTENT_SOURCES}`
   }, this.#authObj);
 
   getContentSourceById = async (params) => {
     validate(content.contentSourceIdValidation, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CONTENT_API.CONTENT_SOURCES_BY_ID}/${params.contentSourceId}`
+      url: `${this.getInstance()}${CONTENT_API.CONTENT_SOURCES_BY_ID}/${params.contentSourceId}`
     }, this.#authObj);
   };
 
@@ -39,9 +33,9 @@ class Content extends Base {
     validate(content.contentSourceIdValidation, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CONTENT_API.OBJECT_AND_FIELDS.replace('<contentSourceId>', params.contentSourceId)}`
+      url: `${this.getInstance()}${CONTENT_API.OBJECT_AND_FIELDS.replace('<contentSourceId>', params.contentSourceId)}`
 
     }, this.#authObj);
   };
@@ -55,9 +49,9 @@ class Content extends Base {
     }, this.#authObj);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CONTENT_API.OBJECT_DATA.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId)}?${queryParams}`
+      url: `${this.getInstance()}${CONTENT_API.OBJECT_DATA.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId)}?${queryParams}`
 
     }, this.#authObj);
   };
@@ -66,9 +60,9 @@ class Content extends Base {
     validate(content.objectSpecificDataWithIdValidation, params, true);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CONTENT_API.OBJECT_DATA_WITH_ID.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId).replace('<documentId>', params.documentId)}`
+      url: `${this.getInstance()}${CONTENT_API.OBJECT_DATA_WITH_ID.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId).replace('<documentId>', params.documentId)}`
     }, this.#authObj);
   };
 
@@ -78,9 +72,9 @@ class Content extends Base {
     const payload = JSON.stringify(params.data);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${CONTENT_API.UPDATE_DOC_BY_ID.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId).replace('<documentId>', params.documentId)}`,
+      url: `${this.getInstance()}${CONTENT_API.UPDATE_DOC_BY_ID.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId).replace('<documentId>', params.documentId)}`,
       data: payload
     }, this.#authObj);
   };
@@ -93,9 +87,9 @@ class Content extends Base {
     }, this.#authObj);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${CONTENT_API.BATCH_UPLOAD.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId)}`,
+      url: `${this.getInstance()}${CONTENT_API.BATCH_UPLOAD.replace('<contentSourceId>', params.contentSourceId).replace('<objectId>', params.objectId)}`,
       data: payload
     }, this.#authObj);
   };

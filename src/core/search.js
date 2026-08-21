@@ -5,16 +5,10 @@ const { validate } = require('../validations/joi-validator');
 const { Base } = require('../utils/base');
 
 class Search extends Base {
-  #instance;
-
-  #timeout;
-
   #authObj;
 
   constructor(props, authObj) {
     super(props);
-    this.#instance = props.instance;
-    this.#timeout = props.timeout;
     this.#authObj = authObj;
   }
 
@@ -22,9 +16,9 @@ class Search extends Base {
     const isValid = validate(search.searchValidation, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${SEARCH_API.SEARCH}`,
+      url: `${this.getInstance()}${SEARCH_API.SEARCH}`,
       data: JSON.stringify(isValid.value)
     }, this.#authObj);
   };
@@ -66,9 +60,9 @@ class Search extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${SEARCH_API.GPT_RESULTS}`,
+      url: `${this.getInstance()}${SEARCH_API.GPT_RESULTS}`,
       data: JSON.stringify(requestParams),
 
     }, this.#authObj);

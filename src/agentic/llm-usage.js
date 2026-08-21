@@ -7,16 +7,10 @@ const { Base } = require('../utils/base');
 
 /** LLM token/cost consumption dashboard - Agentic Suite Analytics. */
 class LlmUsage extends Base {
-  #instance;
-
-  #timeout;
-
   #authObj;
 
   constructor(props, authObj) {
     super(props);
-    this.#instance = props.instance;
-    this.#timeout = props.timeout;
     this.#authObj = authObj;
   }
 
@@ -26,9 +20,9 @@ class LlmUsage extends Base {
     const queryParams = qs.stringify(params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${LLM_USAGE_API.DASHBOARD}?${queryParams}`
+      url: `${this.getInstance()}${LLM_USAGE_API.DASHBOARD}?${queryParams}`
     }, this.#authObj);
   }
 }

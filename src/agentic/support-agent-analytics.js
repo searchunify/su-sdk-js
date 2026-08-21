@@ -7,16 +7,10 @@ const { Base } = require('../utils/base');
 
 /** Bot/chatbot conversation analytics - Agentic Suite "Support Agent" domain. */
 class SupportAgentAnalytics extends Base {
-  #instance;
-
-  #timeout;
-
   #authObj;
 
   constructor(props, authObj) {
     super(props);
-    this.#instance = props.instance;
-    this.#timeout = props.timeout;
     this.#authObj = authObj;
   }
 
@@ -25,9 +19,9 @@ class SupportAgentAnalytics extends Base {
     const queryParams = qs.stringify(params || {});
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${apiPath}?${queryParams}`
+      url: `${this.getInstance()}${apiPath}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -71,9 +65,9 @@ class SupportAgentAnalytics extends Base {
     validate(supportAgent.getSessionTranscriptValidation, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${SUPPORT_AGENT_API.SESSION_TRANSCRIPT.replace('<sessionId>', params.sessionId)}`
+      url: `${this.getInstance()}${SUPPORT_AGENT_API.SESSION_TRANSCRIPT.replace('<sessionId>', params.sessionId)}`
     }, this.#authObj);
   }
 }

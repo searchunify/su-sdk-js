@@ -7,106 +7,79 @@ const { Base } = require('../utils/base');
 
 /** Case QA scores & agent scorecards - Agentic Suite Analytics ("L1"/AI agent quality surface). */
 class CaseQa extends Base {
-  #instance;
-
-  #timeout;
-
   #authObj;
 
   constructor(props, authObj) {
     super(props);
-    this.#instance = props.instance;
-    this.#timeout = props.timeout;
     this.#authObj = authObj;
   }
 
-  getCaseQaFilters(params = {}) {
-    validate(caseQa.getCaseQaFiltersValidation, params);
-
-    const queryParams = qs.stringify(params);
+  #get(schema, params, apiPath) {
+    const { value } = validate(schema, params || {});
+    const queryParams = qs.stringify(value);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CASE_QA_API.FILTERS}?${queryParams}`
+      url: `${this.getInstance()}${apiPath}?${queryParams}`
     }, this.#authObj);
+  }
+
+  #post(schema, params, apiPath) {
+    const { value } = validate(schema, params);
+
+    return HttpRequest({
+      timeout: this.getApiTimeout(),
+      method: requestMethods.post,
+      url: `${this.getInstance()}${apiPath}`,
+      data: JSON.stringify(value)
+    }, this.#authObj);
+  }
+
+  getCaseQaFilters(params = {}) {
+    return this.#get(caseQa.getCaseQaFiltersValidation, params, CASE_QA_API.FILTERS);
   }
 
   getCaseQaMetrics(params) {
-    validate(caseQa.getCaseQaMetricsValidation, params);
-
-    return HttpRequest({
-      timeout: this.#timeout,
-      method: requestMethods.post,
-      url: `${this.#instance}${CASE_QA_API.METRICS}`,
-      data: JSON.stringify(params)
-    }, this.#authObj);
+    return this.#post(caseQa.getCaseQaMetricsValidation, params, CASE_QA_API.METRICS);
   }
 
   getCaseQaCaseDetails(params) {
-    validate(caseQa.getCaseQaCaseDetailsValidation, params);
-
-    return HttpRequest({
-      timeout: this.#timeout,
-      method: requestMethods.post,
-      url: `${this.#instance}${CASE_QA_API.CASE_DETAILS}`,
-      data: JSON.stringify(params)
-    }, this.#authObj);
+    return this.#post(caseQa.getCaseQaCaseDetailsValidation, params, CASE_QA_API.CASE_DETAILS);
   }
 
   getCaseQaDetail(params) {
-    validate(caseQa.getCaseQaDetailValidation, params);
+    const { value } = validate(caseQa.getCaseQaDetailValidation, params);
 
-    const queryParams = qs.stringify({ uid: params.uid, analyticsId: params.analyticsId });
+    const queryParams = qs.stringify({ uid: value.uid, analyticsId: value.analyticsId });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CASE_QA_API.CASE_DETAIL.replace('<caseId>', params.caseId)}?${queryParams}`
+      url: `${this.getInstance()}${CASE_QA_API.CASE_DETAIL.replace('<caseId>', value.caseId)}?${queryParams}`
     }, this.#authObj);
   }
 
-  getCqaInsights() {
+  getCqaInsights(params = {}) {
+    validate(caseQa.getCqaInsightsValidation, params);
+
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${CASE_QA_API.INSIGHTS}`
+      url: `${this.getInstance()}${CASE_QA_API.INSIGHTS}`
     }, this.#authObj);
   }
 
   getAgentScoreCardMetrics(params) {
-    validate(caseQa.getAgentScoreCardMetricsValidation, params);
-
-    return HttpRequest({
-      timeout: this.#timeout,
-      method: requestMethods.post,
-      url: `${this.#instance}${CASE_QA_API.AGENT_SCORE_CARD_METRICS}`,
-      data: JSON.stringify(params)
-    }, this.#authObj);
+    return this.#post(caseQa.getAgentScoreCardMetricsValidation, params, CASE_QA_API.AGENT_SCORE_CARD_METRICS);
   }
 
   getMyScoreCard(params) {
-    validate(caseQa.getMyScoreCardValidation, params);
-
-    const queryParams = qs.stringify(params);
-
-    return HttpRequest({
-      timeout: this.#timeout,
-      method: requestMethods.get,
-      url: `${this.#instance}${CASE_QA_API.MY_SCORE_CARD}?${queryParams}`
-    }, this.#authObj);
+    return this.#get(caseQa.getMyScoreCardValidation, params, CASE_QA_API.MY_SCORE_CARD);
   }
 
   getMyScoreCardDetails(params) {
-    validate(caseQa.getMyScoreCardDetailsValidation, params);
-
-    const queryParams = qs.stringify(params);
-
-    return HttpRequest({
-      timeout: this.#timeout,
-      method: requestMethods.get,
-      url: `${this.#instance}${CASE_QA_API.MY_SCORE_CARD_DETAILS}?${queryParams}`
-    }, this.#authObj);
+    return this.#get(caseQa.getMyScoreCardDetailsValidation, params, CASE_QA_API.MY_SCORE_CARD_DETAILS);
   }
 }
 

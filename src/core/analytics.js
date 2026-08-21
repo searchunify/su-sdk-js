@@ -40,16 +40,10 @@ const normalizeSessionListTableData = (data) => {
 };
 
 class Analytics extends Base {
-  #instance;
-
-  #timeout;
-
   #authObj;
 
   constructor(props, authObj) {
     super(props);
-    this.#instance = props.instance;
-    this.#timeout = props.timeout;
     this.#authObj = authObj;
   }
 
@@ -69,9 +63,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.TILE_DATA}`,
+      url: `${this.getInstance()}${ANALYTICS.TILE_DATA}`,
       data: payload
     }, this.#authObj);
   }
@@ -91,9 +85,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SUMMARY_CHART_DATA}`,
+      url: `${this.getInstance()}${ANALYTICS.SUMMARY_CHART_DATA}`,
       data: payload
     }, this.#authObj);
   }
@@ -104,9 +98,9 @@ class Analytics extends Base {
     const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.ALL_SEARCH_QUERY}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.ALL_SEARCH_QUERY}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -116,9 +110,9 @@ class Analytics extends Base {
     const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCHQUERY_WITH_RESULT}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCHQUERY_WITH_RESULT}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -128,9 +122,9 @@ class Analytics extends Base {
     const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCHQUERY_WITH_NO_CLICKS}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCHQUERY_WITH_NO_CLICKS}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -140,9 +134,9 @@ class Analytics extends Base {
     const queryParams = buildSearchClassificationQueryParams(params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCHQUERY_WITHOUT_RESULT}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCHQUERY_WITHOUT_RESULT}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -163,9 +157,9 @@ class Analytics extends Base {
 
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCHQUERY_HISTOGRAM}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCHQUERY_HISTOGRAM}`,
       data: payload
     }, this.#authObj);
   }
@@ -186,9 +180,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.MISSED_QUERY_HISTOGRAM}`,
+      url: `${this.getInstance()}${ANALYTICS.MISSED_QUERY_HISTOGRAM}`,
       data: payload
     }, this.#authObj);
   }
@@ -205,9 +199,9 @@ class Analytics extends Base {
 
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCH_SESSION_BY_CASE_UID_AUTH}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCH_SESSION_BY_CASE_UID_AUTH}`,
       data: payload
     }, this.#authObj);
   }
@@ -223,9 +217,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.ALL_SEARCH_CONVERSION}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.ALL_SEARCH_CONVERSION}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -240,9 +234,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCH_CONVERSION_NOT_FIRST_PAGE}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCH_CONVERSION_NOT_FIRST_PAGE}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -260,9 +254,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCH_CONVERSION_WITH_FILTERS}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCH_CONVERSION_WITH_FILTERS}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -277,9 +271,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCH_CONVERSION_BY_SESSION_ID}/${params.sessionId}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCH_CONVERSION_BY_SESSION_ID}/${params.sessionId}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -298,9 +292,9 @@ class Analytics extends Base {
 
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.DISCUSSION_READY_TO_BECOM_ARTICLE}`,
+      url: `${this.getInstance()}${ANALYTICS.DISCUSSION_READY_TO_BECOM_ARTICLE}`,
       data: payload
     }, this.#authObj);
   }
@@ -323,9 +317,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.ARTICLE_CREATED_CASES}`,
+      url: `${this.getInstance()}${ANALYTICS.ARTICLE_CREATED_CASES}`,
       data: payload
     }, this.#authObj);
   }
@@ -348,9 +342,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.ARTICLE_DEFLECTED_CASES}`,
+      url: `${this.getInstance()}${ANALYTICS.ARTICLE_DEFLECTED_CASES}`,
       data: payload
     }, this.#authObj);
   }
@@ -359,9 +353,9 @@ class Analytics extends Base {
     validate(analytics.conversionSearchesCreatedCasePost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCHES_CREATED_CASE}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCHES_CREATED_CASE}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -370,9 +364,9 @@ class Analytics extends Base {
     validate(analytics.conversionSearchesOnDeflectionPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCHES_ON_DEFLECTION}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCHES_ON_DEFLECTION}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -381,9 +375,9 @@ class Analytics extends Base {
     validate(analytics.conversionArticlesCreatedCasesSessionsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.ARTICLE_CREATED_CASES_SESSIONS}`,
+      url: `${this.getInstance()}${ANALYTICS.ARTICLE_CREATED_CASES_SESSIONS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -406,9 +400,9 @@ class Analytics extends Base {
 
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.ATTACHED_ARTICLE}`,
+      url: `${this.getInstance()}${ANALYTICS.ATTACHED_ARTICLE}`,
       data: payload
     }, this.#authObj);
   }
@@ -430,9 +424,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.ATTACHED_ON_CASE}`,
+      url: `${this.getInstance()}${ANALYTICS.ATTACHED_ON_CASE}`,
       data: payload
     }, this.#authObj);
   }
@@ -449,9 +443,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.ALL_SEARCH_QUERY_WITH_SESSION}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.ALL_SEARCH_QUERY_WITH_SESSION}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -468,9 +462,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.KCS_SUPPORT}`,
+      url: `${this.getInstance()}${ANALYTICS.KCS_SUPPORT}`,
       data: payload
     }, this.#authObj);
   }
@@ -487,9 +481,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCH_SESSION_BY_CASE_UID}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCH_SESSION_BY_CASE_UID}`,
       data: payload
     }, this.#authObj);
   }
@@ -507,9 +501,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SEARCH_SESSION_BY_SESSION_ID}/${params.sessionId}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SEARCH_SESSION_BY_SESSION_ID}/${params.sessionId}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -533,9 +527,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.AVERAGE_CLICK_POSITION}`,
+      url: `${this.getInstance()}${ANALYTICS.AVERAGE_CLICK_POSITION}`,
       data: JSON.stringify(payload)
     }, this.#authObj);
   }
@@ -560,9 +554,9 @@ class Analytics extends Base {
     const queryParams = qs.stringify(query);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SESSION_LOG}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SESSION_LOG}?${queryParams}`
     }, this.#authObj);
   }
 
@@ -608,9 +602,9 @@ class Analytics extends Base {
     const queryParams = qs.stringify(query);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SESSION_LIST_TABLE}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SESSION_LIST_TABLE}?${queryParams}`
     }, this.#authObj).then((result) => {
       if (result && result.status && result.data) {
         return { ...result, data: normalizeSessionListTableData(result.data) };
@@ -635,9 +629,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.TILE_DATA_CONTENT}`,
+      url: `${this.getInstance()}${ANALYTICS.TILE_DATA_CONTENT}`,
       data: payload
     }, this.#authObj);
   }
@@ -646,9 +640,9 @@ class Analytics extends Base {
     validate(analytics.contentSplitTileDataPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SPLIT_TILE_DATA_CONTENT}`,
+      url: `${this.getInstance()}${ANALYTICS.SPLIT_TILE_DATA_CONTENT}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -657,9 +651,9 @@ class Analytics extends Base {
     validate(analytics.contentUnsuccessfulChartsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.UNSUCCESSFUL_SUMMARY_CHART}`,
+      url: `${this.getInstance()}${ANALYTICS.UNSUCCESSFUL_SUMMARY_CHART}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -668,9 +662,9 @@ class Analytics extends Base {
     validate(analytics.contentSearchesWithNoClicksPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCHS_WITH_NO_CLICKS}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCHS_WITH_NO_CLICKS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -680,9 +674,9 @@ class Analytics extends Base {
     validate(analytics.overviewTopSearchesPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_TOP_SEARCHES}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_TOP_SEARCHES}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -692,9 +686,9 @@ class Analytics extends Base {
     validate(analytics.overviewSearchSessionsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_SESSIONS}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_SEARCH_SESSIONS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -703,9 +697,9 @@ class Analytics extends Base {
     validate(analytics.contentSuccessiveNoClicksPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_NO_CLICKS}`,
+      url: `${this.getInstance()}${ANALYTICS.SUCCESSIVE_NO_CLICKS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -714,9 +708,9 @@ class Analytics extends Base {
     validate(analytics.contentSearchesWithNoResultPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCHES_WITH_NO_RESULT}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCHES_WITH_NO_RESULT}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -726,9 +720,9 @@ class Analytics extends Base {
     validate(analytics.contentSearchesWithNoAiAnswerPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SEARCHES_WITH_NO_AI_ANSWER}`,
+      url: `${this.getInstance()}${ANALYTICS.SEARCHES_WITH_NO_AI_ANSWER}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -737,9 +731,9 @@ class Analytics extends Base {
     validate(analytics.contentSuccessiveNoResultsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_NO_RESULTS}`,
+      url: `${this.getInstance()}${ANALYTICS.SUCCESSIVE_NO_RESULTS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -748,9 +742,9 @@ class Analytics extends Base {
     validate(analytics.contentUnsuccessfulChartsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.UNSUCCESSFUL_SEARCH_SESSION_CHART}`,
+      url: `${this.getInstance()}${ANALYTICS.UNSUCCESSFUL_SEARCH_SESSION_CHART}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -759,9 +753,9 @@ class Analytics extends Base {
     validate(analytics.contentHighConversionPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION}`,
+      url: `${this.getInstance()}${ANALYTICS.HIGH_CONVERSION}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -770,9 +764,9 @@ class Analytics extends Base {
     validate(analytics.contentHighConversionClicksPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION_CLICKS}`,
+      url: `${this.getInstance()}${ANALYTICS.HIGH_CONVERSION_CLICKS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -781,9 +775,9 @@ class Analytics extends Base {
     validate(analytics.contentHighConversionSessionsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.HIGH_CONVERSION_SESSIONS}`,
+      url: `${this.getInstance()}${ANALYTICS.HIGH_CONVERSION_SESSIONS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -792,9 +786,9 @@ class Analytics extends Base {
     validate(analytics.contentArticleUsageByAgentsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.ARTICLE_USAGE_BY_AGENTS}`,
+      url: `${this.getInstance()}${ANALYTICS.ARTICLE_USAGE_BY_AGENTS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -803,9 +797,9 @@ class Analytics extends Base {
     validate(analytics.contentSuccessiveArticlesUsagePost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.SUCCESSIVE_ARTICLES_USAGE}`,
+      url: `${this.getInstance()}${ANALYTICS.SUCCESSIVE_ARTICLES_USAGE}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -826,9 +820,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_1}`,
+      url: `${this.getInstance()}${ANALYTICS.TILE_DATA_METRICS_1}`,
       data: payload
     }, this.#authObj);
   }
@@ -849,9 +843,9 @@ class Analytics extends Base {
     });
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.TILE_DATA_METRICS_2}`,
+      url: `${this.getInstance()}${ANALYTICS.TILE_DATA_METRICS_2}`,
       data: payload
     }, this.#authObj);
   }
@@ -882,9 +876,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_CLICK_POSITION}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_SEARCH_CLICK_POSITION}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -917,9 +911,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_CREATED_CASES}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_CREATED_CASES}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -942,9 +936,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_FEATURED_SNIPPET}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_FEATURED_SNIPPET}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -967,9 +961,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_KNOWLEDGE_TITLE}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_KNOWLEDGE_TITLE}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1000,9 +994,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_PAGE_RATING}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_PAGE_RATING}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1026,9 +1020,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_SEARCH_FEEDBACK}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_SEARCH_FEEDBACK}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1058,9 +1052,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_ADVERTISEMENTS}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_ADVERTISEMENTS}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1100,18 +1094,20 @@ class Analytics extends Base {
       }
     }
     if (params.ecoSystemId) {
-      body.uid = params.ecoSystemId;
+      body.ecoId = params.ecoSystemId;
+      body.uid = null;
     } else {
       body.uid = params.searchClientId ?? '';
+      body.ecoId = null;
     }
     if (params.userMetricsFilters !== undefined) {
       body.userMetricsFilters = params.userMetricsFilters;
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.OVERVIEW_USER_ENGAGEMENT_TRENDS}`,
+      url: `${this.getInstance()}${ANALYTICS.OVERVIEW_USER_ENGAGEMENT_TRENDS}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1142,9 +1138,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${urlPath}`,
+      url: `${this.getInstance()}${urlPath}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1164,9 +1160,9 @@ class Analytics extends Base {
     };
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LLM_RESPONSE_FEEDBACK}`,
+      url: `${this.getInstance()}${ANALYTICS.LLM_RESPONSE_FEEDBACK}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1175,9 +1171,9 @@ class Analytics extends Base {
     validate(analytics.conversionCaseDeflectionStage1, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_STAGE_1}`,
+      url: `${this.getInstance()}${ANALYTICS.CASE_DEFLECTION_STAGE_1}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1186,9 +1182,9 @@ class Analytics extends Base {
     validate(analytics.conversionCaseDeflectionStage2, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_STAGE_2}`,
+      url: `${this.getInstance()}${ANALYTICS.CASE_DEFLECTION_STAGE_2}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1197,9 +1193,9 @@ class Analytics extends Base {
     validate(analytics.conversionCaseDeflectionTrends, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CASE_DEFLECTION_TRENDS}`,
+      url: `${this.getInstance()}${ANALYTICS.CASE_DEFLECTION_TRENDS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1208,9 +1204,9 @@ class Analytics extends Base {
     validate(analytics.conversionConversionSummary, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_SUMMARY}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_SUMMARY}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1224,9 +1220,9 @@ class Analytics extends Base {
     };
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CURRENT_RELEVANCE_INDEX}`,
+      url: `${this.getInstance()}${ANALYTICS.CURRENT_RELEVANCE_INDEX}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1242,9 +1238,9 @@ class Analytics extends Base {
     };
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.RELEVANCE_INDEX}`,
+      url: `${this.getInstance()}${ANALYTICS.RELEVANCE_INDEX}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1265,9 +1261,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LEADERSHIP_UNASSISTED_SELF_SOLVE_VOLUME}`,
+      url: `${this.getInstance()}${ANALYTICS.LEADERSHIP_UNASSISTED_SELF_SOLVE_VOLUME}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1287,36 +1283,36 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME}`,
+      url: `${this.getInstance()}${ANALYTICS.LEADERSHIP_ASSISTED_SELF_SOLVE_VOLUME}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
 
   postLeadershipAssistedCaseVolume(params) {
-    validate(analytics.leadershipAssistedCaseVolume, params);
+    const { value } = validate(analytics.leadershipAssistedCaseVolume, params);
 
     const body = {
-      internalUser: params.internalUser ?? 'all'
+      internalUser: value.internalUser ?? 'all'
     };
-    if (params.tenantId !== undefined && params.tenantId !== null && String(params.tenantId).trim() !== '') {
-      body.tenantId = params.tenantId;
+    if (value.tenantId !== undefined && value.tenantId !== null && value.tenantId !== '') {
+      body.tenantId = value.tenantId;
     }
-    if (params.indexName !== undefined && params.indexName !== null && String(params.indexName).trim() !== '') {
-      body.indexName = params.indexName;
+    if (value.indexName !== undefined && value.indexName !== null && value.indexName !== '') {
+      body.indexName = value.indexName;
     }
-    if (params.from !== undefined && params.from !== null && String(params.from).trim() !== '') {
-      body.from = params.from;
+    if (value.from !== undefined && value.from !== null && value.from !== '') {
+      body.from = value.from;
     }
-    if (params.to !== undefined && params.to !== null && String(params.to).trim() !== '') {
-      body.to = params.to;
+    if (value.to !== undefined && value.to !== null && value.to !== '') {
+      body.to = value.to;
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LEADERSHIP_ASSISTED_CASE_VOLUME}`,
+      url: `${this.getInstance()}${ANALYTICS.LEADERSHIP_ASSISTED_CASE_VOLUME}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1341,9 +1337,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LEADERSHIP_DEFLECTION_COUNT}`,
+      url: `${this.getInstance()}${ANALYTICS.LEADERSHIP_DEFLECTION_COUNT}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1374,9 +1370,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LEADERSHIP_DEFLECTION_COST_SAVINGS_DOWNLOAD}`,
+      url: `${this.getInstance()}${ANALYTICS.LEADERSHIP_DEFLECTION_COST_SAVINGS_DOWNLOAD}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1393,9 +1389,9 @@ class Analytics extends Base {
     }
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.LEADERSHIP_GET_CONTENT_SOURCES}`,
+      url: `${this.getInstance()}${ANALYTICS.LEADERSHIP_GET_CONTENT_SOURCES}`,
       data: JSON.stringify(body)
     }, this.#authObj);
   }
@@ -1404,9 +1400,9 @@ class Analytics extends Base {
     validate(analytics.conversionClicksCountContentSource, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CLICKS_COUNT_CONTENT_SOURCE}`,
+      url: `${this.getInstance()}${ANALYTICS.CLICKS_COUNT_CONTENT_SOURCE}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1415,9 +1411,9 @@ class Analytics extends Base {
     validate(analytics.conversionSessionDetailsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_SESSION_DETAILS}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_SESSION_DETAILS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1426,9 +1422,9 @@ class Analytics extends Base {
     validate(analytics.conversionPaginatedTablePost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_TOP_CLICKED_DOCS}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_TOP_CLICKED_DOCS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1437,9 +1433,9 @@ class Analytics extends Base {
     validate(analytics.conversionSearchesOnClickPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_SEARCHES_ON_CLICK}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_SEARCHES_ON_CLICK}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1448,9 +1444,9 @@ class Analytics extends Base {
     validate(analytics.conversionPaginatedTablePost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_TOP_SEARCHES_WITH_CLICKS}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_TOP_SEARCHES_WITH_CLICKS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1459,9 +1455,9 @@ class Analytics extends Base {
     validate(analytics.conversionClickedResultsPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_CLICKED_RESULTS}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_CLICKED_RESULTS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1470,9 +1466,9 @@ class Analytics extends Base {
     validate(analytics.conversionLinkSharingPost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_LINK_SHARING}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_LINK_SHARING}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1481,9 +1477,9 @@ class Analytics extends Base {
     validate(analytics.conversionPaginatedTablePost, params);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.post,
-      url: `${this.#instance}${ANALYTICS.CONVERSION_DISCUSSIONS}`,
+      url: `${this.getInstance()}${ANALYTICS.CONVERSION_DISCUSSIONS}`,
       data: JSON.stringify(params)
     }, this.#authObj);
   }
@@ -1518,9 +1514,9 @@ class Analytics extends Base {
     const queryParams = qs.stringify(query);
 
     return HttpRequest({
-      timeout: this.#timeout,
+      timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.#instance}${ANALYTICS.SESSION_TRACKING_FORMATTED}?${queryParams}`
+      url: `${this.getInstance()}${ANALYTICS.SESSION_TRACKING_FORMATTED}?${queryParams}`
     }, this.#authObj);
   }
 }
