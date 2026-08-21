@@ -19,6 +19,33 @@ const userMetricsValidation = {
   }),
 };
 
+/**
+ * uid/ecoId are declared with .allow(null, '') on several schemas below, so Joi's built-in peer
+ * methods (.xor()/.nand()) can't be used directly - those treat any key whose value !== undefined
+ * (including null/'') as "present", which would misclassify an explicit empty-string/null as
+ * present. isPresent() is the single canonical presence check every uid/ecoId custom validator
+ * below shares, instead of each hand-rolling its own (slightly different) version.
+ */
+const isPresent = (value) => value !== undefined && value !== null && String(value).trim() !== '';
+
+/** Forbids both uid and ecoId (identified by key name) being present together; neither present is allowed. */
+const atMostOneOf = (keyA, keyB) => (value, helpers) => {
+  if (isPresent(value[keyA]) && isPresent(value[keyB])) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+};
+
+/** Requires exactly one of uid/ecoId (identified by key name) to be present - not both, not neither. */
+const exactlyOneOf = (keyA, keyB) => (value, helpers) => {
+  const hasA = isPresent(value[keyA]);
+  const hasB = isPresent(value[keyB]);
+  if (hasA === hasB) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+};
+
 const similarValidation = Joi.object().keys({
   startDate: Joi.string().trim().required(),
   endDate: Joi.string().trim().required(),
@@ -188,24 +215,10 @@ const conversionCaseDeflectionStage1 = Joi.object({
     )
     .optional(),
   emailTracking: Joi.boolean().optional(),
-  userMetricsFlag: Joi.boolean().optional(),
-  userMetricsFilters: Joi.alternatives().try(Joi.string().trim(), Joi.array().items(Joi.string().trim())).optional(),
-  userMetricsLimit: Joi.number().optional(),
-  userMetricsOffset: Joi.number().optional(),
+  ...userMetricsValidation,
   /** Required by analytics `validator` on POST /api/v2/conversion/* when not proxied through admin (admin injects tenant-id). */
   tenantId: Joi.string().uuid().trim().optional()
-}).custom((value, helpers) => {
-  const hasUid =
-    value.uid !== undefined && value.uid !== null && value.uid !== '';
-  const hasEco =
-    value.ecoId !== undefined &&
-    value.ecoId !== null &&
-    String(value.ecoId).trim() !== '';
-  if (hasUid && hasEco) {
-    return helpers.error('any.invalid');
-  }
-  return value;
-});
+}).custom(atMostOneOf('uid', 'ecoId'));
 
 /** POST /api/v2/conversion/caseDeflectionStage2 — same body shape as stage1. */
 const conversionCaseDeflectionStage2 = conversionCaseDeflectionStage1;
@@ -235,21 +248,7 @@ const conversionConversionSummary = Joi.object({
   userMetricsFilters: Joi.alternatives().try(Joi.string().trim(), Joi.array().items(Joi.string().trim())).optional(),
   userMetricsLimit: Joi.number().optional(),
   userMetricsOffset: Joi.number().optional()
-}).custom((value, helpers) => {
-  const hasEco =
-    value.ecoId !== undefined &&
-    value.ecoId !== null &&
-    String(value.ecoId).trim() !== '';
-  const hasUid =
-    value.uid !== undefined && value.uid !== null && value.uid !== '';
-  if (hasUid && hasEco) {
-    return helpers.error('any.invalid');
-  }
-  if (!hasUid && !hasEco) {
-    return helpers.error('any.invalid');
-  }
-  return value;
-});
+}).custom(exactlyOneOf('uid', 'ecoId'));
 
 /** POST /api/v2/leadership/deflection-count (legacy POST /leadership/deflection-count unchanged on analytics) */
 const leadershipDeflectionCount = Joi.object({
@@ -264,18 +263,7 @@ const leadershipDeflectionCount = Joi.object({
     .optional(),
   from: Joi.string().trim().optional().allow(null, ''),
   to: Joi.string().trim().optional().allow(null, '')
-}).custom((value, helpers) => {
-  const hasUid = value.uid && typeof value.uid === 'string' && value.uid.length > 0;
-  const hasEco =
-    value.ecoId && typeof value.ecoId === 'string' && String(value.ecoId).trim().length > 0;
-  if (hasUid && hasEco) {
-    return helpers.error('any.invalid');
-  }
-  if (!hasUid && !hasEco) {
-    return helpers.error('any.invalid');
-  }
-  return value;
-});
+}).custom(exactlyOneOf('uid', 'ecoId'));
 
 /** POST /api/v2/leadership/deflection-cost-savings-download */
 const leadershipDeflectionCostSavingsDownload = leadershipDeflectionCount.keys({
@@ -368,8 +356,7 @@ const contentGapPostBase = conversionCaseDeflectionStage1.keys({
   emailId: Joi.string().allow('').optional()
 });
 
-/** POST /api/v2/content/tileDataContent and splitTileDataContent (eco only for split). */
-const contentTileDataPost = conversionCaseDeflectionStage1;
+/** POST /api/v2/content/splitTileDataContent (eco only). tileDataContent itself is validated by similarValidation - see getTileDataContent. */
 const contentSplitTileDataPost = conversionCaseDeflectionStage1.keys({
   ecoId: Joi.string().uuid().trim().required()
 });
@@ -582,23 +569,12 @@ const leadershipSelfSolveVolume = Joi.object({
   from: Joi.string().trim().optional().allow(null, ''),
   to: Joi.string().trim().optional().allow(null, ''),
   directlyViewSetting: Joi.boolean().optional()
-}).custom((value, helpers) => {
-  const hasUid = value.uid && typeof value.uid === 'string' && value.uid.length > 0;
-  const hasEco =
-    value.ecoId && typeof value.ecoId === 'string' && value.ecoId.length > 0;
-  if (hasUid && hasEco) {
-    return helpers.error('any.invalid');
-  }
-  if (!hasUid && !hasEco) {
-    return helpers.error('any.invalid');
-  }
-  return value;
-});
+}).custom(exactlyOneOf('uid', 'ecoId'));
 
-/** POST /api/v2/leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. `indexName` is required. */
+/** POST /api/v2/leadership/assisted-case-volume — tenant-scoped rollup; uid/ecoId not required on this route. `indexName` is optional. */
 const leadershipAssistedCaseVolume = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
-  indexName: Joi.string().trim().required(),
+  indexName: Joi.string().trim().optional(),
   internalUser: Joi.alternatives()
     .try(
       Joi.string().valid('all', 'internal', 'external', 'externalOnly'),
@@ -638,7 +614,6 @@ module.exports = {
   conversionPaginatedTablePost,
   conversionSearchesOnClickPost,
   conversionClickedResultsPost,
-  contentTileDataPost,
   contentSplitTileDataPost,
   contentUnsuccessfulChartsPost,
   contentSearchesWithNoClicksPost,

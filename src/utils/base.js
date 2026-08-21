@@ -12,6 +12,10 @@ class Base {
     this.#timeout = props.timeout;
   }
 
+  getInstance() {
+    return this.#instance;
+  }
+
   getApiTimeout() {
     return this.#timeout;
   }
