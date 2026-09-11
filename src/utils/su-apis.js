@@ -101,3 +101,79 @@ exports.CONTENT_API = {
   BATCH_UPLOAD: '/api/v2_cs/apiData/contentSource/<contentSourceId>/object/<objectId>/bulkUpload',
   SEARCH_CLIENTS: '/api/v2/search-clients'
 };
+
+/**
+ * Agentic Suite Analytics - Case QA & Agent Scorecards.
+ * Gateway (agentic-suite-admin-server) forwards these 1:1 to agentic-suite-analytics's own
+ * /api/v1/case-qa/... and /api/v1/human-managers-teams-agents/... paths.
+ */
+exports.CASE_QA_API = {
+  FILTERS: '/api/v1/agentic-analytics/api/v1/case-qa/overview/filters',
+  METRICS: '/api/v1/agentic-analytics/api/v1/case-qa/overview/metrics',
+  CASE_DETAILS: '/api/v1/agentic-analytics/api/v1/case-qa/overview/case-details',
+  CASE_DETAIL: '/api/v1/agentic-analytics/api/v1/case-qa/overview/<caseId>/detail',
+  INSIGHTS: '/api/v1/agentic-analytics/api/v1/case-qa/overview/cqa-insights',
+  AGENT_SCORE_CARD_METRICS: '/api/v1/agentic-analytics/api/v1/case-qa/agent-score-card/metrics',
+  MY_SCORE_CARD: '/api/v1/agentic-analytics/api/v1/human-managers-teams-agents/my-score-card',
+  MY_SCORE_CARD_DETAILS: '/api/v1/agentic-analytics/api/v1/human-managers-teams-agents/my-score-card/details'
+};
+
+/**
+ * Agentic Suite Analytics - Support Agent (bot/conversation) Analytics.
+ * Gateway forwards these 1:1 to agentic-suite-analytics's /api/v1/analytics/support-agent/...
+ */
+exports.SUPPORT_AGENT_API = {
+  AGENTS: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/agents',
+  KPIS: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/kpis',
+  TRENDS_VOLUME_OUTCOME: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/trends/volume-outcome',
+  TRENDS_DURATION: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/trends/duration',
+  TRENDS_CSAT: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/trends/csat',
+  OUTCOME_DISTRIBUTION: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/outcome-distribution',
+  SANKEY: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/sankey',
+  SESSIONS: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/sessions',
+  SESSION_TRANSCRIPT: '/api/v1/agentic-analytics/api/v1/analytics/support-agent/sessions/<sessionId>/transcript'
+};
+
+/**
+ * Agentic Suite Analytics - Agent Partner Analytics (self-service partner reporting suite).
+ * Gateway forwards these 1:1 to agentic-suite-analytics's /api/v1/agent-partner/...
+ */
+exports.AGENT_PARTNER_API = {
+  SEARCH_CLIENTS: '/api/v1/agentic-analytics/api/v1/agent-partner/search-clients',
+  ADOPTION_CONTENT_SOURCES: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/content-sources',
+  OVERVIEW_TILE_DATA: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tile-data',
+  OVERVIEW_AGENT_ENGAGEMENT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/agent-engagement',
+  OVERVIEW_AGENT_ENGAGEMENT_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/agent-engagement/export',
+  OVERVIEW_MTTR_REPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/mttr-report',
+  OVERVIEW_MTTR_REPORT_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/mttr-report/export',
+  OVERVIEW_AGENT_WISE_REPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/agent-wise-report',
+  OVERVIEW_AGENT_WISE_REPORT_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/agent-wise-report/export',
+  TAG_TRENDS_SPIKE_WATCHLIST: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/spike-watchlist',
+  TAG_TRENDS_SPIKE_WATCHLIST_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/spike-watchlist/export',
+  TAG_TRENDS_FREQUENCY: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/frequency',
+  TAG_TRENDS_FREQUENCY_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/frequency/export',
+  TAG_TRENDS_TOP_PAIRS: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/top-pairs',
+  TAG_TRENDS_FILTER_AGENTS: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/filters/agents',
+  TAG_TRENDS_FILTER_PRODUCTS: '/api/v1/agentic-analytics/api/v1/agent-partner/overview/tag-trends/filters/products',
+  ADOPTION_RA_ADOPTION: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/ra-adoption',
+  ADOPTION_RA_ADOPTION_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/ra-adoption/export',
+  ADOPTION_AH_ADOPTION: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/ah-adoption',
+  ADOPTION_AH_ADOPTION_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/ah-adoption/export',
+  ADOPTION_CASE_ESCALATION: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/case-escalation',
+  ADOPTION_CASE_ESCALATION_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/case-escalation/export',
+  ADOPTION_AVERAGE_TTR: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/average-ttr',
+  ADOPTION_AVERAGE_TTR_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/adoption/average-ttr/export',
+  FEEDBACK_RESPONSE_FEEDBACK: '/api/v1/agentic-analytics/api/v1/agent-partner/feedback/response-feedback',
+  FEEDBACK_RESPONSE_FEEDBACK_DETAILS: '/api/v1/agentic-analytics/api/v1/agent-partner/feedback/response-feedback-details',
+  FEEDBACK_FEATURE_TYPES: '/api/v1/agentic-analytics/api/v1/agent-partner/feedback/feature-types',
+  FEEDBACK_AGENT_NAMES: '/api/v1/agentic-analytics/api/v1/agent-partner/feedback/agent-names',
+  FEEDBACK_EXPORT: '/api/v1/agentic-analytics/api/v1/agent-partner/feedback/export'
+};
+
+/**
+ * Agentic Suite Analytics - LLM token/cost consumption.
+ * Gateway forwards this 1:1 to agentic-suite-analytics's /api/v1/agent-analytics/dashboard.
+ */
+exports.LLM_USAGE_API = {
+  DASHBOARD: '/api/v1/agentic-analytics/api/v1/agent-analytics/dashboard'
+};
