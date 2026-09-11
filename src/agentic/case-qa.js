@@ -56,7 +56,7 @@ class CaseQa extends Base {
     return HttpRequest({
       timeout: this.getApiTimeout(),
       method: requestMethods.get,
-      url: `${this.getInstance()}${CASE_QA_API.CASE_DETAIL.replace('<caseId>', value.caseId)}?${queryParams}`
+      url: `${this.getInstance()}${CASE_QA_API.CASE_DETAIL.replace('<caseId>', encodeURIComponent(value.caseId))}?${queryParams}`
     }, this.#authObj);
   }
 

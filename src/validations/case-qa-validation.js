@@ -13,9 +13,10 @@ const filtersSchema = Joi.object().keys({
 });
 
 const getCaseQaFiltersValidation = Joi.object().keys({
-  aiAgentUid: Joi.string().trim().optional(),
-  teamId: Joi.string().trim().optional(),
-  managerEmail: Joi.string().trim().max(255).optional()
+  aiAgentUid: Joi.string().trim().allow('').optional(),
+  teamId: Joi.string().trim().allow('').optional(),
+  managerEmail: Joi.string().trim().max(255).allow('')
+    .optional()
 });
 
 const getCaseQaMetricsValidation = Joi.object().keys({

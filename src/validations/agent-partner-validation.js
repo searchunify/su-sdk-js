@@ -44,8 +44,8 @@ const looseExportFields = {
 
 const paginationSchema = Joi.object({
   enabled: Joi.boolean().optional(),
-  page: Joi.number().integer().min(1).optional(),
-  pageSize: Joi.number().integer().min(1).optional()
+  page: Joi.number().integer().min(1).when('enabled', { is: true, then: Joi.required() }),
+  pageSize: Joi.number().integer().min(1).when('enabled', { is: true, then: Joi.required() })
 }).optional();
 
 const searchClientsValidation = Joi.object({});

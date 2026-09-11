@@ -15,9 +15,9 @@ class LlmUsage extends Base {
   }
 
   getLlmUsageDashboard(params = {}) {
-    validate(llmUsage.getLlmUsageDashboardValidation, params);
+    const { value } = validate(llmUsage.getLlmUsageDashboardValidation, params);
 
-    const queryParams = qs.stringify(params);
+    const queryParams = qs.stringify(value);
 
     return HttpRequest({
       timeout: this.getApiTimeout(),

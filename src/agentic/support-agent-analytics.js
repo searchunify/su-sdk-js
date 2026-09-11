@@ -15,8 +15,11 @@ class SupportAgentAnalytics extends Base {
   }
 
   #get(schema, params, apiPath) {
-    validate(schema, params || {});
-    const queryParams = qs.stringify(params || {});
+    const { value } = validate(schema, params || {});
+    if (Array.isArray(value.agentIds)) {
+      value.agentIds = value.agentIds.join(',');
+    }
+    const queryParams = qs.stringify(value);
 
     return HttpRequest({
       timeout: this.getApiTimeout(),

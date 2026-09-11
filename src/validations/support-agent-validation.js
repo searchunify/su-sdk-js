@@ -4,7 +4,7 @@ const commonParams = {
   startDate: Joi.string().trim().optional(),
   endDate: Joi.string().trim().optional(),
   datePreset: Joi.string().valid(
-    'today', 'yesterday', 'last7days', 'last30days', 'thisMonth', 'lastMonth'
+    'last7Days', 'last30Days', 'last6Weeks', 'last90Days', 'last6Months', 'lastYear'
   ).optional(),
   granularity: Joi.string().valid('day', 'week', 'month', 'daily', 'weekly', 'monthly').optional(),
   agentIds: Joi.alternatives().try(
