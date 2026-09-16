@@ -19,29 +19,29 @@ const mockAuth = { getAuthHeader: async () => 'test', authType: 'apiKey' };
 
 describe('Agentic Analytics su-apis URLs', () => {
   it('should have CASE_QA_API urls under the agentic-analytics gateway prefix', () => {
-    assert.equal(CASE_QA_API.FILTERS, '/api/v1/agentic-analytics/api/v1/case-qa/overview/filters');
-    assert.equal(CASE_QA_API.CASE_DETAIL, '/api/v1/agentic-analytics/api/v1/case-qa/overview/<caseId>/detail');
-    assert.equal(CASE_QA_API.MY_SCORE_CARD, '/api/v1/agentic-analytics/api/v1/human-managers-teams-agents/my-score-card');
+    assert.equal(CASE_QA_API.FILTERS, '/su-agent-suite/api/v1/agentic-analytics/api/v1/case-qa/overview/filters');
+    assert.equal(CASE_QA_API.CASE_DETAIL, '/su-agent-suite/api/v1/agentic-analytics/api/v1/case-qa/overview/<caseId>/detail');
+    assert.equal(CASE_QA_API.MY_SCORE_CARD, '/su-agent-suite/api/v1/agentic-analytics/api/v1/human-managers-teams-agents/my-score-card');
   });
 
   it('should have SUPPORT_AGENT_API urls under the agentic-analytics gateway prefix', () => {
-    assert.equal(SUPPORT_AGENT_API.AGENTS, '/api/v1/agentic-analytics/api/v1/analytics/support-agent/agents');
+    assert.equal(SUPPORT_AGENT_API.AGENTS, '/su-agent-suite/api/v1/agentic-analytics/api/v1/analytics/support-agent/agents');
     assert.equal(
       SUPPORT_AGENT_API.SESSION_TRANSCRIPT,
-      '/api/v1/agentic-analytics/api/v1/analytics/support-agent/sessions/<sessionId>/transcript'
+      '/su-agent-suite/api/v1/agentic-analytics/api/v1/analytics/support-agent/sessions/<sessionId>/transcript'
     );
   });
 
   it('should have AGENT_PARTNER_API urls under the agentic-analytics gateway prefix', () => {
-    assert.equal(AGENT_PARTNER_API.SEARCH_CLIENTS, '/api/v1/agentic-analytics/api/v1/agent-partner/search-clients');
+    assert.equal(AGENT_PARTNER_API.SEARCH_CLIENTS, '/su-agent-suite/api/v1/agentic-analytics/api/v1/agent-partner/search-clients');
     assert.equal(
       AGENT_PARTNER_API.OVERVIEW_AGENT_ENGAGEMENT_EXPORT,
-      '/api/v1/agentic-analytics/api/v1/agent-partner/overview/agent-engagement/export'
+      '/su-agent-suite/api/v1/agentic-analytics/api/v1/agent-partner/overview/agent-engagement/export'
     );
   });
 
   it('should have LLM_USAGE_API url under the agentic-analytics gateway prefix', () => {
-    assert.equal(LLM_USAGE_API.DASHBOARD, '/api/v1/agentic-analytics/api/v1/agent-analytics/dashboard');
+    assert.equal(LLM_USAGE_API.DASHBOARD, '/su-agent-suite/api/v1/agentic-analytics/api/v1/agent-analytics/dashboard');
   });
 });
 
