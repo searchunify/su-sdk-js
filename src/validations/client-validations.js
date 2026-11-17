@@ -8,6 +8,12 @@ const initialize = Joi.object({
   tenantId: Joi.string().uuid().trim().optional(),
   /** When true, analytics HTTP calls include X-SearchUnify-MCP-Track (SearchUnify MCP / trusted BFF only). */
   sendMcpConsumptionTrack: Joi.boolean().optional().default(false),
+  /**
+   * Optional function returning `{ tool, callId, user }` for the current MCP tool invocation.
+   * Called per request; values are sent as X-SearchUnify-MCP-Tool / -Call-Id / -User headers
+   * (only when sendMcpConsumptionTrack is true) so the instance can log per-tool usage.
+   */
+  mcpTrackContext: Joi.func().optional(),
   apiKey: Joi.string(),
   authType: Joi.string().valid(
     AUTH_TYPES.API_KEY,

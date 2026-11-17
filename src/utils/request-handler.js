@@ -35,8 +35,47 @@ const responseHandler = (response) => {
   return result;
 };
 
+const MCP_TRACK_CONTEXT_HEADERS = Object.freeze({
+  tool: 'x-searchunify-mcp-tool',
+  callId: 'x-searchunify-mcp-call-id',
+  user: 'x-searchunify-mcp-user'
+});
+
+const MAX_MCP_HEADER_VALUE_LENGTH = 256;
+
+/**
+ * Builds the per-call MCP tracking headers from the caller-supplied context function.
+ * Values are URI-encoded so any character is header-safe; missing/empty values are skipped.
+ * A throwing context function never breaks the API call - tracking is best effort.
+ */
+const buildMcpTrackContextHeaders = (authObj) => {
+  const headers = {};
+  if (!authObj.sendMcpConsumptionTrack || typeof authObj.mcpTrackContext !== 'function') {
+    return headers;
+  }
+  let context;
+  try {
+    context = authObj.mcpTrackContext() || {};
+  } catch (e) {
+    return headers;
+  }
+  Object.entries(MCP_TRACK_CONTEXT_HEADERS).forEach(([key, headerName]) => {
+    const value = context[key];
+    if (value === undefined || value === null || String(value).trim() === '') return;
+    const trimmed = String(value).trim().slice(0, MAX_MCP_HEADER_VALUE_LENGTH);
+    headers[headerName] = encodeURIComponent(trimmed);
+  });
+
+  return headers;
+};
+
+exports.buildMcpTrackContextHeaders = buildMcpTrackContextHeaders;
+exports.MCP_TRACK_CONTEXT_HEADERS = MCP_TRACK_CONTEXT_HEADERS;
+
 exports.HttpRequest = async (options, authObj) => {
   let defaultHeaders = {};
+  // Token requests (generateToken / getRefreshedToken) opt out of default headers.
+  const isAuthRequest = options.defaultHeaders === false;
 
   if (options.defaultHeaders === false) {
     delete options.defaultHeaders;
@@ -54,6 +93,9 @@ exports.HttpRequest = async (options, authObj) => {
 
   if (authObj.sendMcpConsumptionTrack) {
     defaultHeaders['x-searchunify-mcp-track'] = '1';
+    if (!isAuthRequest) {
+      Object.assign(defaultHeaders, buildMcpTrackContextHeaders(authObj));
+    }
   }
 
   options.headers = { ...defaultHeaders, ...options.headers };
