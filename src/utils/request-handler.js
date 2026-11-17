@@ -42,6 +42,18 @@ const MCP_TRACK_CONTEXT_HEADERS = Object.freeze({
 });
 
 const MAX_MCP_HEADER_VALUE_LENGTH = 256;
+const LONE_SURROGATE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g;
+
+/**
+ * Trims, caps at MAX_MCP_HEADER_VALUE_LENGTH UTF-16 code units and URI-encodes one value.
+ * Lone surrogates (e.g. an emoji cut in half by the cap) are dropped first, because
+ * encodeURIComponent throws URIError on them.
+ */
+const toMcpHeaderValue = (value) => {
+  const capped = String(value).trim().slice(0, MAX_MCP_HEADER_VALUE_LENGTH).replace(LONE_SURROGATE, '');
+
+  return capped === '' ? null : encodeURIComponent(capped);
+};
 
 /**
  * Builds the per-call MCP tracking headers from the caller-supplied context function.
@@ -61,9 +73,13 @@ const buildMcpTrackContextHeaders = (authObj) => {
   }
   Object.entries(MCP_TRACK_CONTEXT_HEADERS).forEach(([key, headerName]) => {
     const value = context[key];
-    if (value === undefined || value === null || String(value).trim() === '') return;
-    const trimmed = String(value).trim().slice(0, MAX_MCP_HEADER_VALUE_LENGTH);
-    headers[headerName] = encodeURIComponent(trimmed);
+    if (value === undefined || value === null) return;
+    try {
+      const encoded = toMcpHeaderValue(value);
+      if (encoded !== null) headers[headerName] = encoded;
+    } catch (e) {
+      // Best effort: a value that cannot be encoded is skipped, never fails the API call.
+    }
   });
 
   return headers;

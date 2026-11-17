@@ -57,6 +57,21 @@ describe('buildMcpTrackContextHeaders', () => {
     assert.equal(headers['x-searchunify-mcp-user'], undefined);
   });
 
+  it('drops an emoji cut in half by the length cap instead of throwing', () => {
+    const auth = authWith({
+      sendMcpConsumptionTrack: true,
+      mcpTrackContext: () => ({ tool: `${'x'.repeat(255)}\u{1F600}`, user: 'a\uD800b' })
+    });
+    const headers = buildMcpTrackContextHeaders(auth);
+    assert.equal(headers['x-searchunify-mcp-tool'], 'x'.repeat(255));
+    assert.equal(headers['x-searchunify-mcp-user'], 'ab');
+  });
+
+  it('keeps a whole emoji that fits within the cap', () => {
+    const auth = authWith({ sendMcpConsumptionTrack: true, mcpTrackContext: () => ({ tool: 'a\u{1F600}' }) });
+    assert.equal(decodeURIComponent(buildMcpTrackContextHeaders(auth)['x-searchunify-mcp-tool']), 'a\u{1F600}');
+  });
+
   it('never throws when the context function throws', () => {
     const auth = authWith({ sendMcpConsumptionTrack: true, mcpTrackContext: () => { throw new Error('boom'); } });
     assert.deepEqual(buildMcpTrackContextHeaders(auth), {});
