@@ -7,3 +7,4 @@ exports.caseQa = require('./case-qa-validation');
 exports.supportAgent = require('./support-agent-validation');
 exports.agentPartner = require('./agent-partner-validation');
 exports.llmUsage = require('./llm-usage-validation');
+exports.customReports = require('./custom-reports-validation');

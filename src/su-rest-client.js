@@ -39,6 +39,10 @@ class SearchUnifyRestClient {
     return this.#core.content;
   }
 
+  CustomReports() {
+    return this.#core.customReports;
+  }
+
   Search() {
     return this.#core.search;
   }

@@ -331,6 +331,38 @@ await Analytics.getSearchSessionByCaseUid({ startDate: '2025-01-01', endDate: '2
 
 ---
 
+### Custom Reports (read only)
+
+The published custom analytics reports of the credential's tenant, their data and the values of their custom
+filters. Nothing here creates or changes a report or returns its definition.
+
+```javascript
+const CustomReports = suRestClient.CustomReports();
+
+// Published reports: { reports: [{ id, name, description, section, columns, filters, customFilters, ... }] }
+const reports = await CustomReports.listReports();
+
+// Rows of one report. Omit searchClients for all search clients.
+const data = await CustomReports.runReport({
+  reportId: 'top_searches',     // `id` from listReports
+  from: '2026-10-01',           // YYYY-MM-DD, required
+  to: '2026-10-31',             // YYYY-MM-DD, required
+  page: 1,
+  pageSize: 20,                 // 1-500
+  sortBy: 'searches',           // optional column key
+  sortDir: 'desc',              // asc | desc
+  internalUser: 'all',          // all | internal | external | externalOnly
+  searchClients: ['<uid>'],     // optional
+  custom: { language: 'en' },   // optional: custom filter name -> value
+  search: { query: 'sso' }      // optional: searchable column -> text
+});
+
+// Values of one custom filter (dropdown / multiselect): [{ value, label }]
+const options = await CustomReports.getReportFilterOptions({ reportId: 'top_searches', name: 'language' });
+```
+
+---
+
 ### Content
 
 ```javascript

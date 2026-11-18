@@ -177,3 +177,14 @@ exports.AGENT_PARTNER_API = {
 exports.LLM_USAGE_API = {
   DASHBOARD: '/su-agent-suite/api/v1/agentic-analytics/api/v1/agent-analytics/dashboard'
 };
+
+/**
+ * Custom analytics reports (SPE-14461), read only: the published reports of the credential's
+ * tenant, their data and the values of their custom filters. The tenant comes from the credential
+ * (admin /api/v2 -> multi-tenant-auth).
+ */
+exports.CUSTOM_REPORTS = {
+  LIST: '/api/v2/custom-reports/reports',
+  RUN: '/api/v2/custom-reports/reports/run',
+  FILTER_OPTIONS: '/api/v2/custom-reports/reports/filter-options'
+};
